@@ -144,26 +144,52 @@ function openDetail(id){
   }
   document.getElementById('result-detail-overlay').style.display='flex';
 }
-function closeDetail(e){ if(!e || e.target===document.getElementById('result-detail-overlay')) document.getElementById('result-detail-overlay').style.display='none'; }
+function closeDetail(e){ if(!e || e.target===document.getElementById('result-detail-overlay')){ document.getElementById('result-detail-overlay').style.display='none'; var ac=document.getElementById('annul-confirm'); if(ac) ac.style.display='none'; var dc=document.getElementById('delete-confirm'); if(dc) dc.style.display='none'; } }
 async function claimResult(){
   if(!currentDetailId) return;
-  try{ await supabasePatch('results',currentDetailId,{claimed_by:currentAdmin.login,claimed_at:new Date().toLocaleString('ru-RU'),status:'claimed'}); var r=allResults.find(function(x){return x.id==currentDetailId}); if(r){r.claimed_by=currentAdmin.login; r.claimed_at=new Date().toLocaleString('ru-RU'); r.status='claimed';} openDetail(currentDetailId); await loadResults(); }catch(e){alert('Ошибка: '+e.message)}
+  try{
+    await supabasePatch('results',currentDetailId,{claimed_by:currentAdmin.login,claimed_at:new Date().toLocaleString('ru-RU'),status:'claimed'});
+    var r=allResults.find(function(x){return x.id==currentDetailId});
+    if(r){ r.claimed_by=currentAdmin.login; r.claimed_at=new Date().toLocaleString('ru-RU'); r.status='claimed'; }
+    filterResults(); updateStats(); openDetail(currentDetailId); showToast('Принято в проверку');
+  }catch(e){ showToast('Ошибка: '+e.message, true); }
 }
 async function saveScore(){
   if(!currentDetailId) return;
   var sc=parseInt(document.getElementById('detail-score-input').value);
-  if(isNaN(sc)||sc<0||sc>35){alert('Балл от 0 до 35');return}
-  try{ await supabasePatch('results',currentDetailId,{admin_score:sc,status:'done'}); closeDetail(); await loadResults(); }catch(e){alert('Ошибка: '+e.message)}
+  if(isNaN(sc)||sc<0||sc>35){ showToast('Балл от 0 до 35', true); return; }
+  try{
+    await supabasePatch('results',currentDetailId,{admin_score:sc,status:'done'});
+    var r=allResults.find(function(x){return x.id==currentDetailId});
+    if(r){ r.admin_score=sc; r.status='done'; }
+    closeDetail(); filterResults(); updateStats(); showToast('Сохранено: '+sc+' / 35');
+  }catch(e){ showToast('Ошибка: '+e.message, true); }
 }
-async function annulResult(){
+function showAnnulConfirm(){ document.getElementById('annul-confirm').style.display=''; document.getElementById('delete-confirm').style.display='none'; }
+function cancelAnnul(){ document.getElementById('annul-confirm').style.display='none'; }
+async function confirmAnnul(){
   if(!currentDetailId) return;
-  if(!confirm('Аннулировать работу? Оценка сбросится, участник сможет пересдать.')) return;
-  try{ await supabasePatch('results',currentDetailId,{admin_score:null,status:'annulled'}); closeDetail(); await loadResults(); }catch(e){alert('Ошибка: '+e.message)}
+  try{
+    await supabasePatch('results',currentDetailId,{admin_score:null,status:'annulled',claimed_by:null,claimed_at:null});
+    var r=allResults.find(function(x){return x.id==currentDetailId});
+    if(r){ r.admin_score=null; r.status='annulled'; r.claimed_by=null; }
+    closeDetail(); filterResults(); updateStats(); showToast('Аннулировано');
+  }catch(e){ showToast('Ошибка: '+e.message, true); }
 }
-async function deleteResult(){
+function showDeleteConfirm(){ document.getElementById('delete-confirm').style.display=''; document.getElementById('annul-confirm').style.display='none'; }
+function cancelDelete(){ document.getElementById('delete-confirm').style.display='none'; }
+async function confirmDelete(){
   if(!currentDetailId) return;
-  if(!confirm('Удалить работу навсегда? Действие необратимо!')) return;
-  try{ await supabaseDelete('results',currentDetailId); closeDetail(); await loadResults(); }catch(e){alert('Ошибка: '+e.message)}
+  try{
+    await supabaseDelete('results',currentDetailId);
+    allResults=allResults.filter(function(x){return x.id!=currentDetailId});
+    closeDetail(); filterResults(); updateStats(); showToast('Удалено');
+  }catch(e){ showToast('Ошибка: '+e.message, true); }
+}
+function showToast(msg, isError){
+  var t=document.getElementById('admin-toast');
+  t.textContent=msg; t.style.background=isError?'var(--red)':'var(--navy)'; t.style.display='block';
+  setTimeout(function(){ t.style.display='none'; }, 2000);
 }
 async function loadUsers(){
   var el=document.getElementById('users-list');

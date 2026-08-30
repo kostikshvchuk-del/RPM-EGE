@@ -135,8 +135,16 @@
         <div style="display:flex;gap:8px;flex-wrap:wrap">
           <button class="btn-primary" id="claim-btn" onclick="claimResult()" style="background:var(--navy)">🔒 Принять в проверку</button>
           <button class="btn-primary" id="save-btn" onclick="saveScore()">✅ Сохранить</button>
-          <button class="btn-annul" onclick="annulResult()">🚫 Аннулировать</button>
-          <button class="btn-delete" onclick="deleteResult()">🗑️ Удалить</button>
+          <button class="btn-annul" onclick="showAnnulConfirm()">🚫 Аннулировать</button>
+          <button class="btn-delete" onclick="showDeleteConfirm()">🗑️ Удалить</button>
+        </div>
+        <div id="annul-confirm" style="display:none;margin-top:12px;padding:12px;background:#fffbeb;border:1px solid #fbbf24;border-radius:8px">
+          <p style="font-size:13px;margin-bottom:8px">Аннулировать? Оценка сбросится, участник сможет пересдать.</p>
+          <div style="display:flex;gap:8px"><button class="btn-annul" onclick="confirmAnnul()">Да, аннулировать</button><button class="btn-outline" onclick="cancelAnnul()">Отмена</button></div>
+        </div>
+        <div id="delete-confirm" style="display:none;margin-top:12px;padding:12px;background:#fee2e2;border:1px solid #fecaca;border-radius:8px">
+          <p style="font-size:13px;color:#991b1b;margin-bottom:8px">Точно удалить? Это необратимо!</p>
+          <div style="display:flex;gap:8px"><button class="btn-delete" onclick="confirmDelete()">Да, удалить</button><button class="btn-outline" onclick="cancelDelete()">Отмена</button></div>
         </div>
       </div>
     </div>
@@ -150,6 +158,7 @@
   </div>
 </footer>
 
+<div id="admin-toast" style="display:none;position:fixed;bottom:20px;right:20px;background:var(--navy);color:#fff;padding:12px 18px;border-radius:8px;font-size:13px;z-index:300;box-shadow:0 4px 12px rgba(0,0,0,.2)"></div>
 <script src="supabase-config.js"></script>
 <script src="admin.js"></script>
 </body>
