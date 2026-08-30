@@ -1,98 +1,172 @@
-// ===== ЕГЭ ШТАТА SOUTH — 25 ВОПРОСОВ (Supabase версия) =====
+// ===== ЕГЭ ШТАТА SOUTH — ПОЛНАЯ ВЕРСИЯ =====
 
-const QUESTIONS = [
-  { q: "Какая фракция распространяет информацию о событиях штата?", a: ["CPD (Полиция)", "NEWS / СМИ", "EMS (Медицина)", "ФБР"], correct: 1, diff: "Легкий" },
-  { q: "Какая фракция является управляющей во всём штате и выпускает новые ФЗ?", a: ["ФБР", "CPD (Полиция)", "Мэрия / Правительство штата", "Суд"], correct: 2, diff: "Легкий" },
-  { q: "Какая фракция отвечает за порядок среди граждан во время митинга?", a: ["ФБР", "CPD (Полиция)", "Национальная Гвардия", "EMS"], correct: 1, diff: "Легкий" },
-  { q: "Есть ли выходные у Мэрии?", a: ["Да, суббота и воскресенье", "Только воскресенье", "Нет — работает 7 дней в неделю без выходных", "По графику"], correct: 2, diff: "Легкий" },
-  { q: "Что является высшим документом (законом) в штате?", a: ["Приказ Губернатора", "Конституция Штата South", "ЕПК", "Уголовный Кодекс"], correct: 1, diff: "Легкий" },
-  { q: "Какая фракция является нежелательной к посещению и находится за мостом в округе?", a: ["ФБР", "Национальная Гвардия / Федеральная Тюрьма", "Мэрия", "EMS"], correct: 1, diff: "Легкий" },
-  { q: "Назовите три основные силовые структуры штата.", a: ["EMS, NEWS, Суд", "CPD, ФБР, Национальная Гвардия", "Мэрия, CPD, EMS", "ФБР, Суд, NEWS"], correct: 1, diff: "Легкий" },
-  { q: "Какая фракция прибывает на место преступления, но её цель — не преступник, а пострадавший?", a: ["ФБР", "EMS / Медицинская служба", "CPD", "NEWS"], correct: 1, diff: "Легкий" },
-  { q: "Какая фракция может оказаться первой на месте происшествия, но не задерживает и не лечит?", a: ["CPD", "EMS", "NEWS / СМИ", "Национальная Гвардия"], correct: 2, diff: "Средний" },
-  { q: "Какая фракция должна первой заняться нарушителем, если он в общественном месте?", a: ["NEWS", "EMS", "CPD (Полиция)", "ФБР"], correct: 2, diff: "Средний" },
-  { q: "Какая фракция отвечает за безопасность государства, даже если опасность не дошла до штата?", a: ["CPD", "ФБР", "Национальная Гвардия", "Мэрия"], correct: 1, diff: "Средний" },
-  { q: "Какая фракция находится выше CPD, но выполняет те же функции с более сложными задачами?", a: ["Национальная Гвардия", "ФБР (Federal Bureau of Investigation)", "EMS", "Мэрия"], correct: 1, diff: "Средний" },
-  { q: "Какая фракция является наиболее эффективной для заработка в штате?", a: ["Национальная Гвардия", "EMS", "NEWS (реклама), Мэрия/ФБР (премии на высоких рангах)", "Суд"], correct: 2, diff: "Средний" },
-  { q: "Какие фракции относятся к социальной сфере и почему?", a: ["CPD и ФБР — они защищают", "EMS и NEWS — оказывают услуги населению, не силовые функции", "Мэрия и Суд — управляют", "Национальная Гвардия и EMS"], correct: 1, diff: "Средний" },
-  { q: "Какие фракции являются государственными и сколько их в штате?", a: ["Только 3", "Все 7 — Мэрия, CPD, ФБР, НГ, EMS, NEWS, Суд", "5", "Только Мэрия и CPD"], correct: 1, diff: "Средний" },
-  { q: "В какую фракцию вы должны трудоустроиться, чтобы потом устроиться в CPD/ФБР?", a: ["NEWS", "Национальная Гвардия / Армия", "EMS", "Мэрия"], correct: 1, diff: "Средний" },
-  { q: "Какая фракция должна быть задействована для обеспечения безопасности стратегического объекта?", a: ["Национальная Гвардия", "ФБР", "CPD", "Мэрия"], correct: 0, diff: "Сложный" },
-  { q: "Какая фракция отвечает за принятие решений, затрагивающих несколько гос. организаций?", a: ["NEWS", "EMS", "Мэрия / Правительство (Губернатор)", "CPD"], correct: 2, diff: "Сложный" },
-  { q: "Какая фракция следит за остальными, оценивая их на проверке?", a: ["NEWS", "EMS", "Мэрия + ФБР как наблюдатель", "Национальная Гвардия"], correct: 2, diff: "Сложный" },
-  { q: "Какая фракция является независимой и не подчиняется Мэрии?", a: ["CPD", "EMS", "Суд + ФБР (федеральное подчинение)", "NEWS"], correct: 2, diff: "Сложный" },
-  { q: "Полицейский выдал розыск неправильно. Куда идти?", a: ["В ФБР", "В Суд — подать исковое заявление (по ЕПК)", "В Мэрию", "В NEWS"], correct: 1, diff: "Сложный" },
-  { q: "CPD и ФБР приехали на серьезное преступление. Кто главный?", a: ["CPD", "ФБР — федеральные преступления — их подследственность", "Делят поровну", "Мэрия решает"], correct: 1, diff: "Сложный" },
-  { q: "Что такое ЕПК и какие фракции по нему работают?", a: ["Экстренный Протокол Контроля", "Единый Процессуальный Кодекс — CPD, ФБР, Суд", "Единый План Контроля", "Электронный Протокол Кадров"], correct: 1, diff: "Сложный" },
-  { q: "Гражданина оскорбили расистским оскорблением. Может ли подать иск?", a: ["Нет — просто слова", "Да — расовая дискриминация наказуема", "Только при свидетелях", "Только ФБР"], correct: 1, diff: "Сложный" },
-  { q: "Представь экскурсию в музей округа. Что расскажешь?", a: ["Музей закрыт", "Основан в 2019. Основание штата, флаг, история силовых, культура", "Это архив ФБР", "Военная база"], correct: 1, diff: "Сложный" }
+// === ВОПРОСЫ I ЧАСТИ (выбор А Б В Г) ===
+const PART1 = [
+  {q:"Какая фракция распространяет информацию о событиях штата?",a:["CPD (Полиция)","NEWS / СМИ","EMS (Медицина)","ФБР"],c:1,d:"Легкий"},
+  {q:"Какая фракция является управляющей во всём штате и выпускает ФЗ?",a:["ФБР","CPD","Мэрия / Правительство","Суд"],c:2,d:"Легкий"},
+  {q:"Какая фракция отвечает за порядок во время митинга?",a:["ФБР","CPD","Национальная Гвардия","EMS"],c:1,d:"Легкий"},
+  {q:"Есть ли выходные у Мэрии?",a:["Да, сб и вс","Только вс","Нет — 7 дней без выходных","По графику"],c:2,d:"Легкий"},
+  {q:"Что является высшим документом в штате?",a:["Приказ Губернатора","Конституция South","ЕПК","УК"],c:1,d:"Легкий"},
+  {q:"Какая фракция за мостом в округе (нежелательная)?",a:["ФБР","Национальная Гвардия / Федеральная Тюрьма","Мэрия","EMS"],c:1,d:"Легкий"},
+  {q:"Три основные силовые структуры?",a:["EMS, NEWS, Суд","CPD, ФБР, Национальная Гвардия","Мэрия, CPD, EMS","ФБР, Суд, NEWS"],c:1,d:"Легкий"},
+  {q:"Какая фракция приезжает, цель — пострадавший?",a:["ФБР","EMS","CPD","NEWS"],c:1,d:"Легкий"},
+  {q:"Какая фракция первой на месте, но не задерживает и не лечит?",a:["CPD","EMS","NEWS / СМИ","НГ"],c:2,d:"Средний"},
+  {q:"Какая фракция первой берётся за нарушителя в общественном месте?",a:["NEWS","EMS","CPD","ФБР"],c:2,d:"Средний"},
+  {q:"Какая фракция за гос. безопасность до угрозы штату?",a:["CPD","ФБР","НГ","Мэрия"],c:1,d:"Средний"},
+  {q:"Какая фракция выше CPD с более сложными задачами?",a:["НГ","ФБР","EMS","Мэрия"],c:1,d:"Средний"},
+  {q:"Какая фракция эффективна для заработка?",a:["НГ","EMS","NEWS/Мэрия/ФБР (премии)","Суд"],c:2,d:"Средний"},
+  {q:"Социальные фракции — какие?",a:["CPD/ФБР","EMS/NEWS — услуги населению","Мэрия/Суд","НГ/EMS"],c:1,d:"Средний"},
+  {q:"Сколько гос. фракций в штате?",a:["3","Все 7","5","2"],c:1,d:"Средний"},
+  {q:"Куда трудоустроиться перед CPD/ФБР?",a:["NEWS","Национальная Гвардия / Армия","EMS","Мэрия"],c:1,d:"Средний"},
+  {q:"Безопасность стратегического объекта — какая фракция?",a:["Национальная Гвардия","ФБР","CPD","Мэрия"],c:0,d:"Сложный"},
+  {q:"Решения, затрагивающие несколько гос. организаций?",a:["NEWS","EMS","Мэрия / Губернатор","CPD"],c:2,d:"Сложный"},
+  {q:"Кто следит за другими на проверке?",a:["NEWS","EMS","Мэрия + ФБР","НГ"],c:2,d:"Сложный"},
+  {q:"Какая фракция независима от Мэрии?",a:["CPD","EMS","Суд + ФБР","NEWS"],c:2,d:"Сложный"},
+  {q:"Неправильный розыск — куда идти?",a:["ФБР","Суд — иск по ЕПК","Мэрия","NEWS"],c:1,d:"Сложный"},
+  {q:"CPD и ФБР на месте — кто главный?",a:["CPD","ФБР — федеральная подследственность","Поровну","Мэрия"],c:1,d:"Сложный"},
+  {q:"ЕПК — что это?",a:["Экстренный Протокол","Единый Процессуальный Кодекс — CPD, ФБР, Суд","Единый План","Электронный Протокол"],c:1,d:"Сложный"},
+  {q:"Расистское оскорбление — иск в суд?",a:["Нет","Да — дискриминация наказуема","Только при свидетелях","Только ФБР"],c:1,d:"Сложный"},
+  {q:"Экскурсия в музей — что рассказать?",a:["Закрыт","Основан 2019. Штат, флаг, силовые, культура","Архив ФБР","Военная база"],c:1,d:"Сложный"}
 ];
 
-let current = 0;
-let answers = Array(QUESTIONS.length).fill(null);
-let warnings = 0;
-let annulled = false;
+// === ВОПРОСЫ II ЧАСТИ (письменно) ===
+const PART2 = [
+  {q:"Какая фракция отвечает за безопасность государства, даже если опасность ещё не дошла до штата? Объясните почему.",hint:"ФБР — контрразведка, федеральный уровень"},
+  {q:"Полицейский выдал вам розыск неправильно. Куда вы пойдёте и что сделаете? Опишите поэтапно.",hint:"Суд — исковое заявление по ЕПК, требование боди-камеры"},
+  {q:"Чем отличается CPD от ФБР? Назовите минимум 3 отличия.",hint:"Местный vs федеральный, подследственность, ранги"},
+  {q:"Представьте что вы даёте экскурсию в музей штата. О чём вы расскажете?",hint:"Основание штата, флаг, история силовых структур, культура"},
+  {q:"Какая фракция является наиболее эффективной для заработка в штате? Обоснуйте.",hint:"NEWS (реклама), Мэрия/ФБР (премии), EMS (оклад + вызовы)"},
+  {q:"Какие фракции относятся к социальной сфере? Почему они так называются?",hint:"EMS и NEWS — услуги населению, не силовые функции"},
+  {q:"Опишите порядок действий если вы стали свидетелем преступления в общественном месте.",hint:"CPD → оцепление, EMS → помощь пострадавшим, ФБР → если госбезопасность"},
+  {q:"Что такое ЕПК и какие фракции по нему работают? Приведите примеры статей.",hint:"Единый Процессуальный Кодекс — задержание, обыск, розыск"},
+  {q:"Почему Суд является независимой фракцией и не подчиняется Мэрии?",hint:"Конституция — разделение властей, судебная власть"},
+  {q:"Если бы вы были Губернатором, какую первую реформу провели бы в штате и почему?",hint:"Любой осмысленный ответ, показывающий знание структуры штата"}
+];
+
+const ALL_QUESTIONS = [...PART1.map((q,i)=>({...q,type:'choice',idx:i})), ...PART2.map((q,i)=>({...q,type:'text',idx:PART1.length+i}))];
+
+let currentUser = null;
+let currentQ = 0;
+let answers = new Array(ALL_QUESTIONS.length).fill(null);
 let timerInterval = null;
 let timeLeft = 25 * 60;
-let examStarted = false;
-let studentInfo = {};
+let examActive = false;
 
-const examScreen = document.getElementById('exam-screen');
-const resultScreen = document.getElementById('result-screen');
-const annulledScreen = document.getElementById('annulled-screen');
-
-function scrollToLogin(){
-  document.getElementById('login').scrollIntoView({behavior:'smooth', block:'start'});
-  setTimeout(()=> document.getElementById('nickname')?.focus(), 600);
+// === НАВИГАЦИЯ ЭКРАНОВ ===
+function showScreen(id){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  window.scrollTo(0,0);
 }
 
-document.querySelectorAll('.nav__link').forEach(a=>{
-  a.addEventListener('click', e=>{
-    document.querySelectorAll('.nav__link').forEach(x=>x.classList.remove('active'));
-    e.target.classList.add('active');
-  });
+// === РЕГИСТРАЦИЯ ===
+document.getElementById('register-form').addEventListener('submit', e=>{
+  e.preventDefault();
+  const login = document.getElementById('reg-login').value.trim();
+  const name = document.getElementById('reg-name').value.trim();
+  const age = parseInt(document.getElementById('reg-age').value);
+  const pass = document.getElementById('reg-pass').value;
+  const pass2 = document.getElementById('reg-pass2').value;
+
+  if(!login || !name || !age || !pass){ alert('Заполните все поля'); return; }
+  if(age < 4){ alert('Минимальный возраст — 4 года'); return; }
+  if(pass.length < 4){ alert('Пароль минимум 4 символа'); return; }
+  if(pass !== pass2){ alert('Пароли не совпадают'); return; }
+
+  // Сохраняем в localStorage
+  const users = JSON.parse(localStorage.getItem('ege_users') || '[]');
+  if(users.find(u=>u.login===login)){ alert('Такой логин уже существует'); return; }
+
+  const user = { login, name, age, pass };
+  users.push(user);
+  localStorage.setItem('ege_users', JSON.stringify(users));
+  localStorage.setItem('ege_current', JSON.stringify(user));
+
+  currentUser = user;
+  showCabinet();
+  showScreen('screen-cabinet');
 });
 
-function tryLogin(e) {
-  if (e) e.preventDefault();
-  const nickEl = document.getElementById('nickname');
-  const gameNickEl = document.getElementById('game-nick');
-  const ageEl = document.getElementById('age');
-  const agreeEl = document.getElementById('agree');
-  const nick = nickEl.value.trim();
-  const gameNick = gameNickEl.value.trim();
-  const age = parseInt(ageEl.value);
+// === ВХОД ===
+document.getElementById('login-form').addEventListener('submit', e=>{
+  e.preventDefault();
+  const login = document.getElementById('log-login').value.trim();
+  const pass = document.getElementById('log-pass').value;
 
-  if (!nick) { alert('Введите имя и фамилию!'); nickEl.focus(); return; }
-  if (nick.length < 3) { alert('Имя слишком короткое'); return; }
-  if (!gameNick) { alert('Введите ник в игре!'); gameNickEl.focus(); return; }
-  if (!age || age < 14) { alert('Минимальный возраст — 14 лет'); ageEl.focus(); return; }
+  const users = JSON.parse(localStorage.getItem('ege_users') || '[]');
+  const user = users.find(u=>u.login===login && u.pass===pass);
+  if(!user){ alert('Неверный логин или пароль'); return; }
 
-  studentInfo = { name: nick, gameNick: gameNick, age: age };
-  document.getElementById('exam-nick').textContent = nick + ' (' + gameNick + ')';
-  startExam();
+  localStorage.setItem('ege_current', JSON.stringify(user));
+  currentUser = user;
+  showCabinet();
+  showScreen('screen-cabinet');
+});
+
+// === КАБИНЕТ ===
+async function showCabinet(){
+  if(!currentUser) return;
+  document.getElementById('cab-avatar').textContent = currentUser.name.charAt(0).toUpperCase();
+  document.getElementById('cab-name').textContent = currentUser.name;
+  document.getElementById('cab-login').textContent = currentUser.login;
+
+  // Загружаем результаты из Supabase
+  try {
+    const results = await supabaseGet('results', `&name=eq.${encodeURIComponent(currentUser.name)}&order=timestamp.desc`);
+    if(results && results.length > 0){
+      const latest = results[0];
+      document.getElementById('cab-empty').style.display = 'none';
+      document.getElementById('cab-result').style.display = '';
+
+      const score = latest.admin_score;
+      if(score !== null && score !== undefined){
+        document.getElementById('cab-score').textContent = score + ' / 35';
+        document.getElementById('cab-score').style.color = score >= 14 ? '#0a7a42' : '#c0392b';
+        document.getElementById('cab-result-title').textContent = score >= 14 ? '✅ ТЕСТ СДАН' : '❌ НЕ СДАНО';
+        document.getElementById('cab-result-icon').textContent = score >= 14 ? '🎓' : '📚';
+      } else {
+        document.getElementById('cab-score').textContent = 'На проверке';
+        document.getElementById('cab-score').style.color = '#f59e0b';
+        document.getElementById('cab-result-title').textContent = '⏳ Ожидает проверки';
+        document.getElementById('cab-result-icon').textContent = '⏳';
+      }
+      document.getElementById('cab-date').textContent = latest.date || '';
+
+      if(results.length > 1){
+        document.getElementById('cab-history').style.display = '';
+        document.getElementById('cab-history-list').innerHTML = results.map(r=>{
+          const sc = r.admin_score;
+          const txt = sc !== null && sc !== undefined ? sc+'/35' : '—';
+          const clr = sc !== null && sc !== undefined ? (sc>=14?'var(--green)':'var(--red)') : 'var(--muted)';
+          return `<div class="cabinet-history-item"><span>${r.date||''}</span><span style="color:${clr};font-weight:800">${txt}</span></div>`;
+        }).join('');
+      }
+    } else {
+      document.getElementById('cab-empty').style.display = '';
+      document.getElementById('cab-result').style.display = 'none';
+      document.getElementById('cab-history').style.display = 'none';
+    }
+  } catch(e){
+    console.error(e);
+    document.getElementById('cab-empty').style.display = '';
+  }
 }
 
-document.getElementById('login-form').addEventListener('submit', tryLogin);
-document.getElementById('login-btn').addEventListener('click', tryLogin);
+function cabLogout(){
+  localStorage.removeItem('ege_current');
+  currentUser = null;
+  showScreen('screen-home');
+}
 
-function startExam() {
-  window.scrollTo({top:0, behavior:'smooth'});
-  document.querySelector('.gov-bar').style.display='none';
-  document.querySelector('.header').style.display='none';
-  document.querySelector('.hero').style.display='none';
-  document.querySelector('.alert-bar').style.display='none';
-  document.querySelector('.main-grid').style.display='none';
-  document.querySelector('.footer').style.display='none';
-
-  examScreen.classList.add('active');
-  current = 0;
-  answers = Array(QUESTIONS.length).fill(null);
-  warnings = 0;
-  annulled = false;
+// === ЭКЗАМЕН ===
+function startExam(){
+  showScreen('screen-exam');
+  currentQ = 0;
+  answers = new Array(ALL_QUESTIONS.length).fill(null);
+  examActive = true;
   timeLeft = 25 * 60;
-  examStarted = true;
-  document.getElementById('total-q').textContent = QUESTIONS.length;
+  document.getElementById('exam-nick').textContent = currentUser.name;
+
   buildGrid();
   renderQuestion();
   startTimer();
@@ -100,88 +174,114 @@ function startExam() {
   setTimeout(()=>{ document.documentElement.requestFullscreen?.().catch(()=>{}); },300);
 }
 
-function buildGrid() {
+function buildGrid(){
   const grid = document.getElementById('question-grid');
   grid.innerHTML = '';
-  QUESTIONS.forEach((_, i) => {
+  ALL_QUESTIONS.forEach((_,i)=>{
     const dot = document.createElement('div');
     dot.className = 'q-dot';
-    dot.textContent = i + 1;
-    dot.onclick = () => { current = i; renderQuestion(); };
-    dot.id = 'dot-' + i;
+    dot.textContent = i+1;
+    dot.onclick = ()=>{ currentQ=i; renderQuestion(); };
+    dot.id = 'dot-'+i;
     grid.appendChild(dot);
   });
 }
 
-function renderQuestion() {
-  const q = QUESTIONS[current];
-  document.getElementById('current-q').textContent = current + 1;
-  document.getElementById('question-text').textContent = q.q;
-  document.getElementById('progress').style.width = ((current+1)/QUESTIONS.length*100) + '%';
+function renderQuestion(){
+  const q = ALL_QUESTIONS[currentQ];
+  const isChoice = q.type === 'choice';
+  const total = ALL_QUESTIONS.length;
 
-  const diffEl = document.getElementById('exam-diff');
-  diffEl.textContent = 'Сложность: ' + q.diff;
-  diffEl.className = 'exam-diff diff-' + (q.diff === 'Легкий' ? 'easy' : q.diff === 'Средний' ? 'medium' : 'hard');
+  document.getElementById('q-current').textContent = currentQ+1;
+  document.getElementById('q-total').textContent = total;
+  document.getElementById('progress').style.width = ((currentQ+1)/total*100)+'%';
 
-  const opts = document.getElementById('options');
-  opts.innerHTML = '';
-  q.a.forEach((text, idx) => {
-    const div = document.createElement('label');
-    div.className = 'option' + (answers[current] === idx ? ' selected' : '');
-    div.innerHTML = `<input type="radio" name="q" ${answers[current]===idx?'checked':''}><span>${String.fromCharCode(65+idx)}) ${text}</span>`;
-    div.onclick = () => { answers[current] = idx; renderQuestion(); updateGrid(); };
-    opts.appendChild(div);
-  });
-  document.getElementById('prev-btn').disabled = current === 0;
+  // Показываем нужную часть
+  document.getElementById('part1-question').style.display = isChoice ? '' : 'none';
+  document.getElementById('part2-question').style.display = isChoice ? 'none' : '';
+
+  // Бейдж части
+  const badge = document.getElementById('exam-part-badge');
+  badge.textContent = currentQ < PART1.length ? 'I Часть (Выбор)' : 'II Часть (Письменно)';
+  badge.className = 'exam-part-badge ' + (currentQ < PART1.length ? 'badge-choice' : 'badge-text');
+
+  if(isChoice){
+    document.getElementById('question-text').textContent = (currentQ+1)+'. '+q.q;
+    const diffEl = document.getElementById('exam-diff');
+    diffEl.textContent = q.d;
+    diffEl.className = 'exam-diff-tag '+(q.d==='Легкий'?'diff-easy':q.d==='Средний'?'diff-medium':'diff-hard');
+
+    const opts = document.getElementById('options');
+    opts.innerHTML = '';
+    q.a.forEach((text,idx)=>{
+      const div = document.createElement('label');
+      div.className = 'option'+(answers[currentQ]===idx?' selected':'');
+      div.innerHTML = `<input type="radio" name="q" ${answers[currentQ]===idx?'checked':''}><span>${String.fromCharCode(65+idx)}) ${text}</span>`;
+      div.onclick = ()=>{ answers[currentQ]=idx; renderQuestion(); updateGrid(); };
+      opts.appendChild(div);
+    });
+  } else {
+    document.getElementById('question-text-2').textContent = (currentQ+1)+'. '+q.q;
+    const ta = document.getElementById('text-answer');
+    ta.value = answers[currentQ] || '';
+    ta.oninput = ()=>{ answers[currentQ] = ta.value; updateGrid(); };
+  }
+
+  document.getElementById('prev-btn').disabled = currentQ===0;
   const nextBtn = document.getElementById('next-btn');
   const finishBtn = document.getElementById('finish-btn');
-  if (current === QUESTIONS.length - 1) { nextBtn.classList.add('hidden'); finishBtn.classList.remove('hidden'); }
+  if(currentQ===total-1){ nextBtn.classList.add('hidden'); finishBtn.classList.remove('hidden'); }
   else { nextBtn.classList.remove('hidden'); finishBtn.classList.add('hidden'); }
   updateGrid();
 }
 
-function updateGrid() {
-  QUESTIONS.forEach((_, i) => {
-    const dot = document.getElementById('dot-' + i);
-    dot.classList.remove('answered', 'current');
-    if (answers[i] !== null) dot.classList.add('answered');
-    if (i === current) dot.classList.add('current');
+function updateGrid(){
+  ALL_QUESTIONS.forEach((_,i)=>{
+    const dot = document.getElementById('dot-'+i);
+    dot.classList.remove('answered','current');
+    if(answers[i]!==null && answers[i]!=='') dot.classList.add('answered');
+    if(i===currentQ) dot.classList.add('current');
   });
 }
 
-document.getElementById('prev-btn').onclick = () => { if (current>0) { current--; renderQuestion(); } };
-document.getElementById('next-btn').onclick = () => { if (current<QUESTIONS.length-1) { current++; renderQuestion(); } };
+document.getElementById('prev-btn').onclick = ()=>{ if(currentQ>0){ currentQ--; renderQuestion(); }};
+document.getElementById('next-btn').onclick = ()=>{ if(currentQ<ALL_QUESTIONS.length-1){ currentQ++; renderQuestion(); }};
 document.getElementById('finish-btn').onclick = finishExam;
-document.getElementById('fullscreen-btn').onclick = () => document.documentElement.requestFullscreen?.();
 
-function startTimer() {
+// ТАЙМЕР
+function startTimer(){
   clearInterval(timerInterval);
   updateTimerDisplay();
-  timerInterval = setInterval(() => {
+  timerInterval = setInterval(()=>{
     timeLeft--;
     updateTimerDisplay();
-    if (timeLeft <= 0) { clearInterval(timerInterval); finishExam(); }
-  }, 1000);
+    if(timeLeft<=0){ clearInterval(timerInterval); finishExam(); }
+  },1000);
 }
-function updateTimerDisplay() {
+function updateTimerDisplay(){
   const m = String(Math.floor(timeLeft/60)).padStart(2,'0');
   const s = String(timeLeft%60).padStart(2,'0');
   const el = document.getElementById('timer');
-  el.textContent = `${m}:${s}`;
-  if (timeLeft < 300) el.classList.add('warn'); else el.classList.remove('warn');
+  el.textContent = m+':'+s;
+  if(timeLeft<300) el.classList.add('warn'); else el.classList.remove('warn');
 }
 
-function finishExam() {
-  if (annulled) return;
+// СДАЧА
+function finishExam(){
+  if(!examActive) return;
   clearInterval(timerInterval);
-  examStarted = false;
+  examActive = false;
   disableAntiCheat();
-  if (document.fullscreenElement) document.exitFullscreen().catch(()=>{});
+  if(document.fullscreenElement) document.exitFullscreen().catch(()=>{});
+
+  // Подсчёт автоматических баллов (только I часть)
+  let autoScore = 0;
+  PART1.forEach((q,i)=>{ if(answers[i]===q.c) autoScore++; });
 
   const result = {
-    name: studentInfo.name || 'Без имени',
-    game_nick: studentInfo.gameNick || '',
-    age: studentInfo.age || 0,
+    name: currentUser.name,
+    game_nick: currentUser.login,
+    age: currentUser.age,
     answers: JSON.stringify(answers),
     date: new Date().toLocaleString('ru-RU'),
     timestamp: Date.now(),
@@ -189,72 +289,32 @@ function finishExam() {
     status: 'pending'
   };
 
-  // Отправляем в Supabase
-  supabasePost('results', result).then(data => {
-    console.log('Результат сохранен в Supabase:', data);
-  }).catch(err => {
-    console.error('Ошибка записи:', err);
+  supabasePost('results', result).then(d=>{
+    console.log('Сохранено:', d);
+  }).catch(e=>{
+    console.error('Ошибка:', e);
   });
 
-  // Показываем ответы ученику
-  examScreen.classList.remove('active');
-  resultScreen.classList.add('active');
-
-  let answered = answers.filter(a => a !== null).length;
-  document.getElementById('result-title').textContent = 'Ответы сданы';
-  document.getElementById('result-text').textContent = `Вы ответили на ${answered} из ${QUESTIONS.length} вопросов. Покажите этот экран преподавателю.`;
-
-  let details = '<b>Ваши ответы:</b><br>';
-  QUESTIONS.forEach((q,i)=>{
-    const userAns = answers[i]===null ? '<i>(нет ответа)</i>' : String.fromCharCode(65+answers[i]) + ') ' + q.a[answers[i]];
-    details += `<div style="padding:4px 0;border-bottom:1px solid #eee;font-size:12px"><b>${i+1}.</b> ${userAns}</div>`;
-  });
-  document.getElementById('result-details').innerHTML = details;
+  showScreen('screen-result');
 }
 
-function restorePortal(){
-  document.querySelector('.gov-bar').style.display='';
-  document.querySelector('.header').style.display='';
-  document.querySelector('.hero').style.display='';
-  document.querySelector('.alert-bar').style.display='';
-  document.querySelector('.main-grid').style.display='';
-  document.querySelector('.footer').style.display='';
-  window.scrollTo({top:0, behavior:'smooth'});
+// АНТИЧИТ
+function enableAntiCheat(){ document.addEventListener('visibilitychange',onVis); window.addEventListener('blur',onBlur); document.addEventListener('fullscreenchange',onFS); }
+function disableAntiCheat(){ document.removeEventListener('visibilitychange',onVis); window.removeEventListener('blur',onBlur); document.removeEventListener('fullscreenchange',onFS); }
+function onVis(){ if(!examActive) return; if(document.hidden) warn('Вы свернули вкладку!'); }
+function onBlur(){ if(!examActive) return; setTimeout(()=>{ if(!document.hasFocus()) warn('Потеря фокуса!'); },500); }
+function onFS(){ if(!examActive) return; if(!document.fullscreenElement) warn('Вышли из полноэкранного!'); }
+function warn(msg){
+  const el = document.getElementById('exam-warning');
+  el.classList.remove('hidden');
+  el.textContent = '⚠️ '+msg+' Покинув аудиторию работа аннулируется!';
+  el.style.background='#fee2e2'; el.style.color='#991b1b';
 }
 
-document.getElementById('restart-btn').onclick = () => { resultScreen.classList.remove('active'); restorePortal(); document.getElementById('login').scrollIntoView({behavior:'smooth'}); };
-
-// Авто-старт если пришли из кабинета
+// АВТО-ВХОД
 (function(){
-  const params = new URLSearchParams(window.location.search);
-  if(params.get('exam') === '1'){
-    const name = localStorage.getItem('ege_nick');
-    const nick = localStorage.getItem('ege_gamenick');
-    if(name && nick){
-      studentInfo = { name, gameNick: nick, age: 18 };
-      document.getElementById('exam-nick').textContent = name + ' (' + nick + ')';
-      setTimeout(startExam, 300);
-    }
+  const saved = localStorage.getItem('ege_current');
+  if(saved){
+    try{ currentUser = JSON.parse(saved); showCabinet(); showScreen('screen-cabinet'); }catch(e){}
   }
 })();
-document.getElementById('annulled-restart').onclick = () => { annulledScreen.classList.remove('active'); restorePortal(); };
-
-function enableAntiCheat(){ document.addEventListener('visibilitychange', onVisibility); window.addEventListener('blur', onBlur); document.addEventListener('fullscreenchange', onFullscreen); window.addEventListener('beforeunload', onBeforeUnload); }
-function disableAntiCheat(){ document.removeEventListener('visibilitychange', onVisibility); window.removeEventListener('blur', onBlur); window.removeEventListener('fullscreenchange', onFullscreen); window.removeEventListener('beforeunload', onBeforeUnload); }
-function onVisibility(){ if(!examStarted||annulled) return; if(document.hidden) triggerWarning('Вы свернули вкладку!'); }
-function onBlur(){ if(!examStarted||annulled) return; setTimeout(()=>{ if(document.hidden) return; if(!document.hasFocus()) triggerWarning('Потеря фокуса!'); },500); }
-function onFullscreen(){ if(!examStarted||annulled) return; if(!document.fullscreenElement) triggerWarning('Вышли из полноэкранного режима!'); }
-function onBeforeUnload(e){ if(examStarted&&!annulled){ e.preventDefault(); e.returnValue=''; } }
-function triggerWarning(msg){
-  warnings++;
-  const box=document.getElementById('warnings');
-  box.classList.remove('hidden');
-  document.getElementById('warning-text').textContent=`⚠️ Предупреждение ${warnings}/2: ${msg}`;
-  if(warnings===1){ box.style.background='#fef3c7'; box.style.borderColor='#f59e0b'; box.style.color='#92400e'; setTimeout(()=>{ if(!document.fullscreenElement) document.documentElement.requestFullscreen?.().catch(()=>{}); },800); }
-  if(warnings>=2) annulExam(msg);
-}
-function annulExam(reason){
-  annulled=true; examStarted=false; clearInterval(timerInterval); disableAntiCheat();
-  examScreen.classList.remove('active'); annulledScreen.classList.add('active');
-  document.getElementById('annulled-reason').textContent = reason + ' — попытка #' + warnings;
-}
