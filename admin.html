@@ -12,28 +12,36 @@
 <div class="gov-bar">
   <div class="container gov-bar__inner">
     <span>🇺🇸 ПАНЕЛЬ АДМИНИСТРАТОРА</span>
-    <span>ЕГЭ Штата South — 2026</span>
+    <span id="admin-bar-role">ЕГЭ Штата South — 2026</span>
   </div>
 </div>
 
 <!-- АВТОРИЗАЦИЯ -->
 <div id="admin-login-wrap" class="auth-wrap">
   <div class="auth-tabs">
-    <button class="auth-tab active" onclick="switchAuthTab('login')">🔐 Вход</button>
+    <button class="auth-tab active">🔐 Вход в панель</button>
   </div>
-  <div id="auth-login" class="auth-panel active">
+  <div class="auth-panel active">
     <div class="auth-card">
       <div class="auth-card__emblem">🛡️</div>
-      <h2>Вход для администратора</h2>
-      <p class="auth-sub">Введите логин и пароль</p>
+      <h2>Вход для проверки</h2>
+      <p class="auth-sub">Преподаватель, Декан, Администратор, Главный Администратор</p>
       <form id="admin-login-form" novalidate>
         <label>Логин</label>
-        <input type="text" id="admin-log-login" placeholder="admin" required>
+        <input type="text" id="admin-log-login" placeholder="admin / decan / teacher / moderator" required>
         <label>Пароль</label>
         <input type="password" id="admin-log-pass" placeholder="Пароль" required>
         <button type="submit" class="btn-primary full" id="admin-log-btn">ВОЙТИ →</button>
       </form>
-      <p class="auth-sub" style="margin-top:14px"><a href="admin-register.html">Подать заявку на регистрацию →</a></p>
+      <div style="margin-top:16px;padding:14px;background:#f8fafc;border:1px solid var(--border);border-radius:10px">
+        <h4 style="font-size:13px;color:var(--navy);margin-bottom:6px">🔑 Данные для входа</h4>
+        <table style="font-size:12px;color:var(--muted);width:100%;border-collapse:collapse">
+          <tr style="border-bottom:1px solid var(--border)"><td style="padding:4px 0;font-weight:700;color:var(--navy)">Глав. Админ</td><td>admin / ege2026</td></tr>
+          <tr style="border-bottom:1px solid var(--border)"><td style="padding:4px 0;font-weight:700;color:var(--navy)">Декан</td><td>decan / decan2026</td></tr>
+          <tr style="border-bottom:1px solid var(--border)"><td style="padding:4px 0;font-weight:700;color:var(--navy)">Преподаватель</td><td>teacher / teach2026</td></tr>
+          <tr><td style="padding:4px 0;font-weight:700;color:var(--navy)">Модератор</td><td>moderator / mod2026</td></tr>
+        </table>
+      </div>
     </div>
   </div>
   <div id="auth-msg" class="auth-msg hidden"></div>
@@ -49,9 +57,9 @@
         <span class="admin-role" id="adm-role">root</span>
       </div>
       <nav class="admin-nav">
-        <a href="#" class="admin-nav__link active" onclick="showTab('results');return false">📋 Результаты</a>
-        <a href="#" class="admin-nav__link" onclick="showTab('users');return false">👥 Участники</a>
-        <a href="#" class="admin-nav__link" onclick="showTab('admins');return false">🛡️ Администраторы</a>
+        <a href="#" class="admin-nav__link active" onclick="showTab('results',this);return false">📋 Результаты</a>
+        <a href="#" class="admin-nav__link" onclick="showTab('users',this);return false">👥 Участники</a>
+        <a href="#" class="admin-nav__link" id="nav-admins" onclick="showTab('admins',this);return false">🛡️ Администраторы</a>
         <a href="#" class="admin-nav__link" onclick="adminLogout()">🚪 Выйти</a>
       </nav>
     </aside>
@@ -115,7 +123,7 @@
   </div>
 </div>
 
-<footer class="footer" id="admin-footer">
+<footer class="footer" id="admin-footer" style="display:none">
   <div class="container footer__grid">
     <div><b>Департамент образования Штата South</b><br>Панель администратора © 2026</div>
     <div>supportegerpmsouth@gmail.com &nbsp;|&nbsp; 22222223</div>
@@ -125,49 +133,37 @@
 <script src="supabase-config.js"></script>
 <script>
 var PART1=[
-  {q:"Какая фракция распространяет информацию о событиях штата?",c:1},
-  {q:"Какая фракция является управляющей во всём штате и выпускает ФЗ?",c:2},
-  {q:"Какая фракция отвечает за порядок во время митинга?",c:1},
-  {q:"Есть ли выходные у Мэрии?",c:2},
-  {q:"Что является высшим документом в штате?",c:1},
-  {q:"Какая фракция за мостом в округе?",c:1},
-  {q:"Три основные силовые структуры?",c:1},
-  {q:"Какая фракция приезжает, цель — пострадавший?",c:1},
-  {q:"Какая фракция первой на месте, но не задерживает и не лечит?",c:2},
-  {q:"Какая фракция первой берётся за нарушителя?",c:2},
-  {q:"Какая фракция за гос. безопасность до угрозы штату?",c:1},
-  {q:"Какая фракция выше CPD?",c:1},
-  {q:"Какая фракция эффективна для заработка?",c:2},
-  {q:"Социальные фракции?",c:1},
-  {q:"Сколько гос. фракций?",c:1},
-  {q:"Куда трудоустроиться перед CPD/ФБР?",c:1},
-  {q:"Безопасность стратегического объекта?",c:0},
-  {q:"Решения для нескольких гос. организаций?",c:2},
-  {q:"Кто следит за другими на проверке?",c:2},
-  {q:"Какая фракция независима от Мэрии?",c:2},
-  {q:"Неправильный розыск?",c:1},
-  {q:"CPD и ФБР — кто главный?",c:1},
-  {q:"ЕПК — что это?",c:1},
-  {q:"Расистское оскорбление — иск?",c:1},
+  {q:"Какая фракция распространяет информацию?",c:1},{q:"Какая фракция управляет штатом?",c:2},
+  {q:"Какая фракция отвечает за порядок на митинге?",c:1},{q:"Выходные у Мэрии?",c:2},
+  {q:"Высший документ в штате?",c:1},{q:"Какая фракция за мостом?",c:1},
+  {q:"Три силовые структуры?",c:1},{q:"Какая фракция к пострадавшему?",c:1},
+  {q:"Какая первой на месте, но не лечит?",c:2},{q:"Какая берётся за нарушителя?",c:2},
+  {q:"Гос. безопасность до угрозы?",c:1},{q:"Какая выше CPD?",c:1},
+  {q:"Эффективна для заработка?",c:2},{q:"Социальные фракции?",c:1},
+  {q:"Сколько гос. фракций?",c:1},{q:"Куда перед CPD/ФБР?",c:1},
+  {q:"Безопасность объекта?",c:0},{q:"Решения для нескольких орг?",c:2},
+  {q:"Кто следит на проверке?",c:2},{q:"Независима от Мэрии?",c:2},
+  {q:"Неправильный розыск?",c:1},{q:"CPD и ФБР — кто главный?",c:1},
+  {q:"ЕПК — что это?",c:1},{q:"Расистское оскорбление?",c:1},
   {q:"Экскурсия в музей?",c:1}
 ];
 var PART2=[
-  {q:"Какая фракция отвечает за безопасность государства до угрозы штату?"},
-  {q:"Полицейский выдал розыск неправильно. Куда идти?"},
-  {q:"Чем отличается CPD от ФБР? 3 отличия."},
-  {q:"Экскурсия в музей штата — о чём расскажете?"},
+  {q:"Какая фракция за безопасность до угрозы штату? Объясните."},
+  {q:"Розыск неправильно. Куда идти? Поэтапно."},
+  {q:"Чем CPD отличается от ФБР? 3 отличия."},
+  {q:"Экскурсия в музей — о чём расскажете?"},
   {q:"Какая фракция эффективна для заработка? Обоснуйте."},
-  {q:"Какие фракции — социальные? Почему?"},
-  {q:"Порядок действий при свидетельстве преступления."},
+  {q:"Какие фракции социальные? Почему?"},
+  {q:"Порядок действий при преступлении."},
   {q:"Что такое ЕПК? Примеры статей."},
   {q:"Почему Суд независим от Мэрии?"},
-  {q:"Какую реформу провели бы будучи Губернатором?"}
+  {q:"Какую реформу провели бы как Губернатор?"}
 ];
 var O=[
   ['CPD (Полиция)','NEWS / СМИ','EMS (Медицина)','ФБР'],
   ['ФБР','CPD','Мэрия / Правительство','Суд'],
   ['ФБР','CPD','Национальная Гвардия','EMS'],
-  ['Да, сб и вс','Только вс','Нет — 7 дней','По графику'],
+  ['Да, сб и вс','Только вс','Нет','По графику'],
   ['Приказ Губернатора','Конституция South','ЕПК','УК'],
   ['ФБР','НГ / Федеральная Тюрьма','Мэрия','EMS'],
   ['EMS, NEWS, Суд','CPD, ФБР, НГ','Мэрия, CPD, EMS','ФБР, Суд, NEWS'],
@@ -191,12 +187,7 @@ var O=[
   ['Закрыт','Основан 2019. Штат, флаг, силовые, культура','Архив ФБР','Военная база']
 ];
 
-function switchAuthTab(t){
-  document.querySelectorAll('.auth-tab').forEach(function(e){e.classList.remove('active')});
-  document.querySelectorAll('.auth-panel').forEach(function(e){e.classList.remove('active')});
-  document.querySelector('[onclick="switchAuthTab(\''+t+'\')"]').classList.add('active');
-  document.getElementById('auth-'+t).classList.add('active');
-}
+var currentAdmin=null;
 
 // Авто-вход
 (async function(){
@@ -205,7 +196,7 @@ function switchAuthTab(t){
     try{
       var a=JSON.parse(s);
       var r=await supabaseFind('admins','login',a.login);
-      if(r&&r.length>0&&r[0].approved){showAdminPanel();return}
+      if(r&&r.length>0&&r[0].approved){showAdminPanel(r[0]);return}
     }catch(e){}
   }
 })();
@@ -219,11 +210,12 @@ document.getElementById('admin-login-form').addEventListener('submit',async func
   var p=document.getElementById('admin-log-pass').value;
   try{
     var r=await supabaseFind('admins','login',l);
-    if(!r||r.length===0){showMsg('Неверный логин или пароль','error');btn.disabled=false;btn.textContent='ВОЙТИ →';return}
+    if(!r||r.length===0){showMsg('Неверный логин','error');btn.disabled=false;btn.textContent='ВОЙТИ →';return}
     var a=r[0];
-    if(a.pass!==p||!a.approved){showMsg('Неверный логин/пароль или заявка не одобрена','error');btn.disabled=false;btn.textContent='ВОЙТИ →';return}
+    if(a.pass!==p){showMsg('Неверный пароль','error');btn.disabled=false;btn.textContent='ВОЙТИ →';return}
+    if(!a.approved){showMsg('Ваша заявка ещё не одобрена','error');btn.disabled=false;btn.textContent='ВОЙТИ →';return}
     localStorage.setItem('ege_admin_current',JSON.stringify({login:a.login,name:a.name,role:a.role}));
-    showAdminPanel();
+    showAdminPanel(a);
   }catch(e){
     showMsg('Ошибка: '+e.message,'error');btn.disabled=false;btn.textContent='ВОЙТИ →';
   }
@@ -231,24 +223,33 @@ document.getElementById('admin-login-form').addEventListener('submit',async func
 
 function showMsg(t,c){var e=document.getElementById('auth-msg');e.textContent=t;e.className='auth-msg '+c}
 
-function showAdminPanel(){
+function showAdminPanel(admin){
+  currentAdmin=admin;
   document.getElementById('admin-login-wrap').style.display='none';
   document.getElementById('admin-panel').style.display='';
   document.getElementById('admin-footer').style.display='';
-  var a=JSON.parse(localStorage.getItem('ege_admin_current'));
-  document.getElementById('adm-avatar').textContent=a.name.charAt(0).toUpperCase();
-  document.getElementById('adm-name').textContent=a.name;
-  document.getElementById('adm-role').textContent=a.role;
+  document.getElementById('adm-avatar').textContent=admin.name.charAt(0).toUpperCase();
+  document.getElementById('adm-name').textContent=admin.name;
+
+  var roleNames={root:'Глав. Администратор',decan:'Декан',teacher:'Преподаватель',admin:'Администратор',moderator:'Модератор'};
+  document.getElementById('adm-role').textContent=roleNames[admin.role]||admin.role;
+  document.getElementById('admin-bar-role').textContent='Роль: '+(roleNames[admin.role]||admin.role);
+
+  // Только root видит админов
+  if(admin.role!=='root'){
+    document.getElementById('nav-admins').style.display='none';
+  }
+
   loadResults();
 }
 
 function adminLogout(){localStorage.removeItem('ege_admin_current');location.reload()}
 
-function showTab(t){
-  document.querySelectorAll('.admin-tab').forEach(function(el){el.style.display='none'});
+function showTab(t,el){
+  document.querySelectorAll('.admin-tab').forEach(function(x){x.style.display='none'});
   document.getElementById('tab-'+t).style.display='';
-  document.querySelectorAll('.admin-nav__link').forEach(function(el){el.classList.remove('active')});
-  event.target.classList.add('active');
+  document.querySelectorAll('.admin-nav__link').forEach(function(x){x.classList.remove('active')});
+  el.classList.add('active');
   if(t==='results')loadResults();
   if(t==='users')loadUsers();
   if(t==='admins')loadAdmins();
@@ -321,6 +322,7 @@ function openDetail(id){
   document.getElementById('result-detail-overlay').style.display='flex';
 }
 function closeDetail(e){if(!e||e.target===document.getElementById('result-detail-overlay'))document.getElementById('result-detail-overlay').style.display='none'}
+
 async function saveScore(){
   if(!currentDetailId)return;
   var sc=parseInt(document.getElementById('detail-score-input').value);
@@ -340,7 +342,7 @@ async function loadUsers(){
     el.innerHTML=users.map(function(u){
       return'<div class="admin-user-card">'+
         '<div class="admin-user-card__avatar">'+u.name.charAt(0)+'</div>'+
-        '<div><b>'+u.name+'</b><p>'+u.login+' · '+u.age+' лет · '+u.created_at+'</p></div>'+
+        '<div><b>'+u.name+'</b><p>'+u.login+' · '+u.age+' лет · '+(u.created_at||'—')+'</p></div>'+
       '</div>';
     }).join('');
   }catch(e){el.innerHTML='<div class="admin-empty">Ошибка загрузки</div>'}
@@ -353,12 +355,13 @@ async function loadAdmins(){
     var admins=await supabaseGet('admins','&order=created_at.desc');
     var pending=admins.filter(function(a){return!a.approved});
     var approved=admins.filter(function(a){return a.approved});
+    var roleNames={root:'Глав. Админ',decan:'Декан',teacher:'Преподаватель',admin:'Администратор',moderator:'Модератор'};
 
     if(pending.length){
       req.innerHTML='<h4 style="font-size:14px;color:var(--navy);margin-bottom:8px">⏳ Заявки на одобрение</h4>'+
         pending.map(function(a){
           return'<div class="admin-request-card">'+
-            '<div><b>'+a.name+'</b><p>'+a.login+' · '+a.role+' · '+a.created_at+'</p></div>'+
+            '<div><b>'+a.name+'</b><p>'+a.login+' · '+(roleNames[a.role]||a.role)+' · '+a.created_at+'</p></div>'+
             '<div style="display:flex;gap:6px">'+
               '<button class="btn-approve" onclick="approveAdmin(\''+a.id+'\')">✅ Одобрить</button>'+
               '<button class="btn-reject" onclick="rejectAdmin(\''+a.id+'\')">❌ Отклонить</button>'+
@@ -370,8 +373,8 @@ async function loadAdmins(){
     el.innerHTML='<h4 style="font-size:14px;color:var(--navy);margin-bottom:8px">🛡️ Администраторы</h4>'+
       approved.map(function(a){
         return'<div class="admin-admin-card">'+
-          '<div><b>'+a.name+'</b><p>'+a.login+' · '+a.role+'</p></div>'+
-          '<span class="admin-role-badge '+(a.role==='root'?'role-root':'')+'">'+a.role+'</span>'+
+          '<div><b>'+a.name+'</b><p>'+a.login+' · '+(roleNames[a.role]||a.role)+'</p></div>'+
+          '<span class="admin-role-badge '+(a.role==='root'?'role-root':'')+'">'+(roleNames[a.role]||a.role)+'</span>'+
         '</div>';
       }).join('');
   }catch(e){el.innerHTML='<div class="admin-empty">Ошибка</div>'}
