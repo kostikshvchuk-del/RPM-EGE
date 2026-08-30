@@ -34,6 +34,46 @@
 [data-theme="dark"] .side-card ol,[data-theme="dark"] .format-card p{color:var(--muted)}
 [data-theme="dark"] input,[data-theme="dark"] textarea,[data-theme="dark"] select{background:var(--card);border-color:var(--border);color:var(--text)}
 [data-theme="dark"] input::placeholder,[data-theme="dark"] textarea::placeholder{color:var(--muted)}
+/* Глобальная читабельность тёмной темы */
+[data-theme="dark"] .side-card ol,
+[data-theme="dark"] .cabinet-sidebar__user p,
+[data-theme="dark"] .cabinet-topbar__info,
+[data-theme="dark"] .cabinet-empty p,
+[data-theme="dark"] .cabinet-result-card__date,
+[data-theme="dark"] .cabinet-result-card__label,
+[data-theme="dark"] .cabinet-nav__link,
+[data-theme="dark"] .admin-result-card__left p,
+[data-theme="dark"] .admin-user-card p,
+[data-theme="dark"] .admin-request-card p,
+[data-theme="dark"] .admin-admin-card p,
+[data-theme="dark"] .detail-header p,
+[data-theme="dark"] .detail-part1-score,
+[data-theme="dark"] .hint,
+[data-theme="dark"] .form-sub,
+[data-theme="dark"] .auth-sub,
+[data-theme="dark"] .form-link,
+[data-theme="dark"] .header__status{color:var(--muted)}
+[data-theme="dark"] .info-box b,
+[data-theme="dark"] .side-card h3,
+[data-theme="dark"] .format-card h3,
+[data-theme="dark"] .rule b,
+[data-theme="dark"] .doc-link b,
+[data-theme="dark"] .form-card h2,
+[data-theme="dark"] .auth-card h2,
+[data-theme="dark"] .cabinet-sidebar__user h3,
+[data-theme="dark"] .cabinet-result-card__left h3,
+[data-theme="dark"] .cabinet-empty h3,
+[data-theme="dark"] .detail-header h3,
+[data-theme="dark"] .admin-result-card__left b,
+[data-theme="dark"] .admin-user-card b,
+[data-theme="dark"] .admin-request-card b,
+[data-theme="dark"] .admin-admin-card b{color:var(--text)}
+[data-theme="dark"] .cabinet-nav__link.active{color:var(--navy);background:#fff}
+[data-theme="dark"] .cabinet-nav__link:hover{color:var(--text);background:rgba(255,255,255,.08)}
+[data-theme="dark"] .btn-outline{background:var(--card);color:var(--text);border-color:var(--border)}
+[data-theme="dark"] .btn-outline:hover{border-color:var(--text)}
+[data-theme="dark"] .q-dot{background:var(--card);color:var(--text);border-color:var(--border)}
+[data-theme="dark"] .admin-empty{background:var(--card);border-color:var(--border);color:var(--muted)}
 body{font-family:'Manrope',system-ui,Arial,sans-serif;background:var(--bg);color:var(--text);line-height:1.6}
 .theme-toggle{background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.2);color:#fff;padding:5px 10px;border-radius:6px;font-size:12px;cursor:pointer;transition:.15s}
 .theme-toggle:hover{background:rgba(255,255,255,.2)}
