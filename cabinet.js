@@ -23,12 +23,16 @@ async function loadCabinet(){
   document.getElementById('cab-created').textContent=currentUser.created_at||'—';
   document.getElementById('cabinet-empty').style.display='none';
   document.getElementById('cabinet-pending').style.display='none';
+  document.getElementById('cabinet-annulled').style.display='none';
   document.getElementById('cabinet-result').style.display='none';
   document.getElementById('cabinet-history').style.display='none';
   try{
     var r=await supabaseGet('results','&name=eq.'+encodeURIComponent(currentUser.name)+'&order=timestamp.desc');
     if(r&&r.length>0){
       var latest=r[0];
+      if(latest.status==='annulled'){
+        document.getElementById('cabinet-annulled').style.display='';
+      } else {
       var sc=latest.admin_score;
       if(sc!==null&&sc!==undefined){
         document.getElementById('cabinet-result').style.display='';
@@ -48,6 +52,7 @@ async function loadCabinet(){
           }catch(e){}
         }
       }else{ document.getElementById('cabinet-pending').style.display=''; }
+      }
       if(r.length>1){
         document.getElementById('cabinet-history').style.display='block';
         document.getElementById('cabinet-history-list').innerHTML=r.map(function(x){
@@ -72,6 +77,8 @@ function startExam(){
   // Проверка — одна попытка
   var pending = document.getElementById('cabinet-pending');
   if(pending && pending.style.display !== 'none'){ alert('У вас уже есть работа на проверке. Дождитесь результата.'); return; }
+  var annulled = document.getElementById('cabinet-annulled');
+  if(annulled && annulled.style.display !== 'none'){ alert('Ваш тест был аннулирован. Свяжитесь с администрацией.'); return; }
   document.getElementById('rules-overlay').style.display='flex';
   document.getElementById('rules-check').checked=false;
 }
