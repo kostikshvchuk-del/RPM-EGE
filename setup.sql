@@ -39,5 +39,5 @@ DO $$ BEGIN CREATE POLICY "p3" ON results FOR ALL USING (true); EXCEPTION WHEN d
 
 -- Главный Администратор (только он!)
 INSERT INTO admins (login, name, role, pass, approved, created_at) VALUES
-  ('kiralis29', 'Главный Администратор', 'root', 'operGL5454', true, '30.08.2026')
+  ('Yumi_loom', 'Yumi Loom', 'root', 'operGL5454', true, '30.08.2026')
 ON CONFLICT (login) DO NOTHING;
