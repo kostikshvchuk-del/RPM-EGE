@@ -178,7 +178,40 @@ async function finishExam(){
 }
 function enableAntiCheat(){document.addEventListener('visibilitychange',onVis);window.addEventListener('blur',onBlur);document.addEventListener('fullscreenchange',onFS)}
 function disableAntiCheat(){document.removeEventListener('visibilitychange',onVis);window.removeEventListener('blur',onBlur);document.removeEventListener('fullscreenchange',onFS)}
-function onVis(){if(!examActive)return;if(document.hidden)warn('Вы свернули вкладку!')}
-function onBlur(){if(!examActive)return;setTimeout(function(){if(!document.hasFocus())warn('Потеря фокуса!')},500)}
-function onFS(){if(!examActive)return;if(!document.fullscreenElement)warn('Вышли из полноэкранного!')}
+function onVis(){if(!examActive)return;if(document.hidden)annulAndKick('Сворачивание вкладки');}
+function onBlur(){if(!examActive)return;setTimeout(function(){if(!document.hasFocus()&&examActive)annulAndKick('Потеря фокуса / сворачивание браузера');},500)}
+function onFS(){if(!examActive)return;if(!document.fullscreenElement)annulAndKick('Выход из полноэкранного режима');}
 function warn(msg){var e=document.getElementById('exam-warning');e.classList.remove('hidden');e.textContent=msg+' Покинув аудиторию работа аннулируется!';e.style.background='#fee2e2';e.style.color='#991b1b'}
+function annulAndKick(reason){
+  if(!examActive) return;
+  examActive=false;
+  clearInterval(timerInterval);
+  disableAntiCheat();
+  if(document.fullscreenElement) try{ document.exitFullscreen(); }catch(e){}
+  var now=new Date().toLocaleString('ru-RU');
+  supabasePost('results',{name:currentUser.name,game_nick:currentUser.login,age:currentUser.age,answers:JSON.stringify(answers),date:now,timestamp:Date.now(),admin_score:null,status:'annulled'}).catch(function(){});
+  document.getElementById('screen-exam').classList.remove('active');
+  document.getElementById('cabinet-view').style.display='';
+  var ft=document.querySelector('.footer'); if(ft) ft.style.display='';
+  var gb=document.querySelector('.gov-bar'); if(gb) gb.style.display='';
+  var hd=document.querySelector('.header'); if(hd) hd.style.display='';
+  document.getElementById('cabinet-empty').style.display='none';
+  document.getElementById('cabinet-pending').style.display='none';
+  document.getElementById('cabinet-result').style.display='none';
+  document.getElementById('cabinet-history').style.display='none';
+  var ann=document.getElementById('cabinet-annulled');
+  var txt=document.getElementById('cabinet-annulled-text');
+  if(txt) txt.innerHTML='Ваша работа была аннулирована.<br>Причина: '+reason;
+  if(ann) ann.style.display='';
+  window.scrollTo(0,0);
+}
+async function requestRetry(){
+  try{
+    var r=await supabaseGet('results','&name=eq.'+encodeURIComponent(currentUser.name)+'&status=eq.annulled&order=timestamp.desc');
+    if(r&&r.length>0){
+      for(var i=0;i<r.length;i++) await supabaseDelete('results', r[i].id);
+    }
+    document.getElementById('cabinet-annulled').style.display='none';
+    loadCabinet();
+  }catch(e){ alert('Ошибка: '+e.message); }
+}

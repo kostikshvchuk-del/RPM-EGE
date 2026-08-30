@@ -67,7 +67,8 @@
       <div id="cabinet-annulled" class="cabinet-empty" style="display:none">
         <div class="cabinet-empty__icon">🚫</div>
         <h3>Тест аннулирован</h3>
-        <p>Ваша работа была аннулирована преподавателем.<br>Свяжитесь с администрацией для уточнения причины.</p>
+        <p id="cabinet-annulled-text">Ваша работа была аннулирована.<br>Причина: нарушение правил проведения (сворачивание).</p>
+        <button class="btn-primary" onclick="requestRetry()" style="margin-top:12px">🔄 Подать на ещё одну попытку</button>
       </div>
 
       <div id="cabinet-result" style="display:none">
@@ -179,6 +180,6 @@
 </footer>
 
 <script src="supabase-config.js"></script>
-<script src="cabinet.js?v=4"></script>
+<script src="cabinet.js?v=5"></script>
 </body>
 </html>
