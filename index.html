@@ -29,6 +29,7 @@
     <div class="header__meta">
       <div class="header__year">ЕГЭ — 2026</div>
       <div class="header__status"><span class="dot"></span> Идет основной период</div>
+      <a href="register.html" class="btn-primary btn-sm" style="margin-top:6px">📝 ВОЙТИ / РЕГИСТРАЦИЯ</a>
     </div>
   </div>
   <nav class="nav">
@@ -56,8 +57,8 @@
         <div class="stat"><b>14</b><span>мин. балл</span></div>
       </div>
 
-      <button class="btn-primary btn-lg" onclick="showScreen('screen-register')">📝 ЗАРЕГИСТРИРОВАТЬСЯ</button>
-      <p class="hero__note">Уже зарегистрированы? <a href="#" onclick="showScreen('screen-login');return false">Войти в кабинет →</a></p>
+      <a href="register.html" class="btn-primary btn-lg">📝 ЗАРЕГИСТРИРОВАТЬСЯ</a>
+      <p class="hero__note">Уже зарегистрированы? <a href="register.html">Войти в кабинет →</a></p>
     </div>
     <div class="hero__right">
       <div class="doc-card">
@@ -88,7 +89,6 @@
 </div>
 
 <main class="container main-grid">
-  <!-- О ФОРМАТЕ -->
   <section id="about" class="section">
     <h2 class="section__title"><span>01</span> О экзамене</h2>
     <div class="cols-2">
@@ -115,7 +115,6 @@
     </div>
   </section>
 
-  <!-- ФОРМАТ -->
   <section id="format" class="section">
     <h2 class="section__title"><span>02</span> Формат экзамена</h2>
     <div class="cards-2">
@@ -138,7 +137,6 @@
     </div>
   </section>
 
-  <!-- ПРАВИЛА -->
   <section id="rules" class="section">
     <h2 class="section__title"><span>03</span> Правила проведения</h2>
     <div class="rules-grid">
@@ -149,7 +147,6 @@
     </div>
   </section>
 
-  <!-- КОНТАКТЫ -->
   <section id="contacts" class="section">
     <h2 class="section__title"><span>04</span> Контакты</h2>
     <div class="doc-links">
@@ -160,174 +157,6 @@
   </section>
 </main>
 
-<!-- ===== РЕГИСТРАЦИЯ ===== -->
-<div id="screen-register" class="screen">
-  <div class="center-wrap">
-    <div class="form-card">
-      <div class="form-card__emblem">📝</div>
-      <h2>Регистрация</h2>
-      <p class="form-sub">Создайте аккаунт для сдачи экзамена</p>
-      <form id="register-form" novalidate>
-        <label>Логин <span class="req">*</span></label>
-        <input type="text" id="reg-login" placeholder="alex_vendetto" required>
-        <span class="hint">Латиница, без пробелов, минимум 3 символа</span>
-
-        <label>Имя и Фамилия <span class="req">*</span></label>
-        <input type="text" id="reg-name" placeholder="Алекс Вендетто" required>
-        <span class="hint">Кириллицей, Имя Фамилия</span>
-
-        <label>Возраст <span class="req">*</span></label>
-        <input type="number" id="reg-age" placeholder="18" min="4" max="99" required>
-        <span class="hint">Минимум 4 года</span>
-
-        <label>Пароль <span class="req">*</span></label>
-        <input type="password" id="reg-pass" placeholder="Минимум 4 символа" required>
-
-        <label>Повторите пароль <span class="req">*</span></label>
-        <input type="password" id="reg-pass2" placeholder="Повторите пароль" required>
-
-        <button type="submit" class="btn-primary full">ЗАРЕГИСТРИРОВАТЬСЯ →</button>
-        <p class="form-link">Уже есть аккаунт? <a href="#" onclick="showScreen('screen-login');return false">Войти</a></p>
-      </form>
-    </div>
-  </div>
-</div>
-
-<!-- ===== ВХОД ===== -->
-<div id="screen-login" class="screen">
-  <div class="center-wrap">
-    <div class="form-card">
-      <div class="form-card__emblem">🔐</div>
-      <h2>Вход в кабинет</h2>
-      <p class="form-sub">Войдите в свой аккаунт</p>
-      <form id="login-form" novalidate>
-        <label>Логин</label>
-        <input type="text" id="log-login" placeholder="alex_vendetto" required>
-        <label>Пароль</label>
-        <input type="password" id="log-pass" placeholder="Ваш пароль" required>
-        <button type="submit" class="btn-primary full">ВОЙТИ →</button>
-        <p class="form-link">Нет аккаунта? <a href="#" onclick="showScreen('screen-register');return false">Зарегистрироваться</a></p>
-      </form>
-    </div>
-  </div>
-</div>
-
-<!-- ===== КАБИНЕТ ===== -->
-<div id="screen-cabinet" class="screen">
-  <div class="cabinet-wrap">
-    <!-- Сайдбар -->
-    <aside class="cabinet-sidebar">
-      <div class="cabinet-sidebar__user">
-        <div class="cabinet-avatar" id="cab-avatar">👤</div>
-        <h3 id="cab-name">Имя</h3>
-        <p id="cab-login-display">login</p>
-        <span class="cabinet-role" id="cab-role">Участник</span>
-      </div>
-      <nav class="cabinet-nav">
-        <a href="#" class="cabinet-nav__link active" onclick="return false">📋 Мои результаты</a>
-        <a href="#" class="cabinet-nav__link" onclick="return false">📜 История</a>
-        <a href="#" class="cabinet-nav__link" onclick="cabLogout()">🚪 Выйти</a>
-      </nav>
-    </aside>
-
-    <!-- Основной контент -->
-    <div class="cabinet-main">
-      <div class="cabinet-topbar">
-        <h2>Мои результаты</h2>
-        <span id="cab-topbar-info" class="cabinet-topbar__info"></span>
-      </div>
-
-      <!-- Нет результатов -->
-      <div id="cab-empty" class="cabinet-empty">
-        <div class="cabinet-empty__icon">📝</div>
-        <h3>Тест ещё не пройден</h3>
-        <p>Нажмите кнопку чтобы начать экзамен</p>
-        <button class="btn-primary btn-lg" onclick="startExam()">НАЧАТЬ ТЕСТ →</button>
-      </div>
-
-      <!-- Есть результат -->
-      <div id="cab-result" style="display:none">
-        <div class="cabinet-result-card">
-          <div class="cabinet-result-card__left">
-            <div class="cabinet-result-card__icon" id="cab-result-icon">🎓</div>
-            <div>
-              <h3 id="cab-result-title">Результат</h3>
-              <p id="cab-result-date" class="cabinet-result-card__date"></p>
-            </div>
-          </div>
-          <div class="cabinet-result-card__right">
-            <div class="cabinet-result-card__score" id="cab-score">—</div>
-            <div class="cabinet-result-card__label">баллов</div>
-          </div>
-        </div>
-
-        <div class="cabinet-result-actions">
-          <button class="btn-primary" onclick="startExam()">ПЕРЕСДАТЬ</button>
-          <button class="btn-outline" onclick="window.print()">🖨️ Печать</button>
-        </div>
-
-        <!-- Детали I части -->
-        <div id="cab-part1-details" class="cabinet-details" style="display:none">
-          <h4>I Часть — Тест</h4>
-          <div id="cab-part1-grid" class="cabinet-detail-grid"></div>
-        </div>
-      </div>
-
-      <!-- История -->
-      <div id="cab-history" style="display:none">
-        <h3 style="font-size:15px;color:var(--navy);margin-bottom:10px">📜 История попыток</h3>
-        <div id="cab-history-list"></div>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- ===== ЭКЗАМЕН ===== -->
-<div id="screen-exam" class="screen">
-  <div class="exam-header">
-    <div class="exam-header__left">
-      <b id="exam-nick">Участник</b>
-      <span class="exam-part-badge" id="exam-part-badge">I Часть</span>
-    </div>
-    <div class="exam-header__center">Вопрос <span id="q-current">1</span> / <span id="q-total">35</span></div>
-    <div class="exam-header__right"><span id="timer">25:00</span></div>
-  </div>
-  <div class="progress-bar"><div id="progress"></div></div>
-  <div class="exam-body">
-    <div id="exam-warning" class="exam-warning hidden"></div>
-    <div id="part1-question">
-      <div class="exam-diff-tag" id="exam-diff"></div>
-      <h2 id="question-text">Загрузка...</h2>
-      <div id="options" class="options"></div>
-    </div>
-    <div id="part2-question" style="display:none">
-      <div class="exam-diff-tag diff-hard">II Часть — Письменно</div>
-      <h2 id="question-text-2">Загрузка...</h2>
-      <textarea id="text-answer" placeholder="Напишите ваш ответ словами..." rows="5"></textarea>
-    </div>
-    <div class="exam-nav">
-      <button id="prev-btn" class="btn-secondary" disabled>← Назад</button>
-      <div style="display:flex;gap:10px">
-        <button id="next-btn" class="btn-primary">Далее →</button>
-        <button id="finish-btn" class="btn-finish hidden">СДАТЬ РАБОТУ</button>
-      </div>
-    </div>
-    <div class="question-grid" id="question-grid"></div>
-  </div>
-</div>
-
-<!-- ===== РЕЗУЛЬТАТ ===== -->
-<div id="screen-result" class="screen">
-  <div class="center-wrap">
-    <div class="form-card" style="text-align:center">
-      <div style="font-size:52px;margin-bottom:10px">📋</div>
-      <h2>Работа сдана</h2>
-      <p class="form-sub">Ответы отправлены на проверку.<br>Результат появится в личном кабинете.</p>
-      <button class="btn-primary" onclick="showScreen('screen-cabinet');loadCabinet()">В КАБИНЕТ →</button>
-    </div>
-  </div>
-</div>
-
 <footer class="footer">
   <div class="container footer__grid">
     <div><b>Департамент образования Штата South</b><br>9001, Los Santos, Government Blvd, 1 © 2026</div>
@@ -335,7 +164,5 @@
   </div>
 </footer>
 
-<script src="supabase-config.js"></script>
-<script src="script.js"></script>
 </body>
 </html>
