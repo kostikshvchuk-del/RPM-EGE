@@ -1,46 +1,7 @@
 // admin.js — логика admin.html
-var PART1=[
-  {c:1},{c:2},{c:1},{c:2},{c:1},{c:1},{c:1},{c:1},{c:2},{c:2},{c:1},{c:1},{c:2},{c:1},{c:1},{c:1},{c:0},{c:2},{c:2},{c:2},{c:1},{c:1},{c:1},{c:1},{c:1}
-];
-var PART2_Q=[
-  "Какая фракция отвечает за безопасность государства до угрозы штату? Объясните.",
-  "Розыск выдан неправильно. Куда идти? Поэтапно.",
-  "Чем CPD отличается от ФБР? 3 отличия.",
-  "Экскурсия в музей — о чём расскажете?",
-  "Какая фракция эффективна для заработка? Обоснуйте.",
-  "Какие фракции социальные? Почему?",
-  "Порядок действий при преступлении.",
-  "Что такое ЕПК? Примеры статей.",
-  "Почему Суд независим от Мэрии?",
-  "Какую реформу провели бы как Губернатор?"
-];
-var O=[
-  ['CPD (Полиция)','NEWS / СМИ','EMS (Медицина)','ФБР'],
-  ['ФБР','CPD','Мэрия / Правительство','Суд'],
-  ['ФБР','CPD','Национальная Гвардия','EMS'],
-  ['Да, сб и вс','Только вс','Нет — 7 дней без выходных','По графику'],
-  ['Приказ Губернатора','Конституция South','ЕПК','УК'],
-  ['ФБР','НГ / Федеральная Тюрьма','Мэрия','EMS'],
-  ['EMS, NEWS, Суд','CPD, ФБР, НГ','Мэрия, CPD, EMS','ФБР, Суд, NEWS'],
-  ['ФБР','EMS','CPD','NEWS'],
-  ['CPD','EMS','NEWS / СМИ','НГ'],
-  ['NEWS','EMS','CPD','ФБР'],
-  ['CPD','ФБР','НГ','Мэрия'],
-  ['НГ','ФБР','EMS','Мэрия'],
-  ['НГ','EMS','NEWS/Мэрия/ФБР (премии)','Суд'],
-  ['CPD/ФБР','EMS/NEWS — услуги населению','Мэрия/Суд','НГ/EMS'],
-  ['3','Все 7','5','2'],
-  ['NEWS','НГ / Федеральная Тюрьма','EMS','Мэрия'],
-  ['НГ','ФБР','CPD','Мэрия'],
-  ['NEWS','EMS','Мэрия / Губернатор','CPD'],
-  ['NEWS','EMS','Мэрия + ФБР','НГ'],
-  ['CPD','EMS','Суд + ФБР','NEWS'],
-  ['ФБР','Суд — иск по ЕПК','Мэрия','NEWS'],
-  ['CPD','ФБР — федеральная подследственность','Поровну','Мэрия'],
-  ['Экстренный Протокол','ЕПК — CPD, ФБР, Суд','Единый План','Электронный Протокол'],
-  ['Нет','Да — дискриминация наказуема','Только при свидетелях','Только ФБР'],
-  ['Закрыт','Основан 2019. Штат, флаг, силовые, культура','Архив ФБР','Военная база']
-];
+var PART1=[{"c": 0}, {"c": 2}, {"c": 2}, {"c": 1}, {"c": 0}, {"c": 2}, {"c": 1}, {"c": 0}, {"c": 0}, {"c": 1}, {"c": 1}, {"c": 3}, {"c": 1}, {"c": 3}, {"c": 0}, {"c": 0}, {"c": 0}, {"c": 1}, {"c": 0}, {"c": 0}, {"c": 0}, {"c": 2}, {"c": 0}, {"c": 1}, {"c": 1}];
+var PART2_Q=["Губернатор важнее судьи? Может ли губернатор отменить решение суда? Распишите своё мнение.", "Чем отличается приказ губернатора от федерального закона? Что выше по силе?", "Вы стали свидетелем коррупции в Мэрии. Куда обратитесь и как докажете?", "Почему нельзя посещать военную базу без пропуска? Что будет за нарушение?", "Опишите порядок задержания по ЕПК: от остановки до суда.", "Может ли сотрудник СМИ снимать задержание? Какие у него права и ограничения?", "В чём разница между IC и OOC? Приведите примеры нарушений.", "Что такое RolePlay и почему нельзя использовать MG (Metagaming)?", "Вы — лидер фракции. Как бы вы повысили дисциплину состава? Предложите 3 меры.", "Опишите идеальный RolePlay процесс: от создания персонажа до повышения во фракции."];
+var O=[["Армия", "ЦПД", "Мэрия", "Больница"], ["Больница", "ЦПД", "Армия", "ФБИ"], ["ЦПД", "ФБИ", "Больница", "СМИ"], ["Армия", "ФБИ", "СМИ", "Мэрия"], ["ЦПД", "СМИ", "Армия", "Мэрия"], ["СМИ", "Больница", "ЦПД", "Мэрия"], ["СМИ", "Мэрия", "Больница", "ФБИ"], ["Мэрия — подать иск в суд", "ФБИ — написать жалобу", "Больница — снять побои", "Армия — обратиться к генералу"], ["ФБИ", "ЦПД", "Мэрия", "Суд"], ["Армия", "ФБИ", "Мэрия", "СМИ"], ["Больница", "ФБИ", "Университет", "СМИ"], ["Мэрия", "СМИ", "Университет", "Армия"], ["Армия", "СМИ", "Мэрия", "ФБИ"], ["Бар 'Укус Змеи'", "Мэрия", "Клуб 'TheCrips'", "Армия"], ["Мэрия", "ФБИ", "Армия", "Университет"], ["Про музей, флаг, историю штата и фракции", "Про капт терри", "Про поезд армейцев", "Про бар"], ["СМИ", "Университет", "Мэрия", "Больница"], ["Армия, СМИ, ЦПД", "Армия, ФБИ, ЦПД", "Мэрия, СМИ, ЦПД", "ЦПД, СМИ, Мэрия"], ["ФБИ", "Армия", "Больница", "СМИ"], ["Единый Процессуальный Кодекс — ЦПД, ФБИ", "Единый Правовой Кодекс — Мэрия", "Единый Полицейский Кодекс — Армия", "Ежедневный Приказ Командования — СМИ"], ["Да", "Нет", "Только если есть свидетели", "Только через ФБИ"], ["Да, суббота и воскресенье", "Да, только воскресенье", "Нет", "По графику"], ["Больница, Университет", "ЦПД, ФБИ", "Мэрия, Армия", "СМИ, ФБИ"], ["6", "7", "8", "12"], ["Федеральные Законы", "Конституция", "Паспорт", "Медкарта"]];
 var currentAdmin=null;
 (async function(){
   var s=localStorage.getItem('ege_admin_current');
@@ -103,11 +64,13 @@ async function loadResults(){
 }
 function updateStats(){
   var total=allResults.length;
+  var claimed=allResults.filter(function(r){return r.status==='claimed'}).length;
   var pending=allResults.filter(function(r){return r.status==='pending'||(!r.status&&r.admin_score==null)}).length;
   var done=allResults.filter(function(r){return r.status==='done'}).length;
   var annulled=allResults.filter(function(r){return r.status==='annulled'}).length;
   document.getElementById('stat-total').textContent=total;
   document.getElementById('stat-pending').textContent=pending;
+  var claimedEl=document.getElementById('stat-claimed'); if(claimedEl) claimedEl.textContent=claimed;
   document.getElementById('stat-done').textContent=done;
   document.getElementById('stat-annulled').textContent=annulled;
 }
@@ -126,7 +89,9 @@ function renderResults(list){
   if(!list.length){el.innerHTML='<div class="admin-empty">Нет результатов — пока никто не сдал работу</div>';return}
   el.innerHTML=list.map(function(r){
     var sc=r.admin_score;
-    if(r.status==='annulled') return'<div class="admin-result-card status-annulled" onclick="openDetail(\''+r.id+'\')"><div class="admin-result-card__left"><div class="admin-result-card__avatar">'+r.name.charAt(0)+'</div><div><b>'+r.name+'</b><p>'+r.game_nick+' · '+r.age+' лет</p><div class="admin-result-card__meta">'+(r.date||'—')+'</div></div></div><div class="admin-result-card__right"><span class="admin-badge annulled">🚫 Аннулировано</span><span style="font-size:10px;color:var(--muted)">Открыть →</span></div></div>';
+    if(r.claimed_by && r.status==='pending') r.status='claimed';
+    if(r.status==='claimed') return'<div class="admin-result-card status-pending" onclick="openDetail(\''+r.id+'\')"><div class="admin-result-card__left"><div class="admin-result-card__avatar">'+r.name.charAt(0)+'</div><div><b>'+r.name+'</b><p>'+r.game_nick+' · '+r.age+' лет</p><div class="admin-result-card__meta">'+(r.date||'—')+' · 🔒 '+r.claimed_by+'</div></div></div><div class="admin-result-card__right"><span class="admin-badge pending">🔒 '+r.claimed_by+'</span><span style="font-size:10px;color:var(--muted)">Открыть →</span></div></div>';
+    if(r.status==='annulled') return'<div class="admin-result-card status-annulled"' onclick="openDetail(\''+r.id+'\')"><div class="admin-result-card__left"><div class="admin-result-card__avatar">'+r.name.charAt(0)+'</div><div><b>'+r.name+'</b><p>'+r.game_nick+' · '+r.age+' лет</p><div class="admin-result-card__meta">'+(r.date||'—')+'</div></div></div><div class="admin-result-card__right"><span class="admin-badge annulled">🚫 Аннулировано</span><span style="font-size:10px;color:var(--muted)">Открыть →</span></div></div>';
     if(r.status==='done') return'<div class="admin-result-card status-done" onclick="openDetail(\''+r.id+'\')"><div class="admin-result-card__left"><div class="admin-result-card__avatar">'+r.name.charAt(0)+'</div><div><b>'+r.name+'</b><p>'+r.game_nick+' · '+r.age+' лет</p><div class="admin-result-card__meta">'+(r.date||'—')+'</div></div></div><div class="admin-result-card__right"><span class="admin-badge '+(sc>=14?'done':'fail')+'">'+(sc>=14?'✅ ':'❌ ')+sc+' / 35</span><span style="font-size:10px;color:var(--muted)">Открыть →</span></div></div>';
     return'<div class="admin-result-card status-pending" onclick="openDetail(\''+r.id+'\')"><div class="admin-result-card__left"><div class="admin-result-card__avatar">'+r.name.charAt(0)+'</div><div><b>'+r.name+'</b><p>'+r.game_nick+' · '+r.age+' лет</p><div class="admin-result-card__meta">'+(r.date||'—')+'</div></div></div><div class="admin-result-card__right"><span class="admin-badge pending">⏳ На проверке</span><span style="font-size:10px;color:var(--muted)">Открыть →</span></div></div>';
   }).join('');
@@ -153,9 +118,35 @@ function openDetail(id){
     return'<div style="margin-bottom:10px;padding:12px;background:#f8fafc;border:1px solid var(--border);border-radius:8px"><b style="font-size:12px;color:var(--navy)">Вопрос '+(PART1.length+i+1)+': '+PART2_Q[i]+'</b><div style="margin-top:6px;padding:8px;background:#fff;border:1px solid var(--border);border-radius:6px;font-size:13px;color:#1a2340;white-space:pre-wrap">'+(has?a:'<i style="color:var(--muted)">Нет ответа</i>')+'</div></div>';
   }).join('');
   document.getElementById('detail-score-input').value = r.admin_score!=null?r.admin_score:'';
+  // Блокировка — кто принял
+  var isRoot = currentAdmin && currentAdmin.role==='root';
+  var isClaimed = !!r.claimed_by;
+  var isMine = isClaimed && r.claimed_by===currentAdmin.login;
+  var claimInfo = document.getElementById('claim-info');
+  var claimBtn = document.getElementById('claim-btn');
+  var saveBtn = document.getElementById('save-btn');
+  if(claimInfo){
+    if(!isClaimed){
+      claimInfo.innerHTML='<span style="color:var(--muted)">Никто не принял — нажмите «Принять» чтобы закрепить за собой</span>';
+      if(claimBtn) claimBtn.style.display='';
+      if(saveBtn) saveBtn.disabled=true;
+    } else if(isMine || isRoot){
+      claimInfo.innerHTML='🔒 Принято: <b>'+r.claimed_by+'</b> '+(r.claimed_at||'')+(isRoot && !isMine ? ' <span style="color:var(--usared)">(root — доступ есть)</span>' : '');
+      if(claimBtn) claimBtn.style.display='none';
+      if(saveBtn) saveBtn.disabled=false;
+    } else {
+      claimInfo.innerHTML='🔒 Занято: <b>'+r.claimed_by+'</b> '+(r.claimed_at||'')+' — другой проверяющий уже работает';
+      if(claimBtn) claimBtn.style.display='none';
+      if(saveBtn) saveBtn.disabled=true;
+    }
+  }
   document.getElementById('result-detail-overlay').style.display='flex';
 }
 function closeDetail(e){ if(!e || e.target===document.getElementById('result-detail-overlay')) document.getElementById('result-detail-overlay').style.display='none'; }
+async function claimResult(){
+  if(!currentDetailId) return;
+  try{ await supabasePatch('results',currentDetailId,{claimed_by:currentAdmin.login,claimed_at:new Date().toLocaleString('ru-RU'),status:'claimed'}); var r=allResults.find(function(x){return x.id==currentDetailId}); if(r){r.claimed_by=currentAdmin.login; r.claimed_at=new Date().toLocaleString('ru-RU'); r.status='claimed';} openDetail(currentDetailId); await loadResults(); }catch(e){alert('Ошибка: '+e.message)}
+}
 async function saveScore(){
   if(!currentDetailId) return;
   var sc=parseInt(document.getElementById('detail-score-input').value);

@@ -1,6 +1,14 @@
 *{box-sizing:border-box;margin:0;padding:0}
 :root{--navy:#1a2744;--navy2:#0f1d33;--blue:#1a56db;--accent:#ffd700;--bg:#f4f6f9;--card:#fff;--border:#d6dce7;--text:#1a2340;--muted:#5b6a8a;--green:#0a7a42;--red:#c0392b;--usared:#B22234;--usablue:#3C3B6E}
+[data-theme="dark"]{--bg:#0f172a;--card:#1e293b;--border:#334155;--text:#e2e8f0;--muted:#94a3b8;--navy:#0f172a;--navy2:#020617}
+[data-theme="dark"] body{background:var(--bg);color:var(--text)}
+[data-theme="dark"] .header{background:var(--card);border-color:var(--border)}
+[data-theme="dark"] .header__ministry,[data-theme="dark"] .header__portal{color:var(--text)}
+[data-theme="dark"] .info-box,[data-theme="dark"] .side-card,[data-theme="dark"] .format-card,[data-theme="dark"] .rule,[data-theme="dark"] .doc-link,[data-theme="dark"] .cabinet-sidebar,[data-theme="dark"] .admin-main,[data-theme="dark"] .auth-card,[data-theme="dark"] .cabinet-result-card,[data-theme="dark"] .cabinet-details,[data-theme="dark"] .admin-result-card,[data-theme="dark"] .admin-user-card,[data-theme="dark"] .admin-stat,[data-theme="dark"] .detail-panel{background:var(--card);border-color:var(--border)}
+[data-theme="dark"] .cabinet-sidebar{border-color:var(--border)}
 body{font-family:'Manrope',system-ui,Arial,sans-serif;background:var(--bg);color:var(--text);line-height:1.6}
+.theme-toggle{background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.2);color:#fff;padding:5px 10px;border-radius:6px;font-size:12px;cursor:pointer;transition:.15s}
+.theme-toggle:hover{background:rgba(255,255,255,.2)}
 .container{max-width:900px;margin:0 auto;padding:0 20px}
 a{color:var(--blue);text-decoration:none}a:hover{text-decoration:underline}
 

@@ -26,12 +26,17 @@ CREATE TABLE IF NOT EXISTS results (
   date TEXT,
   timestamp BIGINT,
   admin_score INT,
-  status TEXT DEFAULT 'pending'
+  status TEXT DEFAULT 'pending',
+  claimed_by TEXT,
+  claimed_at TEXT
 );
 
 ALTER TABLE users ENABLE ROW LEVEL SECURITY;
 ALTER TABLE admins ENABLE ROW LEVEL SECURITY;
 ALTER TABLE results ENABLE ROW LEVEL SECURITY;
+
+ALTER TABLE results ADD COLUMN IF NOT EXISTS claimed_by TEXT;
+ALTER TABLE results ADD COLUMN IF NOT EXISTS claimed_at TEXT;
 
 DO $$ BEGIN CREATE POLICY "p1" ON users FOR ALL USING (true); EXCEPTION WHEN duplicate_object THEN null; END $$;
 DO $$ BEGIN CREATE POLICY "p2" ON admins FOR ALL USING (true); EXCEPTION WHEN duplicate_object THEN null; END $$;

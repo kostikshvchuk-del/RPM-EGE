@@ -7,12 +7,13 @@
 <link rel="stylesheet" href="style.css">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800&family=PT+Serif:wght@400;700&display=swap" rel="stylesheet">
+<script src="theme.js"></script>
 </head>
 <body>
 <div class="gov-bar">
   <div class="container gov-bar__inner">
     <span>🇺🇸 ГОСУДАРСТВЕННЫЙ ПОРТАЛ ШТАТА SOUTH</span>
-    <span>Горячая линия: <b>22222223</b> &nbsp;|&nbsp; supportegerpmsouth@gmail.com</span>
+    <button class="theme-toggle" id="theme-btn" onclick="toggleTheme()" title="Тема">🌙</button> <span>Горячая линия: <b>22222223</b> &nbsp;|&nbsp; supportegerpmsouth@gmail.com</span>
   </div>
 </div>
 <header class="header">
@@ -90,6 +91,32 @@
       <div id="cabinet-history" style="display:none">
         <h3 style="font-size:15px;color:var(--navy);margin-bottom:10px">📜 История попыток</h3>
         <div id="cabinet-history-list"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ПРАВИЛА ПЕРЕД СТАРТОМ -->
+<div id="rules-overlay" class="overlay" style="display:none" onclick="if(event.target===this)closeRules()">
+  <div class="detail-panel" style="max-width:520px">
+    <div class="detail-panel__head" style="background:var(--usared)">
+      <div style="font-size:28px">📋</div>
+      <div><h3>Правила экзамена</h3><p>Ознакомьтесь перед началом</p></div>
+    </div>
+    <div class="detail-panel__body">
+      <ul style="font-size:13px;color:var(--text);line-height:1.6;padding-left:18px;display:flex;flex-direction:column;gap:6px">
+        <li><b>25 минут</b> — таймер в шапке, автосдача по истечении.</li>
+        <li><b>Полноэкранный режим</b> обязателен — выход = предупреждение.</li>
+        <li><b>Нельзя сворачивать</b> вкладку — 2 предупреждения, затем аннулирование.</li>
+        <li><b>Навигация</b> — можно вернуться к любому вопросу.</li>
+        <li><b>Одна попытка</b> — пока работа на проверке, пересдача недоступна.</li>
+      </ul>
+      <label style="display:flex;gap:8px;align-items:center;margin-top:16px;font-size:13px;cursor:pointer">
+        <input type="checkbox" id="rules-check" style="width:18px;height:18px"> Я ознакомлен(а) с правилами и готов(а) начать
+      </label>
+      <div style="display:flex;gap:8px;margin-top:16px">
+        <button class="btn-primary" style="flex:1" onclick="confirmRules()">НАЧАТЬ ЭКЗАМЕН →</button>
+        <button class="btn-outline" onclick="closeRules()">Отмена</button>
       </div>
     </div>
   </div>

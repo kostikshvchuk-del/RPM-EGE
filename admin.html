@@ -7,6 +7,7 @@
 <link rel="stylesheet" href="style.css">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800&family=PT+Serif:wght@400;700&display=swap" rel="stylesheet">
+<script src="theme.js"></script>
 </head>
 <body>
 <div class="gov-bar">
@@ -64,6 +65,7 @@
         <div class="admin-stat pending"><b id="stat-pending">—</b><span>На проверке</span></div>
         <div class="admin-stat done"><b id="stat-done">—</b><span>Проверено</span></div>
         <div class="admin-stat annulled"><b id="stat-annulled">—</b><span>Аннулировано</span></div>
+        <div class="admin-stat" style="border-left-color:var(--navy)"><b id="stat-claimed">—</b><span>В проверке</span></div>
       </div>
 
       <!-- РЕЗУЛЬТАТЫ -->
@@ -129,8 +131,10 @@
           <input type="number" id="detail-score-input" min="0" max="35" placeholder="0">
         </div>
         <p style="font-size:11px;color:var(--muted);margin-bottom:12px">Порог «сдано» — 14 баллов. Аннулирование сбрасывает оценку и открывает пересдачу.</p>
+        <div id="claim-info" style="font-size:12px;padding:8px 10px;background:#f8fafc;border:1px solid var(--border);border-radius:6px;margin-bottom:10px"></div>
         <div style="display:flex;gap:8px;flex-wrap:wrap">
-          <button class="btn-primary" onclick="saveScore()">✅ Сохранить</button>
+          <button class="btn-primary" id="claim-btn" onclick="claimResult()" style="background:var(--navy)">🔒 Принять в проверку</button>
+          <button class="btn-primary" id="save-btn" onclick="saveScore()">✅ Сохранить</button>
           <button class="btn-annul" onclick="annulResult()">🚫 Аннулировать</button>
           <button class="btn-delete" onclick="deleteResult()">🗑️ Удалить</button>
         </div>
