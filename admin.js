@@ -21,6 +21,8 @@ document.getElementById('admin-login-form').addEventListener('submit',async func
   var p=document.getElementById('admin-log-pass').value;
   try{
     var r=await supabaseFind('admins','login',l);
+  if(!r||r.length===0){ var r2=await supabaseFind('admins','login',l.toLowerCase()); if(r2&&r2.length>0) r=r2; }
+  if(!r||r.length===0){ var r3=await supabaseFind('admins','login',l.charAt(0).toUpperCase()+l.slice(1).toLowerCase()); if(r3&&r3.length>0) r=r3; }
     if(!r||r.length===0){showMsg('Неверный логин','error');btn.disabled=false;btn.textContent='ВОЙТИ →';return}
     var a=r[0];
     if(a.pass!==p){showMsg('Неверный пароль','error');btn.disabled=false;btn.textContent='ВОЙТИ →';return}
