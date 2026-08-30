@@ -249,6 +249,10 @@ textarea:focus{border-color:var(--blue);box-shadow:0 0 0 3px #dbeafe}
 .admin-request-card p{font-size:11px;color:var(--muted);margin:0}
 .btn-approve{background:var(--green);color:#fff;border:none;padding:6px 12px;border-radius:6px;font-size:12px;font-weight:700;cursor:pointer}
 .btn-reject{background:var(--red);color:#fff;border:none;padding:6px 12px;border-radius:6px;font-size:12px;font-weight:700;cursor:pointer}
+.btn-annul{background:#f59e0b;color:#fff;border:none;padding:8px 14px;border-radius:8px;font-weight:800;font-size:13px;cursor:pointer}
+.btn-annul:hover{background:#d97706}
+.btn-delete{background:#991b1b;color:#fff;border:none;padding:8px 14px;border-radius:8px;font-weight:800;font-size:13px;cursor:pointer}
+.btn-delete:hover{background:#7f1d1d}
 
 .admin-admin-card{display:flex;justify-content:space-between;align-items:center;background:#fff;border:1px solid var(--border);border-radius:10px;padding:14px 16px;margin-bottom:8px}
 .admin-admin-card b{font-size:14px;color:var(--navy)}

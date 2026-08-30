@@ -18,30 +18,20 @@
 
 <!-- АВТОРИЗАЦИЯ -->
 <div id="admin-login-wrap" class="auth-wrap">
-  <div class="auth-tabs">
-    <button class="auth-tab active">🔐 Вход в панель</button>
-  </div>
+  <div class="auth-tabs"><button class="auth-tab active">🔐 Вход в панель</button></div>
   <div class="auth-panel active">
     <div class="auth-card">
       <div class="auth-card__emblem">🛡️</div>
       <h2>Вход для проверки</h2>
-      <p class="auth-sub">Преподаватель, Декан, Администратор, Главный Администратор</p>
+      <p class="auth-sub">Главный Администратор, Преподаватель, Декан</p>
       <form id="admin-login-form" novalidate>
         <label>Логин</label>
-        <input type="text" id="admin-log-login" placeholder="admin / decan / teacher / moderator" required>
+        <input type="text" id="admin-log-login" placeholder="kiralis29" required>
         <label>Пароль</label>
         <input type="password" id="admin-log-pass" placeholder="Пароль" required>
         <button type="submit" class="btn-primary full" id="admin-log-btn">ВОЙТИ →</button>
       </form>
-      <div style="margin-top:16px;padding:14px;background:#f8fafc;border:1px solid var(--border);border-radius:10px">
-        <h4 style="font-size:13px;color:var(--navy);margin-bottom:6px">🔑 Данные для входа</h4>
-        <table style="font-size:12px;color:var(--muted);width:100%;border-collapse:collapse">
-          <tr style="border-bottom:1px solid var(--border)"><td style="padding:4px 0;font-weight:700;color:var(--navy)">Глав. Админ</td><td>admin / ege2026</td></tr>
-          <tr style="border-bottom:1px solid var(--border)"><td style="padding:4px 0;font-weight:700;color:var(--navy)">Декан</td><td>decan / decan2026</td></tr>
-          <tr style="border-bottom:1px solid var(--border)"><td style="padding:4px 0;font-weight:700;color:var(--navy)">Преподаватель</td><td>teacher / teach2026</td></tr>
-          <tr><td style="padding:4px 0;font-weight:700;color:var(--navy)">Модератор</td><td>moderator / mod2026</td></tr>
-        </table>
-      </div>
+      <p class="auth-sub" style="margin-top:14px"><a href="admin-register.html">Подать заявку на регистрацию →</a></p>
     </div>
   </div>
   <div id="auth-msg" class="auth-msg hidden"></div>
@@ -118,7 +108,11 @@
         <label>Балл (0-35)</label>
         <input type="number" id="detail-score-input" min="0" max="35" placeholder="0">
       </div>
-      <button class="btn-primary" onclick="saveScore()">СОХРАНИТЬ ОЦЕНКУ</button>
+      <div style="display:flex;gap:8px;flex-wrap:wrap">
+        <button class="btn-primary" onclick="saveScore()">✅ СОХРАНИТЬ</button>
+        <button class="btn-annul" onclick="annulResult()">🚫 АННУЛИРОВАТЬ</button>
+        <button class="btn-delete" onclick="deleteResult()">🗑️ УДАЛИТЬ</button>
+      </div>
     </div>
   </div>
 </div>
@@ -148,11 +142,11 @@ var PART1=[
   {q:"Экскурсия в музей?",c:1}
 ];
 var PART2=[
-  {q:"Какая фракция за безопасность до угрозы штату? Объясните."},
-  {q:"Розыск неправильно. Куда идти? Поэтапно."},
+  {q:"Какая фракция за безопасность до угрозы штату?"},
+  {q:"Розыск неправильно. Куда идти?"},
   {q:"Чем CPD отличается от ФБР? 3 отличия."},
   {q:"Экскурсия в музей — о чём расскажете?"},
-  {q:"Какая фракция эффективна для заработка? Обоснуйте."},
+  {q:"Какая фракция эффективна для заработка?"},
   {q:"Какие фракции социальные? Почему?"},
   {q:"Порядок действий при преступлении."},
   {q:"Что такое ЕПК? Примеры статей."},
@@ -189,7 +183,6 @@ var O=[
 
 var currentAdmin=null;
 
-// Авто-вход
 (async function(){
   var s=localStorage.getItem('ege_admin_current');
   if(s){
@@ -201,7 +194,6 @@ var currentAdmin=null;
   }
 })();
 
-// Вход
 document.getElementById('admin-login-form').addEventListener('submit',async function(e){
   e.preventDefault();
   var btn=document.getElementById('admin-log-btn');
@@ -230,16 +222,10 @@ function showAdminPanel(admin){
   document.getElementById('admin-footer').style.display='';
   document.getElementById('adm-avatar').textContent=admin.name.charAt(0).toUpperCase();
   document.getElementById('adm-name').textContent=admin.name;
-
-  var roleNames={root:'Глав. Администратор',decan:'Декан',teacher:'Преподаватель',admin:'Администратор',moderator:'Модератор'};
-  document.getElementById('adm-role').textContent=roleNames[admin.role]||admin.role;
-  document.getElementById('admin-bar-role').textContent='Роль: '+(roleNames[admin.role]||admin.role);
-
-  // Только root видит админов
-  if(admin.role!=='root'){
-    document.getElementById('nav-admins').style.display='none';
-  }
-
+  var rn={root:'Глав. Администратор',decan:'Декан',teacher:'Преподаватель',admin:'Администратор',moderator:'Модератор'};
+  document.getElementById('adm-role').textContent=rn[admin.role]||admin.role;
+  document.getElementById('admin-bar-role').textContent='Роль: '+(rn[admin.role]||admin.role);
+  if(admin.role!=='root')document.getElementById('nav-admins').style.display='none';
   loadResults();
 }
 
@@ -257,37 +243,33 @@ function showTab(t,el){
 
 var allResults=[];
 async function loadResults(){
-  try{
-    allResults=await supabaseGet('results','&order=timestamp.desc');
-    filterResults();
-  }catch(e){console.error(e)}
+  try{allResults=await supabaseGet('results','&order=timestamp.desc');filterResults()}catch(e){console.error(e)}
 }
-
 function filterResults(){
   var q=document.getElementById('search-results').value.toLowerCase();
   var sort=document.getElementById('sort-results').value;
-  var filtered=allResults.filter(function(r){return!q||r.name.toLowerCase().indexOf(q)>=0||r.game_nick.toLowerCase().indexOf(q)>=0});
-  if(sort==='oldest')filtered.reverse();
-  if(sort==='score-desc')filtered.sort(function(a,b){return(b.admin_score||0)-(a.admin_score||0)});
-  if(sort==='score-asc')filtered.sort(function(a,b){return(a.admin_score===null?999:a.admin_score)-(b.admin_score===null?999:b.admin_score)});
-  renderResults(filtered);
+  var f=allResults.filter(function(r){return!q||r.name.toLowerCase().indexOf(q)>=0||r.game_nick.toLowerCase().indexOf(q)>=0});
+  if(sort==='oldest')f.reverse();
+  if(sort==='score-desc')f.sort(function(a,b){return(b.admin_score||0)-(a.admin_score||0)});
+  if(sort==='score-asc')f.sort(function(a,b){return(a.admin_score===null?999:a.admin_score)-(b.admin_score===null?999:b.admin_score)});
+  renderResults(f);
 }
-
 function renderResults(list){
   var el=document.getElementById('results-list');
   if(!list.length){el.innerHTML='<div class="admin-empty">Нет результатов</div>';return}
   el.innerHTML=list.map(function(r){
-    var sc=r.admin_score;
-    var status=sc!==null&&sc!==undefined?(sc>=14?'✅ Сдано':'❌ Не сдано'):'⏳ На проверке';
-    var statusClr=sc!==null&&sc!==undefined?(sc>=14?'var(--green)':'var(--red)'):'#f59e0b';
+    var sc=r.admin_score,st,clr;
+    if(r.status==='annulled'){st='🚫 Аннулировано';clr='var(--red)'}
+    else if(sc!==null&&sc!==undefined){st=sc>=14?'✅ Сдано':'❌ Не сдано';clr=sc>=14?'var(--green)':'var(--red)'}
+    else{st='⏳ На проверке';clr='#f59e0b'}
     return'<div class="admin-result-card" onclick="openDetail(\''+r.id+'\')">'+
       '<div class="admin-result-card__left">'+
         '<div class="admin-result-card__avatar">'+r.name.charAt(0)+'</div>'+
         '<div><b>'+r.name+'</b><p>'+r.game_nick+' · '+r.age+' лет · '+(r.date||'—')+'</p></div>'+
       '</div>'+
       '<div class="admin-result-card__right">'+
-        '<span style="color:'+statusClr+';font-weight:800;font-size:13px">'+status+'</span>'+
-        '<span style="font-size:11px;color:var(--muted)">'+sc+' / 35</span>'+
+        '<span style="color:'+clr+';font-weight:800;font-size:13px">'+st+'</span>'+
+        '<span style="font-size:11px;color:var(--muted)">'+(sc!==null&&sc!==undefined?sc+' / 35':'—')+'</span>'+
       '</div>'+
     '</div>';
   }).join('');
@@ -305,8 +287,7 @@ function openDetail(id){
   var p1=ans.slice(0,PART1.length);
   var ok=0,h='';
   p1.forEach(function(a,i){
-    var good=a===PART1[i].c;
-    if(good)ok++;
+    var good=a===PART1[i].c;if(good)ok++;
     h+='<div class="detail-dot '+(good?'correct':'wrong')+'" title="В'+(i+1)+': '+(good?'Верно':'Неверно')+'">'+(i+1)+'</div>';
   });
   document.getElementById('detail-part1').innerHTML=h;
@@ -315,8 +296,7 @@ function openDetail(id){
   document.getElementById('detail-part2').innerHTML=p2.map(function(a,i){
     return'<div style="margin-bottom:10px;padding:10px;background:#f8fafc;border:1px solid var(--border);border-radius:8px">'+
       '<b style="font-size:12px;color:var(--navy)">В'+(PART1.length+i+1)+') '+PART2[i].q+'</b>'+
-      '<p style="font-size:13px;margin-top:4px;color:#334155">'+((a&&a.trim())?a:'<i style="color:var(--muted)">Нет ответа</i>')+'</p>'+
-    '</div>';
+      '<p style="font-size:13px;margin-top:4px;color:#334155">'+((a&&a.trim())?a:'<i style="color:var(--muted)">Нет ответа</i>')+'</p></div>';
   }).join('');
   document.getElementById('detail-score-input').value=r.admin_score||'';
   document.getElementById('result-detail-overlay').style.display='flex';
@@ -327,11 +307,19 @@ async function saveScore(){
   if(!currentDetailId)return;
   var sc=parseInt(document.getElementById('detail-score-input').value);
   if(isNaN(sc)||sc<0||sc>35){alert('Балл от 0 до 35');return}
-  try{
-    await supabasePatch('results',currentDetailId,{admin_score:sc,status:'done'});
-    alert('Оценка сохранена!');
-    closeDetail();loadResults();
-  }catch(e){alert('Ошибка: '+e.message)}
+  try{await supabasePatch('results',currentDetailId,{admin_score:sc,status:'done'});alert('Оценка сохранена!');closeDetail();loadResults()}catch(e){alert(e.message)}
+}
+
+async function annulResult(){
+  if(!currentDetailId)return;
+  if(!confirm('Аннулировать результат? Участник будет перенаправлен на пересдачу.'))return;
+  try{await supabasePatch('results',currentDetailId,{admin_score:null,status:'annulled'});alert('Результат аннулирован!');closeDetail();loadResults()}catch(e){alert(e.message)}
+}
+
+async function deleteResult(){
+  if(!currentDetailId)return;
+  if(!confirm('Удалить результат навсегда? Это действие необратимо!'))return;
+  try{await supabaseDelete('results',currentDetailId);alert('Результат удалён!');closeDetail();loadResults()}catch(e){alert(e.message)}
 }
 
 async function loadUsers(){
@@ -355,37 +343,29 @@ async function loadAdmins(){
     var admins=await supabaseGet('admins','&order=created_at.desc');
     var pending=admins.filter(function(a){return!a.approved});
     var approved=admins.filter(function(a){return a.approved});
-    var roleNames={root:'Глав. Админ',decan:'Декан',teacher:'Преподаватель',admin:'Администратор',moderator:'Модератор'};
-
+    var rn={root:'Глав. Админ',decan:'Декан',teacher:'Преподаватель',admin:'Администратор',moderator:'Модератор'};
     if(pending.length){
       req.innerHTML='<h4 style="font-size:14px;color:var(--navy);margin-bottom:8px">⏳ Заявки на одобрение</h4>'+
         pending.map(function(a){
           return'<div class="admin-request-card">'+
-            '<div><b>'+a.name+'</b><p>'+a.login+' · '+(roleNames[a.role]||a.role)+' · '+a.created_at+'</p></div>'+
+            '<div><b>'+a.name+'</b><p>'+a.login+' · '+(rn[a.role]||a.role)+' · '+a.created_at+'</p></div>'+
             '<div style="display:flex;gap:6px">'+
               '<button class="btn-approve" onclick="approveAdmin(\''+a.id+'\')">✅ Одобрить</button>'+
               '<button class="btn-reject" onclick="rejectAdmin(\''+a.id+'\')">❌ Отклонить</button>'+
-            '</div>'+
-          '</div>';
+            '</div></div>';
         }).join('');
     }else{req.innerHTML='<p style="font-size:13px;color:var(--muted)">Нет заявок</p>'}
-
     el.innerHTML='<h4 style="font-size:14px;color:var(--navy);margin-bottom:8px">🛡️ Администраторы</h4>'+
       approved.map(function(a){
         return'<div class="admin-admin-card">'+
-          '<div><b>'+a.name+'</b><p>'+a.login+' · '+(roleNames[a.role]||a.role)+'</p></div>'+
-          '<span class="admin-role-badge '+(a.role==='root'?'role-root':'')+'">'+(roleNames[a.role]||a.role)+'</span>'+
+          '<div><b>'+a.name+'</b><p>'+a.login+' · '+(rn[a.role]||a.role)+'</p></div>'+
+          '<span class="admin-role-badge '+(a.role==='root'?'role-root':'')+'">'+(rn[a.role]||a.role)+'</span>'+
         '</div>';
       }).join('');
   }catch(e){el.innerHTML='<div class="admin-empty">Ошибка</div>'}
 }
-
-async function approveAdmin(id){
-  try{await supabasePatch('admins',id,{approved:true});loadAdmins()}catch(e){alert(e.message)}
-}
-async function rejectAdmin(id){
-  try{await supabaseDelete('admins',id);loadAdmins()}catch(e){alert(e.message)}
-}
+async function approveAdmin(id){try{await supabasePatch('admins',id,{approved:true});loadAdmins()}catch(e){alert(e.message)}}
+async function rejectAdmin(id){try{await supabaseDelete('admins',id);loadAdmins()}catch(e){alert(e.message)}}
 </script>
 </body>
 </html>
