@@ -3,283 +3,451 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Панель администратора — ЕГЭ South</title>
+<title>Панель администратора — ЕГЭ Штата South</title>
 <link rel="stylesheet" href="style.css">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800&family=PT+Serif:wght@400;700&display=swap" rel="stylesheet">
 </head>
 <body>
 
-<!-- LOGIN -->
-<div id="login-screen" class="screen active">
-  <div class="admin-login">
-    <div class="admin-login__card">
-      <div class="admin-login__icon">🔒</div>
-      <h2>Панель администратора</h2>
-      <p>Введите логин и пароль</p>
+<div class="gov-bar">
+  <div class="container gov-bar__inner">
+    <span>🇺🇸 ПАНЕЛЬ АДМИНИСТРАТОРА</span>
+    <span>ЕГЭ Штата South — 2026</span>
+  </div>
+</div>
+
+<!-- ===== АВТОРИЗАЦИЯ ===== -->
+<div id="admin-login-wrap" class="auth-wrap">
+  <div class="auth-tabs">
+    <button class="auth-tab active" onclick="switchAuthTab('login')">🔐 Вход</button>
+    <button class="auth-tab" onclick="switchAuthTab('register')">📝 Регистрация</button>
+  </div>
+
+  <div id="auth-login" class="auth-panel active">
+    <div class="auth-card">
+      <div class="auth-card__emblem">🛡️</div>
+      <h2>Вход для администратора</h2>
+      <p class="auth-sub">Введите логин и пароль</p>
       <form id="admin-login-form" novalidate>
         <label>Логин</label>
-        <input type="text" id="admin-user" placeholder="admin" required>
+        <input type="text" id="admin-log-login" placeholder="admin" required>
         <label>Пароль</label>
-        <input type="password" id="admin-pass" placeholder="••••••" required>
+        <input type="password" id="admin-log-pass" placeholder="Пароль" required>
         <button type="submit" class="btn-primary full">ВОЙТИ →</button>
-        <p id="login-error" style="color:#c0392b;font-size:12px;margin-top:8px;display:none">Неверный логин или пароль</p>
+      </form>
+      <p class="auth-sub" style="margin-top:14px"><a href="admin-register.html">Подать заявку на регистрацию →</a></p>
+    </div>
+  </div>
+
+  <div id="auth-register" class="auth-panel">
+    <div class="auth-card">
+      <div class="auth-card__emblem">📝</div>
+      <h2>Заявка на регистрацию</h2>
+      <p class="auth-sub">После регистрации заявка уходит на одобрение главным администратором</p>
+      <form id="admin-reg-form" novalidate>
+        <label>Логин <span class="req">*</span></label>
+        <input type="text" id="admin-reg-login" placeholder="moderator_01" required>
+        <label>Имя и Фамилия <span class="req">*</span></label>
+        <input type="text" id="admin-reg-name" placeholder="Иван Иванов" required>
+        <label>Роль</label>
+        <select id="admin-reg-role" style="width:100%;background:#f8fafc;border:1px solid var(--border);padding:11px 12px;border-radius:8px;font-size:14px;outline:none">
+          <option value="admin">Администратор</option>
+          <option value="moderator">Модератор</option>
+          <option value="teacher">Преподаватель</option>
+        </select>
+        <label>Пароль <span class="req">*</span></label>
+        <input type="password" id="admin-reg-pass" placeholder="Минимум 4 символа" required>
+        <label>Повторите пароль <span class="req">*</span></label>
+        <input type="password" id="admin-reg-pass2" placeholder="Повторите пароль" required>
+        <button type="submit" class="btn-primary full">ПОДАТЬ ЗАЯВКУ →</button>
       </form>
     </div>
   </div>
+
+  <div id="auth-msg" class="auth-msg hidden"></div>
 </div>
 
-<!-- ADMIN PANEL -->
-<div id="admin-panel" class="screen">
-  <div class="gov-bar">
-    <div class="container gov-bar__inner">
-      <span>🇺🇸 ПАНЕЛЬ АДМИНИСТРАТОРА — ЕГЭ SOUTH</span>
-      <span>
-        <a href="index.html" style="color:#fff;text-decoration:none">← На главную</a> &nbsp;|&nbsp;
-        <a href="#" onclick="logout()" style="color:#ffd700;text-decoration:none">Выйти</a>
-      </span>
+<!-- ===== АДМИН-ПАНЕЛЬ ===== -->
+<div id="admin-panel" style="display:none">
+  <div class="admin-layout">
+    <!-- Сайдбар -->
+    <aside class="admin-sidebar">
+      <div class="admin-sidebar__user">
+        <div class="admin-avatar" id="adm-avatar">🛡️</div>
+        <h3 id="adm-name">Admin</h3>
+        <span class="admin-role" id="adm-role">root</span>
+      </div>
+      <nav class="admin-nav">
+        <a href="#" class="admin-nav__link active" onclick="showTab('results');return false">📋 Результаты</a>
+        <a href="#" class="admin-nav__link" onclick="showTab('users');return false">👥 Участники</a>
+        <a href="#" class="admin-nav__link" onclick="showTab('admins');return false">🛡️ Администраторы</a>
+        <a href="#" class="admin-nav__link" onclick="adminLogout()">🚪 Выйти</a>
+      </nav>
+    </aside>
+
+    <!-- Контент -->
+    <div class="admin-main">
+      <!-- === ТАБ: РЕЗУЛЬТАТЫ === -->
+      <div id="tab-results" class="admin-tab active">
+        <div class="admin-topbar">
+          <h2>Результаты экзамена</h2>
+          <div class="admin-topbar__actions">
+            <input type="text" id="search-results" placeholder="Поиск по имени..." class="admin-search" oninput="filterResults()">
+            <select id="sort-results" class="admin-select" onchange="filterResults()">
+              <option value="newest">Сначала новые</option>
+              <option value="oldest">Сначала старые</option>
+              <option value="score-desc">Балл ↓</option>
+              <option value="score-asc">Балл ↑</option>
+            </select>
+          </div>
+        </div>
+        <div id="results-list"></div>
+      </div>
+
+      <!-- === ТАБ: УЧАСТНИКИ === -->
+      <div id="tab-users" class="admin-tab" style="display:none">
+        <div class="admin-topbar">
+          <h2>Участники</h2>
+        </div>
+        <div id="users-list"></div>
+      </div>
+
+      <!-- === ТАБ: АДМИНИСТРАТОРЫ === -->
+      <div id="tab-admins" class="admin-tab" style="display:none">
+        <div class="admin-topbar">
+          <h2>Управление администраторами</h2>
+        </div>
+        <div id="admin-requests" style="margin-bottom:20px"></div>
+        <div id="admin-list"></div>
+      </div>
     </div>
   </div>
+</div>
 
-  <header class="header">
-    <div class="container header__inner">
-      <div class="header__emblem">
-        <div class="emblem">⚙️</div>
-        <div class="header__titles">
-          <div class="header__ministry">ПАНЕЛЬ АДМИНИСТРАТОРА</div>
-          <div class="header__portal"><span>ПРОВЕРКА ОТВЕТОВ ЕГЭ</span></div>
-        </div>
-      </div>
-      <div class="header__meta">
-        <div class="header__year" id="admin-count">Загрузка...</div>
-        <button class="btn-gos" onclick="loadResults()">🔄 Обновить</button>
+<!-- ===== ДЕТАЛИ РЕЗУЛЬТАТА ===== -->
+<div id="result-detail-overlay" class="overlay" style="display:none" onclick="closeDetail(event)">
+  <div class="detail-panel" onclick="event.stopPropagation()">
+    <button class="detail-close" onclick="closeDetail()">&times;</button>
+    <div class="detail-header">
+      <div class="detail-avatar" id="detail-avatar">👤</div>
+      <div>
+        <h3 id="detail-name">Имя</h3>
+        <p id="detail-nick">nick</p>
       </div>
     </div>
-  </header>
 
-  <main class="container main-grid">
-    <section id="list-section" class="section">
-      <h2 class="section__title"><span>📋</span> Все сдачи</h2>
-      <div class="admin-toolbar">
-        <div class="admin-search">
-          <span class="admin-search__icon">🔍</span>
-          <input type="text" id="search-input" placeholder="Поиск по имени или нику..." oninput="renderList()">
-        </div>
-        <div class="admin-sort">
-          <label style="margin:0;font-size:12px">Сортировка:</label>
-          <select id="sort-select" onchange="renderList()">
-            <option value="date-desc">Сначала новые</option>
-            <option value="date-asc">Сначала старые</option>
-            <option value="name-asc">Имя А→Я</option>
-            <option value="name-desc">Имя Я→А</option>
-            <option value="score-desc">Балл ↓</option>
-            <option value="score-asc">Балл ↑</option>
-          </select>
-        </div>
-      </div>
-      <div id="admin-empty" class="side-card" style="text-align:center;padding:30px">
-        <h3 style="color:var(--muted)">Нет данных</h3>
-        <p style="font-size:13px;color:var(--muted)">Пока никто не сдавал экзамен.</p>
-      </div>
-      <div id="admin-list"></div>
-    </section>
+    <div class="detail-section">
+      <h4>I Часть — Тест</h4>
+      <div class="detail-part1-grid" id="detail-part1"></div>
+      <p class="detail-part1-score">Автобалл: <b id="detail-auto-score">0</b> / 25</p>
+    </div>
 
-    <section id="detail-section" class="section" style="display:none">
-      <h2 class="section__title"><span>🔎</span> Ответы участника</h2>
-      <div id="detail-header" style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;margin-bottom:14px"></div>
-      <div class="table-wrap">
-        <table class="gov-table">
-          <thead><tr><th>№</th><th>Сложн.</th><th>Вопрос</th><th>Ответ</th><th>Верный</th><th></th></tr></thead>
-          <tbody id="detail-body"></tbody>
-        </table>
+    <div class="detail-section">
+      <h4>II Часть — Письменно</h4>
+      <div id="detail-part2"></div>
+    </div>
+
+    <div class="detail-section">
+      <h4>Оценка</h4>
+      <div class="detail-score-row">
+        <label>Балл (0-35)</label>
+        <input type="number" id="detail-score-input" min="0" max="35" placeholder="0">
       </div>
-      <div style="margin-top:14px;display:flex;gap:10px;align-items:center;flex-wrap:wrap">
-        <label style="margin:0;font-weight:700;font-size:14px">Балл (0-25):</label>
-        <input type="number" id="detail-score" min="0" max="25" class="admin-score-input">
-        <button onclick="saveDetailScore()" class="btn-primary" style="width:auto;padding:10px 18px">Сохранить</button>
-        <span id="detail-saved" style="font-size:12px;color:var(--green);display:none">✓ Сохранено</span>
+      <div class="detail-score-row">
+        <label>Комментарий</label>
+        <input type="text" id="detail-comment" placeholder="Комментарий к проверке">
       </div>
-      <button onclick="closeDetail()" class="btn-secondary" style="margin-top:12px">← Назад</button>
-    </section>
-  </main>
+      <button class="btn-primary" onclick="saveScore()">СОХРАНИТЬ ОЦЕНКУ</button>
+    </div>
+  </div>
 </div>
+
+<footer class="footer" id="admin-footer">
+  <div class="container footer__grid">
+    <div><b>Департамент образования Штата South</b><br>Панель администратора © 2026</div>
+    <div>supportegerpmsouth@gmail.com &nbsp;|&nbsp; 22222223</div>
+  </div>
+</footer>
 
 <script src="supabase-config.js"></script>
 <script>
-const QUESTIONS = [
-  {q:"Какая фракция распространяет информацию о событиях штата?",a:["CPD","NEWS / СМИ","EMS","ФБР"],diff:"Легкий"},
-  {q:"Какая фракция является управляющей во всём штате?",a:["ФБР","CPD","Мэрия / Правительство","Суд"],diff:"Легкий"},
-  {q:"Какая фракция отвечает за порядок во время митинга?",a:["ФБР","CPD","Национальная Гвардия","EMS"],diff:"Легкий"},
-  {q:"Есть ли выходные у Мэрии?",a:["Да, сб и вс","Только вс","Нет — 7 дней без выходных","По графику"],diff:"Легкий"},
-  {q:"Что является высшим документом в штате?",a:["Приказ Губернатора","Конституция Штата South","ЕПК","УК"],diff:"Легкий"},
-  {q:"Какая фракция за мостом в округе (нежелательная)?",a:["ФБР","Национальная Гвардия / Федеральная Тюрьма","Мэрия","EMS"],diff:"Легкий"},
-  {q:"Три основные силовые структуры?",a:["EMS, NEWS, Суд","CPD, ФБР, Национальная Гвардия","Мэрия, CPD, EMS","ФБР, Суд, NEWS"],diff:"Легкий"},
-  {q:"Какая фракция приезжает, цель — пострадавший?",a:["ФБР","EMS","CPD","NEWS"],diff:"Легкий"},
-  {q:"Какая фракция первой на месте, но не задерживает и не лечит?",a:["CPD","EMS","NEWS / СМИ","НГ"],diff:"Средний"},
-  {q:"Какая фракция первой берётся за нарушителя в общественном месте?",a:["NEWS","EMS","CPD","ФБР"],diff:"Средний"},
-  {q:"Какая фракция за гос. безопасность до угрозы штату?",a:["CPD","ФБР","НГ","Мэрия"],diff:"Средний"},
-  {q:"Какая фракция выше CPD с более сложными задачами?",a:["НГ","ФБР","EMS","Мэрия"],diff:"Средний"},
-  {q:"Какая фракция эффективна для заработка?",a:["НГ","EMS","NEWS/Мэрия/ФБР (премии)","Суд"],diff:"Средний"},
-  {q:"Социальные фракции — какие и почему?",a:["CPD/ФБР","EMS/NEWS — услуги населению","Мэрия/Суд","НГ/EMS"],diff:"Средний"},
-  {q:"Сколько гос. фракций в штате?",a:["3","Все 7","5","2"],diff:"Средний"},
-  {q:"Куда трудоустроиться перед CPD/ФБР?",a:["NEWS","Национальная Гвардия / Армия","EMS","Мэрия"],diff:"Средний"},
-  {q:"Безопасность стратегического объекта — какая фракция?",a:["Национальная Гвардия","ФБР","CPD","Мэрия"],diff:"Сложный"},
-  {q:"Решения, затрагивающие несколько гос. организаций?",a:["NEWS","EMS","Мэрия / Губернатор","CPD"],diff:"Сложный"},
-  {q:"Кто следит за другими на проверке?",a:["NEWS","EMS","Мэрия + ФБР","НГ"],diff:"Сложный"},
-  {q:"Какая фракция независима от Мэрии?",a:["CPD","EMS","Суд + ФБР","NEWS"],diff:"Сложный"},
-  {q:"Неправильный розыск — куда идти?",a:["ФБР","Суд — иск по ЕПК","Мэрия","NEWS"],diff:"Сложный"},
-  {q:"CPD и ФБР на месте — кто главный?",a:["CPD","ФБР — федеральная подследственность","Поровну","Мэрия"],diff:"Сложный"},
-  {q:"ЕПК — что это и кто работает?",a:["Экстренный Протокол","Единый Процессуальный Кодекс — CPD, ФБР, Суд","Единый План","Электронный Протокол"],diff:"Сложный"},
-  {q:"Расистское оскорбление — иск в суд?",a:["Нет","Да — дискриминация наказуема","Только при свидетелях","Только ФБР"],diff:"Сложный"},
-  {q:"Экскурсия в музей — что рассказать?",a:["Закрыт","Основан 2019. Штат, флаг, силовые, культура","Архив ФБР","Военная база"],diff:"Сложный"}
-];
-const ANSWERS_KEY = [1,2,2,2,1,1,1,1,2,2,1,1,2,1,1,1,0,2,2,2,1,1,1,1,1];
-const ADMIN_USER = 'admin';
-const ADMIN_PASS = 'ege2026';
+// ===== ХРАНИЛИЩЕ =====
+function getAdmins(){return JSON.parse(localStorage.getItem('ege_admins')||'[]')}
+function saveAdmins(a){localStorage.setItem('ege_admins',JSON.stringify(a))}
+function getPending(){return JSON.parse(localStorage.getItem('ege_admin_pending')||'[]')}
+function savePending(a){localStorage.setItem('ege_admin_pending',JSON.stringify(a))}
 
-let allResults = [];
-let selectedId = null;
-
-document.getElementById('admin-login-form').addEventListener('submit', e => {
-  e.preventDefault();
-  const u = document.getElementById('admin-user').value.trim();
-  const p = document.getElementById('admin-pass').value;
-  if(u === ADMIN_USER && p === ADMIN_PASS){
-    document.getElementById('login-screen').classList.remove('active');
-    document.getElementById('admin-panel').classList.add('active');
-    loadResults();
-  } else {
-    document.getElementById('login-error').style.display = '';
-    document.getElementById('admin-pass').value = '';
+// Первый запуск — создаём root
+(function(){
+  var admins=getAdmins();
+  if(admins.length===0){
+    admins.push({login:'admin',name:'Главный Администратор',role:'root',pass:'ege2026',approved:true,created:new Date().toLocaleString('ru-RU')});
+    saveAdmins(admins);
   }
+})();
+
+// ===== АВТОРИЗАЦИЯ =====
+function switchAuthTab(t){
+  document.querySelectorAll('.auth-tab').forEach(function(el){el.classList.remove('active')});
+  document.querySelectorAll('.auth-panel').forEach(function(el){el.classList.remove('active')});
+  document.querySelector('[onclick="switchAuthTab(\''+t+'\')"]').classList.add('active');
+  document.getElementById('auth-'+t).classList.add('active');
+}
+
+// Вход
+document.getElementById('admin-login-form').addEventListener('submit',function(e){
+  e.preventDefault();
+  var l=document.getElementById('admin-log-login').value.trim();
+  var p=document.getElementById('admin-log-pass').value;
+  var admins=getAdmins();
+  var a=admins.find(function(x){return x.login===l&&x.pass===p&&x.approved});
+  if(!a){showAuthMsg('Неверный логин/пароль или заявка не одобрена','error');return}
+  localStorage.setItem('ege_admin_current',JSON.stringify(a));
+  showAdminPanel();
 });
 
-function logout(){
-  document.getElementById('admin-panel').classList.remove('active');
-  document.getElementById('login-screen').classList.add('active');
-  document.getElementById('admin-user').value = '';
-  document.getElementById('admin-pass').value = '';
-  document.getElementById('login-error').style.display = 'none';
+// Регистрация заявки
+document.getElementById('admin-reg-form').addEventListener('submit',function(e){
+  e.preventDefault();
+  var l=document.getElementById('admin-reg-login').value.trim();
+  var n=document.getElementById('admin-reg-name').value.trim();
+  var r=document.getElementById('admin-reg-role').value;
+  var p=document.getElementById('admin-reg-pass').value;
+  var p2=document.getElementById('admin-reg-pass2').value;
+  if(!l||!n||!p){showAuthMsg('Заполните все поля','error');return}
+  if(l.length<3){showAuthMsg('Логин минимум 3 символа','error');return}
+  if(p.length<4){showAuthMsg('Пароль минимум 4 символа','error');return}
+  if(p!==p2){showAuthMsg('Пароли не совпадают','error');return}
+  var admins=getAdmins();
+  if(admins.find(function(x){return x.login===l})){showAuthMsg('Такой логин уже существует','error');return}
+  var pending=getPending();
+  if(pending.find(function(x){return x.login===l})){showAuthMsg('Заявка уже подана','error');return}
+  pending.push({login:l,name:n,role:r,pass:p,created:new Date().toLocaleString('ru-RU')});
+  savePending(pending);
+  showAuthMsg('Заявка подана! Ожидайте одобрения главного администратора.','ok');
+  document.getElementById('admin-reg-form').reset();
+});
+
+function showAuthMsg(t,c){var e=document.getElementById('auth-msg');e.textContent=t;e.className='auth-msg '+c}
+
+// ===== АДМИН-ПАНЕЛЬ =====
+(function(){
+  var s=localStorage.getItem('ege_admin_current');
+  if(s){try{JSON.parse(s);showAdminPanel()}catch(e){}}
+})();
+
+function showAdminPanel(){
+  document.getElementById('admin-login-wrap').style.display='none';
+  document.getElementById('admin-panel').style.display='';
+  document.getElementById('admin-footer').style.display='';
+  var a=JSON.parse(localStorage.getItem('ege_admin_current'));
+  document.getElementById('adm-avatar').textContent=a.name.charAt(0).toUpperCase();
+  document.getElementById('adm-name').textContent=a.name;
+  document.getElementById('adm-role').textContent=a.role;
+  loadResults();
 }
 
+function adminLogout(){localStorage.removeItem('ege_admin_current');location.reload()}
+
+function showTab(t){
+  document.querySelectorAll('.admin-tab').forEach(function(el){el.style.display='none'});
+  document.getElementById('tab-'+t).style.display='';
+  document.querySelectorAll('.admin-nav__link').forEach(function(el){el.classList.remove('active')});
+  event.target.classList.add('active');
+  if(t==='results')loadResults();
+  if(t==='users')loadUsers();
+  if(t==='admins')loadAdmins();
+}
+
+// ===== ЗАГРУЗКА РЕЗУЛЬТАТОВ =====
+var allResults=[];
 async function loadResults(){
-  document.getElementById('admin-count').textContent = 'Загрузка...';
-  try {
-    allResults = await supabaseGet('results', '&order=timestamp.desc');
-    if(!Array.isArray(allResults)) allResults = [];
-    renderList();
-  } catch(e) {
-    console.error(e);
-    document.getElementById('admin-count').textContent = 'Ошибка';
-  }
+  try{
+    allResults=await supabaseGet('results','&order=timestamp.desc');
+    filterResults();
+  }catch(e){console.error(e)}
 }
 
-function renderList(){
-  const sort = document.getElementById('sort-select').value;
-  const sorted = [...allResults];
+function filterResults(){
+  var q=document.getElementById('search-results').value.toLowerCase();
+  var sort=document.getElementById('sort-results').value;
+  var filtered=allResults.filter(function(r){return!q||r.name.toLowerCase().indexOf(q)>=0||r.game_nick.toLowerCase().indexOf(q)>=0});
+  if(sort==='oldest')filtered.reverse();
+  if(sort==='score-desc')filtered.sort(function(a,b){return(b.admin_score||0)-(a.admin_score||0)});
+  if(sort==='score-asc')filtered.sort(function(a,b){return(a.admin_score===null?999:a.admin_score)-(b.admin_score===null?999:b.admin_score)});
+  renderResults(filtered);
+}
 
-  switch(sort){
-    case 'date-desc': sorted.sort((a,b)=> (b.timestamp||0)-(a.timestamp||0)); break;
-    case 'date-asc': sorted.sort((a,b)=> (a.timestamp||0)-(b.timestamp||0)); break;
-    case 'name-asc': sorted.sort((a,b)=> (a.name||'').localeCompare(b.name||'','ru')); break;
-    case 'name-desc': sorted.sort((a,b)=> (b.name||'').localeCompare(a.name||'','ru')); break;
-    case 'score-desc': sorted.sort((a,b)=> (b.admin_score??-1)-(a.admin_score??-1)); break;
-    case 'score-asc': sorted.sort((a,b)=> (a.admin_score??999)-(b.admin_score??999)); break;
-  }
-
-  document.getElementById('admin-count').textContent = allResults.length + ' сдач';
-  const list = document.getElementById('admin-list');
-  const empty = document.getElementById('admin-empty');
-
-  if(sorted.length === 0){ empty.style.display=''; list.innerHTML=''; return; }
-  empty.style.display = 'none';
-
-  const search = document.getElementById('search-input').value.toLowerCase();
-  const filtered = sorted.filter(r => 
-    (r.name||'').toLowerCase().includes(search) || (r.game_nick||'').toLowerCase().includes(search)
-  );
-
-  list.innerHTML = filtered.map(r => {
-    const ans = typeof r.answers === 'string' ? JSON.parse(r.answers) : (r.answers || []);
-    const autoCorrect = ans.filter((a,i)=> a===ANSWERS_KEY[i]).length;
-    const score = r.admin_score !== null && r.admin_score !== undefined ? r.admin_score : '—';
-    const scoreColor = r.admin_score !== null && r.admin_score !== undefined
-      ? (r.admin_score >= 12 ? 'var(--green)' : 'var(--usared)')
-      : 'var(--muted)';
-    return `
-    <div class="admin-list-card" onclick="openDetail(${r.id})">
-      <div class="admin-list-card__left">
-        <b>${r.name||'Без имени'}</b>
-        <span>${r.game_nick || ''} · ${r.age || '—'} лет</span>
-      </div>
-      <div class="admin-list-card__right">
-        <span class="admin-list-card__auto">${autoCorrect}/25</span>
-        <span class="admin-list-card__score" style="color:${scoreColor}">${score}</span>
-        <span class="admin-list-card__date">${r.date || ''}</span>
-      </div>
-    </div>`;
+function renderResults(list){
+  var el=document.getElementById('results-list');
+  if(!list.length){el.innerHTML='<div class="admin-empty">Нет результатов</div>';return}
+  el.innerHTML=list.map(function(r){
+    var sc=r.admin_score;
+    var status=sc!==null&&sc!==undefined?(sc>=14?'✅ Сдано':'❌ Не сдано'):'⏳ На проверке';
+    var statusClr=sc!==null&&sc!==undefined?(sc>=14?'var(--green)':'var(--red)'):'#f59e0b';
+    return'<div class="admin-result-card" onclick="openDetail(\''+r.id+'\')">'+
+      '<div class="admin-result-card__left">'+
+        '<div class="admin-result-card__avatar">'+r.name.charAt(0)+'</div>'+
+        '<div><b>'+r.name+'</b><p>'+r.game_nick+' · '+r.age+' лет · '+r.date+'</p></div>'+
+      '</div>'+
+      '<div class="admin-result-card__right">'+
+        '<span style="color:'+statusClr+';font-weight:800;font-size:13px">'+status+'</span>'+
+        '<span style="font-size:11px;color:var(--muted)">'+sc+' / 35</span>'+
+      '</div>'+
+    '</div>';
   }).join('');
 }
 
+// ===== ДЕТАЛЬНЫЙ ПРОСМОТР =====
+var currentDetailId=null;
 function openDetail(id){
-  selectedId = id;
-  const r = allResults.find(x => x.id === id);
-  if(!r) return;
-
-  document.getElementById('detail-section').style.display = '';
-  document.getElementById('list-section').style.display = 'none';
-  document.getElementById('detail-section').scrollIntoView({behavior:'smooth'});
-
-  const ans = typeof r.answers === 'string' ? JSON.parse(r.answers) : (r.answers || []);
-  const autoCorrect = ans.filter((a,i)=> a===ANSWERS_KEY[i]).length;
-
-  document.getElementById('detail-header').innerHTML = `
-    <div>
-      <b style="font-size:18px">${r.name||'Без имени'}</b>
-      <span style="font-size:14px;color:var(--muted);margin-left:8px">${r.game_nick || ''}</span>
-      <span style="font-size:12px;color:var(--muted);margin-left:8px">Возраст: ${r.age || '—'} | ${r.date || '—'}</span>
-    </div>
-    <div>Автоответов: <b>${autoCorrect}/25</b></div>
-  `;
-
-  document.getElementById('detail-body').innerHTML = ans.map((a, qi) => {
-    const isCorrect = a === ANSWERS_KEY[qi];
-    const userAns = a === null || a === undefined ? '<i style="color:#999">(нет)</i>' : String.fromCharCode(65+a) + ') ' + QUESTIONS[qi].a[a];
-    const correctAns = String.fromCharCode(65+ANSWERS_KEY[qi]) + ') ' + QUESTIONS[qi].a[ANSWERS_KEY[qi]];
-    const dc = QUESTIONS[qi].diff === 'Легкий' ? 'diff-easy' : QUESTIONS[qi].diff === 'Средний' ? 'diff-medium' : 'diff-hard';
-    return `<tr>
-      <td><b>${qi+1}</b></td>
-      <td><span class="exam-diff ${dc}" style="font-size:9px;padding:2px 5px">${QUESTIONS[qi].diff}</span></td>
-      <td style="font-size:12px">${QUESTIONS[qi].q.slice(0,70)}${QUESTIONS[qi].q.length>70?'...':''}</td>
-      <td style="font-size:12px">${userAns}</td>
-      <td style="font-size:12px">${correctAns}</td>
-      <td>${isCorrect?'✅':'❌'}</td>
-    </tr>`;
+  currentDetailId=id;
+  var r=allResults.find(function(x){return x.id===id});
+  if(!r)return;
+  document.getElementById('detail-avatar').textContent=r.name.charAt(0);
+  document.getElementById('detail-name').textContent=r.name;
+  document.getElementById('detail-nick').textContent=r.game_nick+' · '+r.age+' лет';
+  var ans=JSON.parse(r.answers||'[]');
+  // Part 1
+  var p1=ans.slice(0,PART1.length);
+  var ok=0,h='';
+  p1.forEach(function(a,i){
+    var good=a===PART1[i].c;
+    if(good)ok++;
+    h+='<div class="detail-dot '+(good?'correct':'wrong')+'" title="В'+(i+1)+': '+(good?'Верно':'Неверно')+'">'+(i+1)+'</div>';
+  });
+  document.getElementById('detail-part1').innerHTML=h;
+  document.getElementById('detail-auto-score').textContent=ok;
+  // Part 2
+  var p2=ans.slice(PART1.length);
+  document.getElementById('detail-part2').innerHTML=p2.map(function(a,i){
+    return'<div style="margin-bottom:10px;padding:10px;background:#f8fafc;border:1px solid var(--border);border-radius:8px">'+
+      '<b style="font-size:12px;color:var(--navy)">В'+(PART1.length+i+1)+') '+PART2[i].q+'</b>'+
+      '<p style="font-size:13px;margin-top:4px;color:#334155">'+((a&&a.trim())?a:'<i style="color:var(--muted)">Нет ответа</i>')+'</p>'+
+    '</div>';
   }).join('');
-
-  document.getElementById('detail-score').value = r.admin_score ?? '';
-  document.getElementById('detail-saved').style.display = 'none';
+  document.getElementById('detail-score-input').value=r.admin_score||'';
+  document.getElementById('detail-comment').value='';
+  document.getElementById('result-detail-overlay').style.display='flex';
 }
 
-async function saveDetailScore(){
-  if(!selectedId) return;
-  const val = parseInt(document.getElementById('detail-score').value);
-  if(isNaN(val) || val < 0 || val > 25){ alert('Балл от 0 до 25'); return; }
+function closeDetail(e){if(!e||e.target===document.getElementById('result-detail-overlay'))document.getElementById('result-detail-overlay').style.display='none'}
 
-  await supabasePatch('results', selectedId, { admin_score: val, status: 'checked' });
-  document.getElementById('detail-saved').style.display = '';
-  setTimeout(()=>{ document.getElementById('detail-saved').style.display='none'; }, 2500);
-
-  const r = allResults.find(x => x.id === selectedId);
-  if(r){ r.admin_score = val; r.status = 'checked'; }
-  renderList();
+async function saveScore(){
+  if(!currentDetailId)return;
+  var sc=parseInt(document.getElementById('detail-score-input').value);
+  if(isNaN(sc)||sc<0||sc>35){alert('Балл от 0 до 35');return}
+  try{
+    await supabasePatch('results',currentDetailId,{admin_score:sc,status:'done'});
+    alert('Оценка сохранена!');
+    closeDetail();
+    loadResults();
+  }catch(e){alert('Ошибка: '+e.message)}
 }
 
-function closeDetail(){
-  selectedId = null;
-  document.getElementById('detail-section').style.display = 'none';
-  document.getElementById('list-section').style.display = '';
+// ===== УЧАСТНИКИ =====
+async function loadUsers(){
+  var el=document.getElementById('users-list');
+  try{
+    var users=await supabaseGet('results','&select=name,game_nick,age,date&order=timestamp.desc');
+    var seen={};
+    var unique=users.filter(function(u){if(seen[u.name])return false;seen[u.name]=true;return true});
+    if(!unique.length){el.innerHTML='<div class="admin-empty">Нет участников</div>';return}
+    el.innerHTML=unique.map(function(u){
+      return'<div class="admin-user-card">'+
+        '<div class="admin-user-card__avatar">'+u.name.charAt(0)+'</div>'+
+        '<div><b>'+u.name+'</b><p>'+u.game_nick+' · '+u.age+' лет · '+u.date+'</p></div>'+
+      '</div>';
+    }).join('');
+  }catch(e){el.innerHTML='<div class="admin-empty">Ошибка загрузки</div>'}
 }
+
+// ===== АДМИНИСТРАТОРЫ =====
+function loadAdmins(){
+  var pending=getPending();
+  var admins=getAdmins();
+  // Заявки
+  var pr=document.getElementById('admin-requests');
+  if(pending.length){
+    pr.innerHTML='<h4 style="font-size:14px;color:var(--navy);margin-bottom:8px">⏳ Заявки на одобрение</h4>'+pending.map(function(p){
+      return'<div class="admin-request-card">'+
+        '<div><b>'+p.name+'</b><p>'+p.login+' · '+p.role+' · '+p.created+'</p></div>'+
+        '<div style="display:flex;gap:6px">'+
+          '<button class="btn-approve" onclick="approveAdmin(\''+p.login+'\')">✅ Одобрить</button>'+
+          '<button class="btn-reject" onclick="rejectAdmin(\''+p.login+'\')">❌ Отклонить</button>'+
+        '</div>'+
+      '</div>';
+    }).join('');
+  }else{pr.innerHTML='<p style="font-size:13px;color:var(--muted)">Нет заявок на одобрение</p>'}
+  // Список
+  var al=document.getElementById('admin-list');
+  al.innerHTML='<h4 style="font-size:14px;color:var(--navy);margin-bottom:8px">🛡️ Администраторы</h4>'+admins.map(function(a){
+    return'<div class="admin-admin-card">'+
+      '<div><b>'+a.name+'</b><p>'+a.login+' · '+a.role+'</p></div>'+
+      '<span class="admin-role-badge '+(a.role==='root'?'role-root':'')+'">'+a.role+'</span>'+
+    '</div>';
+  }).join('');
+}
+
+function approveAdmin(login){
+  var pending=getPending();var admins=getAdmins();
+  var idx=pending.findIndex(function(p){return p.login===login});
+  if(idx===-1)return;
+  var a=pending.splice(idx,1)[0];
+  a.approved=true;
+  admins.push(a);
+  savePending(pending);saveAdmins(admins);
+  loadAdmins();
+}
+
+function rejectAdmin(login){
+  var pending=getPending();
+  pending=pending.filter(function(p){return p.login!==login});
+  savePending(pending);
+  loadAdmins();
+}
+
+// Вопросы (нужны для detail)
+var PART1=[
+  {q:"Какая фракция распространяет информацию о событиях штата?",a:["CPD (Полиция)","NEWS / СМИ","EMS (Медицина)","ФБР"],c:1,d:"Легкий"},
+  {q:"Какая фракция является управляющей во всём штате и выпускает ФЗ?",a:["ФБР","CPD","Мэрия / Правительство","Суд"],c:2,d:"Легкий"},
+  {q:"Какая фракция отвечает за порядок во время митинга?",a:["ФБР","CPD","Национальная Гвардия","EMS"],c:1,d:"Легкий"},
+  {q:"Есть ли выходные у Мэрии?",a:["Да, сб и вс","Только вс","Нет — 7 дней без выходных","По графику"],c:2,d:"Легкий"},
+  {q:"Что является высшим документом в штате?",a:["Приказ Губернатора","Конституция South","ЕПК","УК"],c:1,d:"Легкий"},
+  {q:"Какая фракция за мостом в округе?",a:["ФБР","Национальная Гвардия / Федеральная Тюрьма","Мэрия","EMS"],c:1,d:"Легкий"},
+  {q:"Три основные силовые структуры?",a:["EMS, NEWS, Суд","CPD, ФБР, Национальная Гвардия","Мэрия, CPD, EMS","ФБР, Суд, NEWS"],c:1,d:"Легкий"},
+  {q:"Какая фракция приезжает, цель — пострадавший?",a:["ФБР","EMS","CPD","NEWS"],c:1,d:"Легкий"},
+  {q:"Какая фракция первой на месте, но не задерживает и не лечит?",a:["CPD","EMS","NEWS / СМИ","НГ"],c:2,d:"Средний"},
+  {q:"Какая фракция первой берётся за нарушителя?",a:["NEWS","EMS","CPD","ФБР"],c:2,d:"Средний"},
+  {q:"Какая фракция за гос. безопасность до угрозы штату?",a:["CPD","ФБР","НГ","Мэрия"],c:1,d:"Средний"},
+  {q:"Какая фракция выше CPD?",a:["НГ","ФБР","EMS","Мэрия"],c:1,d:"Средний"},
+  {q:"Какая фракция эффективна для заработка?",a:["НГ","EMS","NEWS/Мэрия/ФБР (премии)","Суд"],c:2,d:"Средний"},
+  {q:"Социальные фракции?",a:["CPD/ФБР","EMS/NEWS — услуги населению","Мэрия/Суд","НГ/EMS"],c:1,d:"Средний"},
+  {q:"Сколько гос. фракций?",a:["3","Все 7","5","2"],c:1,d:"Средний"},
+  {q:"Куда трудоустроиться перед CPD/ФБР?",a:["NEWS","Национальная Гвардия","EMS","Мэрия"],c:1,d:"Средний"},
+  {q:"Безопасность стратегического объекта?",a:["Национальная Гвардия","ФБР","CPD","Мэрия"],c:0,d:"Сложный"},
+  {q:"Решения для нескольких гос. организаций?",a:["NEWS","EMS","Мэрия / Губернатор","CPD"],c:2,d:"Сложный"},
+  {q:"Кто следит за другими на проверке?",a:["NEWS","EMS","Мэрия + ФБР","НГ"],c:2,d:"Сложный"},
+  {q:"Какая фракция независима от Мэрии?",a:["CPD","EMS","Суд + ФБР","NEWS"],c:2,d:"Сложный"},
+  {q:"Неправильный розыск?",a:["ФБР","Суд — иск по ЕПК","Мэрия","NEWS"],c:1,d:"Сложный"},
+  {q:"CPD и ФБР — кто главный?",a:["CPD","ФБР","Поровну","Мэрия"],c:1,d:"Сложный"},
+  {q:"ЕПК — что это?",a:["Экстренный Протокол","Единый Процессуальный Кодекс","Единый План","Электронный Протокол"],c:1,d:"Сложный"},
+  {q:"Расистское оскорбление — иск?",a:["Нет","Да","Только при свидетелях","Только ФБР"],c:1,d:"Сложный"},
+  {q:"Экскурсия в музей?",a:["Закрыт","Основан 2019. Штат, флаг, силовые, культура","Архив ФБР","Военная база"],c:1,d:"Сложный"}
+];
+var PART2=[
+  {q:"Какая фракция отвечает за безопасность государства до угрозы штату?"},
+  {q:"Полицейский выдал розыск неправильно. Куда идти?"},
+  {q:"Чем отличается CPD от ФБР? 3 отличия."},
+  {q:"Экскурсия в музей штата — о чём расскажете?"},
+  {q:"Какая фракция эффективна для заработка? Обоснуйте."},
+  {q:"Какие фракции — социальные? Почему?"},
+  {q:"Порядок действий при свидетельстве преступления."},
+  {q:"Что такое ЕПК? Примеры статей."},
+  {q:"Почему Суд независим от Мэрии?"},
+  {q:"Какую реформу провели бы будучи Губернатором?"}
+];
 </script>
 </body>
 </html>

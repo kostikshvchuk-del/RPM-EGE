@@ -23,7 +23,7 @@
       <div class="emblem">🏛️</div>
       <div class="header__titles">
         <div class="header__ministry">ДЕПАРТАМЕНТ ОБРАЗОВАНИЯ<br>ШТАТА SOUTH — RPM</div>
-        <div class="header__portal">Официальный портал<br><span>ГОСУДАРСТВЕННОГО ЭКЗАМЕНА</span></div>
+        <div class="header__portal">Личный кабинет<br><span>ГОСУДАРСТВЕННОГО ЭКЗАМЕНА</span></div>
       </div>
     </div>
     <div class="header__meta">
@@ -32,74 +32,85 @@
   </div>
 </header>
 
-<div class="cabinet-wrap">
-  <!-- Сайдбар -->
-  <aside class="cabinet-sidebar">
-    <div class="cabinet-sidebar__user">
-      <div class="cabinet-avatar" id="cab-avatar">👤</div>
-      <h3 id="cab-name">Имя</h3>
-      <p id="cab-login">login</p>
-      <span class="cabinet-role">Участник</span>
-    </div>
-    <nav class="cabinet-nav">
-      <a href="#" class="cabinet-nav__link active">📋 Мои результаты</a>
-      <a href="#" class="cabinet-nav__link" id="nav-history" onclick="toggleHistory();return false">📜 История</a>
-      <a href="#" class="cabinet-nav__link" onclick="cabLogout()">🚪 Выйти</a>
-    </nav>
-  </aside>
+<!-- ===== КАБИНЕТ ===== -->
+<div id="cabinet-view">
+  <div class="cabinet-wrap">
+    <!-- Сайдбар -->
+    <aside class="cabinet-sidebar">
+      <div class="cabinet-sidebar__user">
+        <div class="cabinet-avatar" id="cab-avatar">👤</div>
+        <h3 id="cab-name">Имя</h3>
+        <p id="cab-login">login</p>
+        <span class="cabinet-role">Участник</span>
+      </div>
+      <nav class="cabinet-nav">
+        <a href="#" class="cabinet-nav__link active" onclick="return false">📋 Результаты</a>
+        <a href="#" class="cabinet-nav__link" onclick="cabLogout()">🚪 Выйти</a>
+      </nav>
+      <div class="cabinet-sidebar__footer">
+        <div class="cabinet-sidebar__stat">
+          <span>Возраст</span>
+          <b id="cab-age">—</b>
+        </div>
+        <div class="cabinet-sidebar__stat">
+          <span>Дата регистрации</span>
+          <b id="cab-created">—</b>
+        </div>
+      </div>
+    </aside>
 
-  <!-- Контент -->
-  <div class="cabinet-main">
-    <div class="cabinet-topbar">
-      <h2>Мои результаты</h2>
-      <span id="cabinet-topbar-info" class="cabinet-topbar__info"></span>
-    </div>
+    <!-- Контент -->
+    <div class="cabinet-main">
+      <div class="cabinet-topbar">
+        <h2>Мои результаты</h2>
+      </div>
 
-    <!-- Нет результатов -->
-    <div id="cabinet-empty" class="cabinet-empty">
-      <div class="cabinet-empty__icon">📝</div>
-      <h3>Тест ещё не пройден</h3>
-      <p>Нажмите кнопку чтобы начать экзамен</p>
-      <button class="btn-primary btn-lg" onclick="startExam()">НАЧАТЬ ТЕСТ →</button>
-    </div>
+      <!-- Нет результатов -->
+      <div id="cabinet-empty" class="cabinet-empty">
+        <div class="cabinet-empty__icon">📝</div>
+        <h3>Тест ещё не пройден</h3>
+        <p>Нажмите кнопку чтобы начать экзамен</p>
+        <button class="btn-primary btn-lg" onclick="startExam()">НАЧАТЬ ТЕСТ →</button>
+      </div>
 
-    <!-- Есть результат -->
-    <div id="cabinet-result" style="display:none">
-      <div class="cabinet-result-card">
-        <div class="cabinet-result-card__left">
-          <div class="cabinet-result-card__icon" id="cabinet-result-icon">🎓</div>
-          <div>
-            <h3 id="cabinet-result-title">Результат</h3>
-            <p id="cabinet-result-date" class="cabinet-result-card__date"></p>
+      <!-- Есть результат -->
+      <div id="cabinet-result" style="display:none">
+        <div class="cabinet-result-card">
+          <div class="cabinet-result-card__left">
+            <div class="cabinet-result-card__icon" id="cabinet-result-icon">🎓</div>
+            <div>
+              <h3 id="cabinet-result-title">Результат</h3>
+              <p id="cabinet-result-date" class="cabinet-result-card__date"></p>
+            </div>
+          </div>
+          <div class="cabinet-result-card__right">
+            <div class="cabinet-result-card__score" id="cabinet-score">—</div>
+            <div class="cabinet-result-card__label">баллов</div>
           </div>
         </div>
-        <div class="cabinet-result-card__right">
-          <div class="cabinet-result-card__score" id="cabinet-score">—</div>
-          <div class="cabinet-result-card__label">баллов</div>
+
+        <div class="cabinet-result-actions">
+          <button class="btn-primary" onclick="startExam()">ПЕРЕСДАТЬ</button>
+          <button class="btn-outline" onclick="window.print()">🖨️ Печать</button>
+        </div>
+
+        <!-- Детали I части -->
+        <div id="cabinet-details" class="cabinet-details" style="display:none">
+          <h4>I Часть — Тест</h4>
+          <div id="cabinet-detail-grid" class="cabinet-detail-grid"></div>
         </div>
       </div>
 
-      <div class="cabinet-result-actions">
-        <button class="btn-primary" onclick="startExam()">ПЕРЕСДАТЬ</button>
-        <button class="btn-outline" onclick="window.print()">🖨️ Печать</button>
+      <!-- История -->
+      <div id="cabinet-history" style="display:none">
+        <h3 style="font-size:15px;color:var(--navy);margin-bottom:10px">📜 История попыток</h3>
+        <div id="cabinet-history-list"></div>
       </div>
-
-      <!-- Детали I части -->
-      <div id="cabinet-details" class="cabinet-details" style="display:none">
-        <h4>I Часть — Тест</h4>
-        <div id="cabinet-detail-grid" class="cabinet-detail-grid"></div>
-      </div>
-    </div>
-
-    <!-- История -->
-    <div id="cabinet-history" style="display:none">
-      <h3 style="font-size:15px;color:var(--navy);margin-bottom:10px">📜 История попыток</h3>
-      <div id="cabinet-history-list"></div>
     </div>
   </div>
 </div>
 
-<!-- ЭКЗАМЕН -->
+<!-- ===== ЭКЗАМЕН ===== -->
 <div id="screen-exam" class="screen">
   <div class="exam-header">
     <div class="exam-header__left">
@@ -133,7 +144,7 @@
   </div>
 </div>
 
-<!-- РЕЗУЛЬТАТ -->
+<!-- ===== РЕЗУЛЬТАТ ===== -->
 <div id="screen-result" class="screen">
   <div class="center-wrap">
     <div class="form-card" style="text-align:center">
@@ -147,15 +158,14 @@
 
 <footer class="footer">
   <div class="container footer__grid">
-    <div><b>Департамент образования Штата South</b><br>9001, Los Santos, Government Blvd, 1 © 2026</div>
+    <div><b>Департамент образования Штата South</b><br>РPM-SOUTH, University №1 © 2026</div>
     <div>supportegerpmsouth@gmail.com &nbsp;|&nbsp; 22222223</div>
   </div>
 </footer>
 
 <script src="supabase-config.js"></script>
 <script>
-// ===== ВОПРОСЫ =====
-var PART1 = [
+var PART1=[
   {q:"Какая фракция распространяет информацию о событиях штата?",a:["CPD (Полиция)","NEWS / СМИ","EMS (Медицина)","ФБР"],c:1,d:"Легкий"},
   {q:"Какая фракция является управляющей во всём штате и выпускает ФЗ?",a:["ФБР","CPD","Мэрия / Правительство","Суд"],c:2,d:"Легкий"},
   {q:"Какая фракция отвечает за порядок во время митинга?",a:["ФБР","CPD","Национальная Гвардия","EMS"],c:1,d:"Легкий"},
@@ -182,277 +192,163 @@ var PART1 = [
   {q:"Расистское оскорбление — иск в суд?",a:["Нет","Да — дискриминация наказуема","Только при свидетелях","Только ФБР"],c:1,d:"Сложный"},
   {q:"Экскурсия в музей — что рассказать?",a:["Закрыт","Основан 2019. Штат, флаг, силовые, культура","Архив ФБР","Военная база"],c:1,d:"Сложный"}
 ];
-
-var PART2 = [
-  {q:"Какая фракция отвечает за безопасность государства, даже если опасность ещё не дошла до штата? Объясните почему.",hint:"ФБР — контрразведка, федеральный уровень"},
-  {q:"Полицейский выдал вам розыск неправильно. Куда вы пойдёте и что сделаете? Опишите поэтапно.",hint:"Суд — исковое заявление по ЕПК"},
-  {q:"Чем отличается CPD от ФБР? Назовите минимум 3 отличия.",hint:"Местный vs федеральный, подследственность, ранги"},
-  {q:"Представьте что вы даёте экскурсию в музей штата. О чём вы рассажете?",hint:"Основание штата, флаг, история силовых структур, культура"},
-  {q:"Какая фракция является наиболее эффективной для заработка в штате? Обоснуйте.",hint:"NEWS, Мэрия/ФБР (премии), EMS (оклад + вызовы)"},
-  {q:"Какие фракции относятся к социальной сфере? Почему они так называются?",hint:"EMS и NEWS — услуги населению"},
-  {q:"Опишите порядок действий если вы стали свидетелем преступления в общественном месте.",hint:"CPD → оцепление, EMS → помощь, ФБР → если госбезопасность"},
-  {q:"Что такое ЕПК и какие фракции по нему работают? Приведите примеры статей.",hint:"Единый Процессуальный Кодекс — задержание, обыск, розыск"},
-  {q:"Почему Суд является независимой фракцией и не подчиняется Мэрии?",hint:"Конституция — разделение властей"},
-  {q:"Если бы вы были Губернатором, какую первую реформу провели бы в штате и почему?",hint:"Любой осмысленный ответ"}
+var PART2=[
+  {q:"Какая фракция отвечает за безопасность государства, даже если опасность ещё не дошла до штата? Объясните почему."},
+  {q:"Полицейский выдал вам розыск неправильно. Куда вы пойдёте и что сделаете? Опишите поэтапно."},
+  {q:"Чем отличается CPD от ФБР? Назовите минимум 3 отличия."},
+  {q:"Представьте что вы даёте экскурсию в музей штата. О чём вы расскажете?"},
+  {q:"Какая фракция является наиболее эффективной для заработка в штате? Обоснуйте."},
+  {q:"Какие фракции относятся к социальной сфере? Почему они так называются?"},
+  {q:"Опишите порядок действий если вы стали свидетелем преступления в общественном месте."},
+  {q:"Что такое ЕПК и какие фракции по нему работают? Приведите примеры статей."},
+  {q:"Почему Суд является независимой фракцией и не подчиняется Мэрии?"},
+  {q:"Если бы вы были Губернатором, какую первую реформу провели бы в штате и почему?"}
 ];
+var ALL=PART1.map(function(q,i){return{q:q.q,a:q.a,c:q.c,d:q.d,type:'choice',idx:i}}).concat(PART2.map(function(q,i){return{q:q.q,type:'text',idx:PART1.length+i}}));
+var currentUser=null,currentQ=0,answers=[],timerInterval=null,timeLeft=25*60,examActive=false;
 
-var ALL = PART1.map(function(q,i){return {q:q.q,a:q.a,c:q.c,d:q.d,type:'choice',idx:i}}).concat(PART2.map(function(q,i){return {q:q.q,type:'text',idx:PART1.length+i}}));
-
-var currentUser = null;
-var currentQ = 0;
-var answers = [];
-var timerInterval = null;
-var timeLeft = 25 * 60;
-var examActive = false;
-
-// === АВТО-ВХОД ===
 (function(){
-  var saved = localStorage.getItem('ege_current');
-  if(!saved){ window.location.href = 'register.html'; return; }
-  try {
-    currentUser = JSON.parse(saved);
-    loadCabinet();
-  } catch(e){ window.location.href = 'register.html'; }
+  var s=localStorage.getItem('ege_current');
+  if(!s){window.location.href='register.html';return}
+  try{currentUser=JSON.parse(s);loadCabinet()}catch(e){window.location.href='register.html'}
 })();
 
-// === КАБИНЕТ ===
 async function loadCabinet(){
-  if(!currentUser) return;
-  document.getElementById('cabinet-avatar') && (document.getElementById('cabinet-avatar').textContent = currentUser.name.charAt(0).toUpperCase());
-  document.getElementById('cab-avatar').textContent = currentUser.name.charAt(0).toUpperCase();
-  document.getElementById('cab-name').textContent = currentUser.name;
-  document.getElementById('cab-login').textContent = currentUser.login;
-  document.getElementById('cabinet-topbar-info').textContent = 'Аккаунт создан: ' + (currentUser.created || '—');
-
-  try {
-    var results = await supabaseGet('results', '&name=' + encodeURIComponent(currentUser.name) + '&order=timestamp.desc');
-    if(results && results.length > 0){
-      var latest = results[0];
-      document.getElementById('cabinet-empty').style.display = 'none';
-      document.getElementById('cabinet-result').style.display = '';
-
-      var score = latest.admin_score;
-      if(score !== null && score !== undefined){
-        document.getElementById('cabinet-score').textContent = score;
-        document.getElementById('cabinet-score').style.color = score >= 14 ? '#0a7a42' : '#c0392b';
-        document.getElementById('cabinet-result-title').textContent = score >= 14 ? 'ТЕСТ СДАН' : 'НЕ СДАНО';
-        document.getElementById('cabinet-result-icon').textContent = score >= 14 ? '🎓' : '📚';
-      } else {
-        document.getElementById('cabinet-score').textContent = '—';
-        document.getElementById('cabinet-score').style.color = '#f59e0b';
-        document.getElementById('cabinet-result-title').textContent = 'Ожидает проверки';
-        document.getElementById('cabinet-result-icon').textContent = '⏳';
+  if(!currentUser)return;
+  document.getElementById('cab-avatar').textContent=currentUser.name.charAt(0).toUpperCase();
+  document.getElementById('cab-name').textContent=currentUser.name;
+  document.getElementById('cab-login').textContent=currentUser.login;
+  document.getElementById('cab-age').textContent=currentUser.age+' лет';
+  document.getElementById('cab-created').textContent=currentUser.created||'—';
+  try{
+    var r=await supabaseGet('results','&name='+encodeURIComponent(currentUser.name)+'&order=timestamp.desc');
+    if(r&&r.length>0){
+      var latest=r[0];
+      document.getElementById('cabinet-empty').style.display='none';
+      document.getElementById('cabinet-result').style.display='';
+      var sc=latest.admin_score;
+      if(sc!==null&&sc!==undefined){
+        document.getElementById('cabinet-score').textContent=sc;
+        document.getElementById('cabinet-score').style.color=sc>=14?'#0a7a42':'#c0392b';
+        document.getElementById('cabinet-result-title').textContent=sc>=14?'ТЕСТ СДАН':'НЕ СДАНО';
+        document.getElementById('cabinet-result-icon').textContent=sc>=14?'🎓':'📚';
+      }else{
+        document.getElementById('cabinet-score').textContent='—';
+        document.getElementById('cabinet-score').style.color='#f59e0b';
+        document.getElementById('cabinet-result-title').textContent='Ожидает проверки';
+        document.getElementById('cabinet-result-icon').textContent='⏳';
       }
-      document.getElementById('cabinet-result-date').textContent = 'Дата сдачи: ' + (latest.date || '—');
-
+      document.getElementById('cabinet-result-date').textContent='Дата сдачи: '+(latest.date||'—');
       if(latest.answers){
-        try {
-          var ans = JSON.parse(latest.answers);
-          var part1 = ans.slice(0, PART1.length);
-          var correct = 0;
-          var html = '';
-          part1.forEach(function(a,i){
-            var ok = a === PART1[i].c;
-            if(ok) correct++;
-            html += '<div class="detail-dot '+(ok?'correct':'wrong')+'" title="В'+(i+1)+': '+(ok?'Верно':'Неверно')+'">'+(i+1)+'</div>';
+        try{
+          var ans=JSON.parse(latest.answers);
+          var p1=ans.slice(0,PART1.length);
+          var ok=0,h='';
+          p1.forEach(function(a,i){
+            var good=a===PART1[i].c;
+            if(good)ok++;
+            h+='<div class="detail-dot '+(good?'correct':'wrong')+'" title="В'+(i+1)+': '+(good?'Верно':'Неверно')+'">'+(i+1)+'</div>';
           });
-          document.getElementById('cabinet-details').style.display = '';
-          document.getElementById('cabinet-detail-grid').innerHTML = '<span style="font-size:12px;color:var(--muted);margin-bottom:6px;display:block">I Часть: '+correct+' из '+PART1.length+'</span>' + html;
-        } catch(e){}
+          document.getElementById('cabinet-details').style.display='';
+          document.getElementById('cabinet-detail-grid').innerHTML='<span style="font-size:12px;color:var(--muted);margin-bottom:6px;display:block">I Часть: '+ok+' из '+PART1.length+'</span>'+h;
+        }catch(e){}
       }
-
-      if(results.length > 1){
-        document.getElementById('cabinet-history').style.display = 'block';
-        document.getElementById('cabinet-history-list').innerHTML = results.map(function(r){
-          var sc = r.admin_score;
-          var txt = sc !== null && sc !== undefined ? sc + ' / 35' : 'На проверке';
-          var clr = sc !== null && sc !== undefined ? (sc>=14?'var(--green)':'var(--red)') : '#f59e0b';
-          return '<div style="display:flex;justify-content:space-between;padding:10px 12px;background:#fff;border:1px solid var(--border);border-radius:8px;margin-bottom:6px;font-size:13px"><span style="color:var(--muted)">'+(r.date||'')+'</span><span style="color:'+clr+';font-weight:800">'+txt+'</span></div>';
+      if(r.length>1){
+        document.getElementById('cabinet-history').style.display='block';
+        document.getElementById('cabinet-history-list').innerHTML=r.map(function(x){
+          var s2=x.admin_score;
+          var t=s2!==null&&s2!==undefined?s2+' / 35':'На проверке';
+          var c=s2!==null&&s2!==undefined?(s2>=14?'var(--green)':'var(--red)'):'#f59e0b';
+          return'<div style="display:flex;justify-content:space-between;padding:10px 12px;background:#fff;border:1px solid var(--border);border-radius:8px;margin-bottom:6px;font-size:13px"><span style="color:var(--muted)">'+(x.date||'')+'</span><span style="color:'+c+';font-weight:800">'+t+'</span></div>';
         }).join('');
       }
-    } else {
-      document.getElementById('cabinet-empty').style.display = '';
-      document.getElementById('cabinet-result').style.display = 'none';
+    }else{
+      document.getElementById('cabinet-empty').style.display='';
+      document.getElementById('cabinet-result').style.display='none';
     }
-  } catch(e){
-    console.error(e);
-    document.getElementById('cabinet-empty').style.display = '';
+  }catch(e){
+    document.getElementById('cabinet-empty').style.display='';
   }
 }
-
-function toggleHistory(){
-  var el = document.getElementById('cabinet-history');
-  el.style.display = el.style.display === 'none' || el.style.display === '' ? 'block' : 'none';
-}
-
-function cabLogout(){
-  localStorage.removeItem('ege_current');
-  window.location.href = 'register.html';
-}
-
+function cabLogout(){localStorage.removeItem('ege_current');window.location.href='register.html'}
 function backToCabinet(){
   document.getElementById('screen-exam').classList.remove('active');
   document.getElementById('screen-result').classList.remove('active');
-  document.querySelector('.cabinet-wrap').style.display = '';
-  document.querySelector('.footer').style.display = '';
-  document.querySelector('.gov-bar').style.display = '';
-  document.querySelector('.header').style.display = '';
-  loadCabinet();
-  window.scrollTo(0,0);
+  document.getElementById('cabinet-view').style.display='';
+  document.querySelector('.footer').style.display='';
+  document.querySelector('.gov-bar').style.display='';
+  document.querySelector('.header').style.display='';
+  loadCabinet();window.scrollTo(0,0);
 }
-
-// === ЭКЗАМЕН ===
 function startExam(){
-  document.querySelector('.cabinet-wrap').style.display = 'none';
-  document.querySelector('.footer').style.display = 'none';
-  document.querySelector('.gov-bar').style.display = 'none';
-  document.querySelector('.header').style.display = 'none';
-
+  document.getElementById('cabinet-view').style.display='none';
+  document.querySelector('.footer').style.display='none';
+  document.querySelector('.gov-bar').style.display='none';
+  document.querySelector('.header').style.display='none';
   document.getElementById('screen-exam').classList.add('active');
-  currentQ = 0;
-  answers = new Array(ALL.length).fill(null);
-  examActive = true;
-  timeLeft = 25 * 60;
-  document.getElementById('exam-nick').textContent = currentUser.name;
-
-  buildGrid();
-  renderQuestion();
-  startTimer();
-  enableAntiCheat();
-  setTimeout(function(){ document.documentElement.requestFullscreen && document.documentElement.requestFullscreen().catch(function(){}); }, 300);
+  currentQ=0;answers=new Array(ALL.length).fill(null);examActive=true;timeLeft=25*60;
+  document.getElementById('exam-nick').textContent=currentUser.name;
+  buildGrid();renderQuestion();startTimer();enableAntiCheat();
+  setTimeout(function(){document.documentElement.requestFullscreen&&document.documentElement.requestFullscreen().catch(function(){})},300);
 }
-
 function buildGrid(){
-  var grid = document.getElementById('question-grid');
-  grid.innerHTML = '';
+  var g=document.getElementById('question-grid');g.innerHTML='';
   ALL.forEach(function(_,i){
-    var dot = document.createElement('div');
-    dot.className = 'q-dot';
-    dot.textContent = i+1;
-    dot.onclick = function(){ currentQ=i; renderQuestion(); };
-    dot.id = 'dot-'+i;
-    grid.appendChild(dot);
+    var d=document.createElement('div');d.className='q-dot';d.textContent=i+1;
+    d.onclick=function(){currentQ=i;renderQuestion()};d.id='dot-'+i;g.appendChild(d);
   });
 }
-
 function renderQuestion(){
-  var q = ALL[currentQ];
-  var isChoice = q.type === 'choice';
-  var total = ALL.length;
-
-  document.getElementById('q-current').textContent = currentQ+1;
-  document.getElementById('q-total').textContent = total;
-  document.getElementById('progress').style.width = ((currentQ+1)/total*100)+'%';
-
-  document.getElementById('part1-question').style.display = isChoice ? '' : 'none';
-  document.getElementById('part2-question').style.display = isChoice ? 'none' : '';
-
-  var badge = document.getElementById('exam-part-badge');
-  badge.textContent = currentQ < PART1.length ? 'I Часть (Выбор)' : 'II Часть (Письменно)';
-  badge.className = 'exam-part-badge ' + (currentQ < PART1.length ? 'badge-choice' : 'badge-text');
-
-  if(isChoice){
-    document.getElementById('question-text').textContent = (currentQ+1)+'. '+q.q;
-    var diffEl = document.getElementById('exam-diff');
-    diffEl.textContent = q.d;
-    diffEl.className = 'exam-diff-tag '+(q.d==='Легкий'?'diff-easy':q.d==='Средний'?'diff-medium':'diff-hard');
-
-    var opts = document.getElementById('options');
-    opts.innerHTML = '';
-    q.a.forEach(function(text,idx){
-      var div = document.createElement('label');
-      div.className = 'option'+(answers[currentQ]===idx?' selected':'');
-      div.innerHTML = '<input type="radio" name="q" '+(answers[currentQ]===idx?'checked':'')+'><span>'+String.fromCharCode(65+idx)+') '+text+'</span>';
-      div.onclick = function(){ answers[currentQ]=idx; renderQuestion(); updateGrid(); };
-      opts.appendChild(div);
+  var q=ALL[currentQ],isC=q.type==='choice',total=ALL.length;
+  document.getElementById('q-current').textContent=currentQ+1;
+  document.getElementById('q-total').textContent=total;
+  document.getElementById('progress').style.width=((currentQ+1)/total*100)+'%';
+  document.getElementById('part1-question').style.display=isC?'':'none';
+  document.getElementById('part2-question').style.display=isC?'none':'';
+  var b=document.getElementById('exam-part-badge');
+  b.textContent=currentQ<PART1.length?'I Часть (Выбор)':'II Часть (Письменно)';
+  b.className='exam-part-badge '+(currentQ<PART1.length?'badge-choice':'badge-text');
+  if(isC){
+    document.getElementById('question-text').textContent=(currentQ+1)+'. '+q.q;
+    var de=document.getElementById('exam-diff');de.textContent=q.d;
+    de.className='exam-diff-tag '+(q.d==='Легкий'?'diff-easy':q.d==='Средний'?'diff-medium':'diff-hard');
+    var o=document.getElementById('options');o.innerHTML='';
+    q.a.forEach(function(txt,idx){
+      var dv=document.createElement('label');
+      dv.className='option'+(answers[currentQ]===idx?' selected':'');
+      dv.innerHTML='<input type="radio" name="q" '+(answers[currentQ]===idx?'checked':'')+'><span>'+String.fromCharCode(65+idx)+') '+txt+'</span>';
+      dv.onclick=function(){answers[currentQ]=idx;renderQuestion();updateGrid()};
+      o.appendChild(dv);
     });
-  } else {
-    document.getElementById('question-text-2').textContent = (currentQ+1)+'. '+q.q;
-    var ta = document.getElementById('text-answer');
-    ta.value = answers[currentQ] || '';
-    ta.oninput = function(){ answers[currentQ] = ta.value; updateGrid(); };
+  }else{
+    document.getElementById('question-text-2').textContent=(currentQ+1)+'. '+q.q;
+    var ta=document.getElementById('text-answer');ta.value=answers[currentQ]||'';
+    ta.oninput=function(){answers[currentQ]=ta.value;updateGrid()};
   }
-
-  document.getElementById('prev-btn').disabled = currentQ===0;
-  var nextBtn = document.getElementById('next-btn');
-  var finishBtn = document.getElementById('finish-btn');
-  if(currentQ===total-1){ nextBtn.style.display='none'; finishBtn.style.display=''; }
-  else { nextBtn.style.display=''; finishBtn.style.display='none'; }
+  document.getElementById('prev-btn').disabled=currentQ===0;
+  var nb=document.getElementById('next-btn'),fb=document.getElementById('finish-btn');
+  if(currentQ===total-1){nb.style.display='none';fb.style.display=''}else{nb.style.display='';fb.style.display='none'}
   updateGrid();
 }
-
-function updateGrid(){
-  ALL.forEach(function(_,i){
-    var dot = document.getElementById('dot-'+i);
-    dot.classList.remove('answered','current');
-    if(answers[i]!==null && answers[i]!=='') dot.classList.add('answered');
-    if(i===currentQ) dot.classList.add('current');
-  });
-}
-
-document.getElementById('prev-btn').onclick = function(){ if(currentQ>0){ currentQ--; renderQuestion(); }};
-document.getElementById('next-btn').onclick = function(){ if(currentQ<ALL.length-1){ currentQ++; renderQuestion(); }};
-document.getElementById('finish-btn').onclick = finishExam;
-
-function startTimer(){
-  clearInterval(timerInterval);
-  updateTimerDisplay();
-  timerInterval = setInterval(function(){
-    timeLeft--;
-    updateTimerDisplay();
-    if(timeLeft<=0){ clearInterval(timerInterval); finishExam(); }
-  },1000);
-}
-function updateTimerDisplay(){
-  var m = String(Math.floor(timeLeft/60)).padStart(2,'0');
-  var s = String(timeLeft%60).padStart(2,'0');
-  var el = document.getElementById('timer');
-  el.textContent = m+':'+s;
-  if(timeLeft<300) el.classList.add('warn'); else el.classList.remove('warn');
-}
-
+function updateGrid(){ALL.forEach(function(_,i){var d=document.getElementById('dot-'+i);d.classList.remove('answered','current');if(answers[i]!==null&&answers[i]!=='')d.classList.add('answered');if(i===currentQ)d.classList.add('current')})}
+document.getElementById('prev-btn').onclick=function(){if(currentQ>0){currentQ--;renderQuestion()}};
+document.getElementById('next-btn').onclick=function(){if(currentQ<ALL.length-1){currentQ++;renderQuestion()}};
+document.getElementById('finish-btn').onclick=finishExam;
+function startTimer(){clearInterval(timerInterval);updateTimerDisplay();timerInterval=setInterval(function(){timeLeft--;updateTimerDisplay();if(timeLeft<=0){clearInterval(timerInterval);finishExam()}},1000)}
+function updateTimerDisplay(){var m=String(Math.floor(timeLeft/60)).padStart(2,'0'),s=String(timeLeft%60).padStart(2,'0'),e=document.getElementById('timer');e.textContent=m+':'+s;if(timeLeft<300)e.classList.add('warn');else e.classList.remove('warn')}
 function finishExam(){
-  if(!examActive) return;
-  clearInterval(timerInterval);
-  examActive = false;
-  disableAntiCheat();
-  if(document.fullscreenElement) document.exitFullscreen && document.exitFullscreen().catch(function(){});
-
-  var result = {
-    name: currentUser.name,
-    game_nick: currentUser.login,
-    age: currentUser.age,
-    answers: JSON.stringify(answers),
-    date: new Date().toLocaleString('ru-RU'),
-    timestamp: Date.now(),
-    admin_score: null,
-    status: 'pending'
-  };
-
-  supabasePost('results', result).then(function(d){
-    console.log('Сохранено:', d);
-  }).catch(function(e){
-    console.error('Ошибка:', e);
-  });
-
+  if(!examActive)return;clearInterval(timerInterval);examActive=false;disableAntiCheat();
+  if(document.fullscreenElement)document.exitFullscreen&&document.exitFullscreen().catch(function(){});
+  supabasePost('results',{name:currentUser.name,game_nick:currentUser.login,age:currentUser.age,answers:JSON.stringify(answers),date:new Date().toLocaleString('ru-RU'),timestamp:Date.now(),admin_score:null,status:'pending'}).catch(function(e){console.error(e)});
   document.getElementById('screen-exam').classList.remove('active');
-  document.getElementById('screen-result').classList.add('active');
-  window.scrollTo(0,0);
+  document.getElementById('screen-result').classList.add('active');window.scrollTo(0,0);
 }
-
-// АНТИЧИТ
-function enableAntiCheat(){ document.addEventListener('visibilitychange',onVis); window.addEventListener('blur',onBlur); document.addEventListener('fullscreenchange',onFS); }
-function disableAntiCheat(){ document.removeEventListener('visibilitychange',onVis); window.removeEventListener('blur',onBlur); document.removeEventListener('fullscreenchange',onFS); }
-function onVis(){ if(!examActive) return; if(document.hidden) warn('Вы свернули вкладку!'); }
-function onBlur(){ if(!examActive) return; setTimeout(function(){ if(!document.hasFocus()) warn('Потеря фокуса!'); },500); }
-function onFS(){ if(!examActive) return; if(!document.fullscreenElement) warn('Вышли из полноэкранного!'); }
-function warn(msg){
-  var el = document.getElementById('exam-warning');
-  el.classList.remove('hidden');
-  el.textContent = msg+' Покинув аудиторию работа аннулируется!';
-  el.style.background='#fee2e2'; el.style.color='#991b1b';
-}
+function enableAntiCheat(){document.addEventListener('visibilitychange',onVis);window.addEventListener('blur',onBlur);document.addEventListener('fullscreenchange',onFS)}
+function disableAntiCheat(){document.removeEventListener('visibilitychange',onVis);window.removeEventListener('blur',onBlur);document.removeEventListener('fullscreenchange',onFS)}
+function onVis(){if(!examActive)return;if(document.hidden)warn('Вы свернули вкладку!')}
+function onBlur(){if(!examActive)return;setTimeout(function(){if(!document.hasFocus())warn('Потеря фокуса!')},500)}
+function onFS(){if(!examActive)return;if(!document.fullscreenElement)warn('Вышли из полноэкранного!')}
+function warn(msg){var e=document.getElementById('exam-warning');e.classList.remove('hidden');e.textContent=msg+' Покинув аудиторию работа аннулируется!';e.style.background='#fee2e2';e.style.color='#991b1b'}
 </script>
-
 </body>
 </html>
