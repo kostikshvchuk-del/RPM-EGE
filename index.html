@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ЕГЭ Штата South — Официальный портал</title>
+<link rel="stylesheet" href="style.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800&family=PT+Serif:wght@400;700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+<div class="gov-bar">
+  <div class="container gov-bar__inner">
+    <span>🇺🇸 ГОСУДАРСТВЕННЫЙ ПОРТАЛ ШТАТА SOUTH</span>
+    <span>Горячая линия: <b>8-800-555-14-63</b></span>
+  </div>
+</div>
+
+<header class="header">
+  <div class="container header__inner">
+    <div class="header__emblem">
+      <div class="emblem">🏛️</div>
+      <div class="header__titles">
+        <div class="header__ministry">ДЕПАРТАМЕНТ ОБРАЗОВАНИЯ<br>ШТАТА SOUTH — RPM</div>
+        <div class="header__portal">Официальный портал<br><span>ГОСУДАРСТВЕННОГО ЭКЗАМЕНА</span></div>
+      </div>
+    </div>
+    <div class="header__meta">
+      <div class="header__year">ЕГЭ — 2026</div>
+      <div class="header__status"><span class="dot"></span> Идет основной период</div>
+      <button class="btn-gos" onclick="scrollToLogin()">Личный кабинет →</button>
+    </div>
+  </div>
+  <nav class="nav">
+    <div class="container nav__inner">
+      <a href="#about" class="nav__link active">О ЕГЭ</a>
+      <a href="#schedule" class="nav__link">Расписание</a>
+      <a href="#rules" class="nav__link">Правила</a>
+      <a href="#contacts" class="nav__link">Контакты</a>
+    </div>
+  </nav>
+</header>
+
+<section class="hero">
+  <div class="container hero__grid">
+    <div class="hero__left">
+      <div class="hero__badge">ПРИКАЗ № 142-П ОТ 15.08.2026 &nbsp;•&nbsp; УТВЕРЖДЕН ГУБЕРНАТОРОМ</div>
+      <h1>Государственный экзамен<br><span>Штата South — 2026</span></h1>
+      <p class="hero__lead">Официальный портал для участников экзамена. Все сроки, пункты проведения и результаты — только здесь.</p>
+      <div class="hero__stats">
+        <div class="stat"><b>24</b><span>ППЭ в штате</span></div>
+        <div class="stat"><b>1 847</b><span>участников</span></div>
+        <div class="stat"><b>25 мин</b><span>время экзамена</span></div>
+        <div class="stat"><b>12</b><span>мин. балл</span></div>
+      </div>
+      <div class="hero__actions">
+        <button class="btn-primary" onclick="scrollToLogin()">НАЧАТЬ ТЕСТ</button>
+        <button class="btn-outline" onclick="document.getElementById('schedule').scrollIntoView({behavior:'smooth'})">Расписание</button>
+      </div>
+    </div>
+    <div class="hero__right">
+      <div class="doc-card">
+        <div class="doc-card__head">ОБЪЯВЛЕНИЕ</div>
+        <div class="doc-card__body">
+          <p class="doc-card__title">Корпус Университета —<br>ППЭ №07</p>
+          <p class="doc-card__text">Экзамен по <b>«РПМ — Основы RolePlay»</b> проводится в присутствии преподавателя. Все ответы проверяются вручную администрацией.</p>
+          <ul class="doc-list">
+            <li><span class="doc-list__icon">📄</span> Паспорт / ID-карта штата</li>
+            <li><span class="doc-list__icon">🖥️</span> Полноэкранный режим обязателен</li>
+            <li><span class="doc-list__icon">⛔</span> Сворачивание = аннулирование</li>
+          </ul>
+          <div class="doc-card__sign">
+            <div><b>И.о. Директора Департамента</b><br><span>В. А. Вернадский</span></div>
+            <div class="stamp">ПЕЧАТЬ<br>ДЕП.ОБР<br>SOUTH</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="alert-bar">
+  <div class="container alert-bar__inner">
+    <span class="alert-tag">ВАЖНО</span>
+    <span>При выходе из полноэкранного режима, переключении вкладки или сворачивании браузера результат <b>аннулируется</b>. Предупреждений — 2, далее — удаление.</span>
+  </div>
+</div>
+
+<main class="container main-grid">
+  <section id="about" class="section">
+    <h2 class="section__title"><span>01</span> О проведении ЕГЭ</h2>
+    <div class="cols-2">
+      <div>
+        <p>Государственный экзамен штата South — обязательная аттестация для граждан, претендующих на гос. службу.</p>
+        <p>Экзамен по <b>«РПМ»</b> состоит из двух частей. Этот портал обеспечивает <b>I часть — тест (25 вопросов)</b>.</p>
+        <div class="info-grid">
+          <div class="info-box"><b>Форма</b><span>25 вопросов с выбором ответа</span></div>
+          <div class="info-box"><b>Время</b><span>25 минут, без перерыва</span></div>
+          <div class="info-box"><b>Проверка</b><span>Вручную администрацией</span></div>
+          <div class="info-box"><b>Наблюдение</b><span>Видеофиксация + прокторинг</span></div>
+        </div>
+      </div>
+      <div class="side-card">
+        <h3>Правила участника</h3>
+        <ol>
+          <li>RP-имя: <b>Имя Фамилия</b> кириллицей.</li>
+          <li>Проверка имени: <b>forebears.io</b>.</li>
+          <li>Ники <b>admin, moder</b>, оскорбления — запрещены.</li>
+          <li>Скины: во фракции — только униформа.</li>
+        </ol>
+        <a href="#rules" class="link">Полный регламент →</a>
+      </div>
+    </div>
+  </section>
+
+  <section id="schedule" class="section">
+    <h2 class="section__title"><span>02</span> Расписание — 2026</h2>
+    <div class="table-wrap">
+      <table class="gov-table">
+        <thead><tr><th>Дата</th><th>Предмет</th><th>ППЭ</th><th>Начало</th><th>Статус</th></tr></thead>
+        <tbody>
+          <tr class="active-row"><td><b>30.08.2026</b></td><td>РПМ — I часть • 1-я волна</td><td>Корпус Университета, ауд. 24</td><td>18:00</td><td><span class="badge green">РЕГИСТРАЦИЯ</span></td></tr>
+          <tr><td>31.08.2026</td><td>РПМ — II часть (устно)</td><td>Корпус Университета</td><td>17:00</td><td><span class="badge gray">По спискам</span></td></tr>
+          <tr><td>02.09.2026</td><td>Резерв: РПМ (все части)</td><td>ППЭ №03 — Мэрия</td><td>19:00</td><td><span class="badge gray">Резерв</span></td></tr>
+          <tr><td>05.09.2026</td><td>Апелляция и пересдача</td><td>Департамент образования</td><td>15:00</td><td><span class="badge blue">По заявлению</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section id="rules" class="section">
+    <h2 class="section__title"><span>03</span> Правила проведения</h2>
+    <div class="rules-grid">
+      <div class="rule"><div class="rule__num">1</div><div><b>Полноэкранный режим обязателен.</b> Автоматический вход при старте. Выход = предупреждение.</div></div>
+      <div class="rule"><div class="rule__num">2</div><div><b>Запрещено</b> сворачивать, переключать вкладки. 1-е — предупреждение, 2-е — аннулирование.</div></div>
+      <div class="rule"><div class="rule__num">3</div><div><b>25 минут без перерыва.</b> Таймер в шапке, за 5 минут — красный. Автосдача.</div></div>
+      <div class="rule"><div class="rule__num">4</div><div><b>Навигация:</b> можно возвращаться к вопросам. Неотвеченные — серым.</div></div>
+    </div>
+  </section>
+
+  <section id="contacts" class="section">
+    <h2 class="section__title"><span>04</span> Контакты</h2>
+    <div class="doc-links">
+      <div class="doc-link"><span>📞</span><div><b>Горячая линия</b><span>8-800-555-14-63</span></div></div>
+      <div class="doc-link"><span>📧</span><div><b>Почта</b><span>support@ege-south.gov</span></div></div>
+      <div class="doc-link"><span>📍</span><div><b>Адрес ППЭ №07</b><span>Los Santos, University Campus</span></div></div>
+    </div>
+  </section>
+
+  <section id="login" class="section login-section">
+    <h2 class="section__title"><span>05</span> Регистрация на экзамен</h2>
+    <div class="login-grid">
+      <div class="login-card-gov">
+        <div class="login-card__head"> <span class="cab-badge">ППЭ №07 • Ауд. 24</span> <span class="cab-seats">Мест: <b id="free-seats">7</b> / 24</span></div>
+        <form id="login-form" novalidate>
+          <label>Имя и Фамилия <span class="req">*</span></label>
+          <input type="text" id="nickname" placeholder="Алекс Вендетто" required>
+          <span class="hint">Формат: Имя Фамилия кириллицей</span>
+          <label>Nick (ник в игре) <span class="req">*</span></label>
+          <input type="text" id="game-nick" placeholder="Alex_Vendetto" required>
+          <span class="hint">Ваш ник в RPM</span>
+          <label>Возраст <span class="req">*</span></label>
+          <input type="number" id="age" placeholder="18" required min="14" max="99">
+          <span class="hint">Минимум 14 лет</span>
+          <div class="checkbox-wrap">
+            <input type="checkbox" id="agree" required>
+            <label for="agree">Я ознакомлен с правилами. Понимаю, что при сворачивании сайта результат <b>аннулируется</b>.</label>
+          </div>
+          <button type="submit" id="login-btn" class="btn-primary full">НАЧАТЬ ТЕСТ →</button>
+        </form>
+      </div>
+      <div class="login-side">
+        <div class="side-info">
+          <h4>Что взять с собой</h4>
+          <ul>
+            <li>✔️ Паспорт / ID-карта</li>
+            <li>✔️ Ручка (для II части)</li>
+          </ul>
+        </div>
+        <div class="side-info">
+          <h4>Технические требования</h4>
+          <ul>
+            <li>Браузер: Chrome / Firefox / Edge</li>
+            <li>Интернет, звук включен</li>
+            <li>Разрешить полноэкранный режим</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<!-- EXAM -->
+<div id="exam-screen" class="screen">
+  <header class="exam-header">
+    <div class="header-left">
+      <b id="exam-nick">Участник</b>
+      <span id="exam-status">● Идет экзамен • Прокторинг</span>
+    </div>
+    <div class="header-center">Вопрос <span id="current-q">1</span> / <span id="total-q">25</span></div>
+    <div class="header-right">
+      <span id="timer">25:00</span>
+      <button id="fullscreen-btn">⛶ На весь экран</button>
+    </div>
+  </header>
+  <div class="progress-bar"><div id="progress"></div></div>
+  <div class="exam-card-gov">
+    <div id="warnings" class="warnings hidden"><span id="warning-text"></span></div>
+    <div class="exam-diff" id="exam-diff"></div>
+    <h2 id="question-text">Загрузка...</h2>
+    <div id="options" class="options"></div>
+    <div class="exam-nav">
+      <button id="prev-btn" class="btn-secondary" disabled>← Назад</button>
+      <div style="display:flex; gap:10px">
+        <button id="next-btn" class="btn-primary">Далее →</button>
+        <button id="finish-btn" class="btn-finish hidden">ЗАВЕРШИТЬ И СДАТЬ</button>
+      </div>
+    </div>
+    <div class="question-grid" id="question-grid"></div>
+    <div class="exam-footer-note">Неотвеченные вопросы считаются неверными. По истечении времени — автосдача.</div>
+  </div>
+</div>
+
+<!-- RESULT — ответы ученика для админа -->
+<div id="result-screen" class="screen">
+  <div class="result-card-gov">
+    <div class="result-head">ОТВЕТЫ УЧАСТНИКА — ДЛЯ ПРОВЕРКИ АДМИНИСТРАЦИЕЙ</div>
+    <div id="result-icon" class="result-icon">📋</div>
+    <h1 id="result-title">Ваши ответы сданы</h1>
+    <p id="result-text" class="result-text">Ответы отправлены на проверку. Покажите этот экран преподавателю / администратору для выставления балла.</p>
+    <div class="result-details" id="result-details"></div>
+    <div class="result-actions">
+      <button id="restart-btn" class="btn-primary">На главную</button>
+      <button onclick="window.print()" class="btn-outline">🖨️ Печать / Скриншот</button>
+    </div>
+    <p class="result-hint">Администратор проверит ответы и выставит балл в панели управления.</p>
+  </div>
+</div>
+
+<!-- ANNULLED -->
+<div id="annulled-screen" class="screen">
+  <div class="result-card-gov annulled">
+    <div class="result-icon">⛔</div>
+    <h1>РАБОТА АННУЛИРОВАНА</h1>
+    <p id="annulled-reason">Нарушение регламента.</p>
+    <p class="annulled-note">При сворачивании или выходе из полноэкранного режима результат аннулируется. Обратитесь к преподавателю.</p>
+    <button id="annulled-restart" class="btn-secondary">На главную</button>
+  </div>
+</div>
+
+<footer class="footer">
+  <div class="container footer__grid">
+    <div><b>Департамент образования Штата South</b><br>9001, South, Los Santos, Government Blvd, 1<br>© 2026</div>
+    <div class="footer__right">Официальный портал ЕГЭ<br>support@ege-south.gov • 8-800-555-14-63</div>
+  </div>
+</footer>
+
+<script src="supabase-config.js"></script>
+<script src="script.js"></script>
+</body>
+</html>
