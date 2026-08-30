@@ -28,6 +28,8 @@
 [data-theme="dark"] .detail-section h4,
 [data-theme="dark"] .admin-topbar h2,
 [data-theme="dark"] .cabinet-topbar h2,
+[data-theme="dark"] .admin-stat b{color:var(--text)}
+[data-theme="dark"] .admin-stat span{color:#cbd5e1}
 [data-theme="dark"] label{color:var(--text)}
 [data-theme="dark"] .side-card ol,[data-theme="dark"] .format-card p{color:var(--muted)}
 [data-theme="dark"] input,[data-theme="dark"] textarea,[data-theme="dark"] select{background:var(--card);border-color:var(--border);color:var(--text)}
