@@ -215,10 +215,9 @@ async function requestRetry(){
   try{
     var r=await supabaseGet('results','&name=eq.'+encodeURIComponent(currentUser.name)+'&status=eq.annulled&order=timestamp.desc');
     if(r&&r.length>0){
-      for(var i=0;i<r.length;i++) await supabaseDelete('results', r[i].id);
+      await supabasePatch('results', r[0].id, {status:'retry_pending'});
+      document.getElementById('cabinet-annulled').style.display='none';
+      document.getElementById('cabinet-retry').style.display='';
     }
-    document.getElementById('cabinet-annulled').style.display='none';
-  document.getElementById('cabinet-retry').style.display='none';
-    loadCabinet();
   }catch(e){ alert('Ошибка: '+e.message); }
 }
