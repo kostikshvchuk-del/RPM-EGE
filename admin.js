@@ -56,7 +56,7 @@ function showTab(t,el){
   if(t==='users') loadUsers();
   if(t==='admins') loadAdmins();
 }
-var allResults=[];
+var allResults=[];var filteredResults=[];var currentPage=1;var PAGE_SIZE=20;var currentUsersPage=1;var USERS_PAGE_SIZE=20;
 async function loadResults(){
   try{
     allResults=await supabaseGet('results','&order=timestamp.desc');
@@ -84,12 +84,18 @@ function filterResults(){
   else if(sort==='pending') f=f.sort(function(a,b){ var ap=a.status==='pending'?0:1, bp=b.status==='pending'?0:1; return ap-bp; });
   else if(sort==='score-desc') f.sort(function(a,b){return(b.admin_score||0)-(a.admin_score||0)});
   else if(sort==='score-asc') f.sort(function(a,b){return(a.admin_score===null?999:a.admin_score)-(b.admin_score===null?999:b.admin_score)});
-  renderResults(f);
+  filteredResults=f; currentPage=1; renderResults(f);
 }
 function renderResults(list){
   var el=document.getElementById('results-list');
-  if(!list.length){el.innerHTML='<div class="admin-empty">Нет результатов — пока никто не сдал работу</div>';return}
-  el.innerHTML=list.map(function(r){
+  var pagEl=document.getElementById('pagination');
+  if(!list.length){el.innerHTML='<div class="admin-empty">Нет результатов — пока никто не сдал работу</div>'; if(pagEl) pagEl.innerHTML=''; return;}
+  var totalPages=Math.ceil(list.length/PAGE_SIZE);
+  if(currentPage>totalPages) currentPage=totalPages;
+  if(currentPage<1) currentPage=1;
+  var start=(currentPage-1)*PAGE_SIZE;
+  var pageList=list.slice(start, start+PAGE_SIZE);
+  el.innerHTML=pageList.map(function(r){
     var sc=r.admin_score;
     if(r.claimed_by && r.status==='pending') r.status='claimed';
     if(r.status==='claimed') return'<div class="admin-result-card status-pending" onclick="openDetail(\''+r.id+'\')"><div class="admin-result-card__left"><div class="admin-result-card__avatar">'+r.name.charAt(0)+'</div><div><b>'+r.name+'</b><p>'+r.game_nick+' · '+r.age+' лет</p><div class="admin-result-card__meta">'+(r.date||'—')+' · 🔒 '+r.claimed_by+'</div></div></div><div class="admin-result-card__right"><span class="admin-badge pending">🔒 '+r.claimed_by+'</span><span style="font-size:10px;color:var(--muted)">Открыть →</span></div></div>';
@@ -97,6 +103,15 @@ function renderResults(list){
     if(r.status==='done') return'<div class="admin-result-card status-done" onclick="openDetail(\''+r.id+'\')"><div class="admin-result-card__left"><div class="admin-result-card__avatar">'+r.name.charAt(0)+'</div><div><b>'+r.name+'</b><p>'+r.game_nick+' · '+r.age+' лет</p><div class="admin-result-card__meta">'+(r.date||'—')+'</div></div></div><div class="admin-result-card__right"><span class="admin-badge '+(sc>=14?'done':'fail')+'">'+(sc>=14?'✅ ':'❌ ')+sc+' / 35</span><span style="font-size:10px;color:var(--muted)">Открыть →</span></div></div>';
     return'<div class="admin-result-card status-pending" onclick="openDetail(\''+r.id+'\')"><div class="admin-result-card__left"><div class="admin-result-card__avatar">'+r.name.charAt(0)+'</div><div><b>'+r.name+'</b><p>'+r.game_nick+' · '+r.age+' лет</p><div class="admin-result-card__meta">'+(r.date||'—')+'</div></div></div><div class="admin-result-card__right"><span class="admin-badge pending">⏳ На проверке</span><span style="font-size:10px;color:var(--muted)">Открыть →</span></div></div>';
   }).join('');
+  if(pagEl){
+    var html='';
+    if(totalPages>1){
+      html+='<button class="btn-outline btn-sm" '+(currentPage===1?'disabled':'')+' onclick="goPage('+(currentPage-1)+')">← Назад</button>';
+      html+='<span style="font-size:13px;color:var(--muted)">Стр. '+currentPage+' / '+totalPages+' ('+list.length+')</span>';
+      html+='<button class="btn-outline btn-sm" '+(currentPage===totalPages?'disabled':'')+' onclick="goPage('+(currentPage+1)+')">Вперёд →</button>';
+    } else { html+='<span style="font-size:12px;color:var(--muted)">Всего '+list.length+'</span>'; }
+    pagEl.innerHTML=html;
+  }
 }
 var currentDetailId=null;
 function openDetail(id){
@@ -144,6 +159,7 @@ function openDetail(id){
   }
   document.getElementById('result-detail-overlay').style.display='flex';
 }
+function goPage(p){ currentPage=p; renderResults(filteredResults); window.scrollTo(0,0); }
 function closeDetail(e){ if(!e || e.target===document.getElementById('result-detail-overlay')){ document.getElementById('result-detail-overlay').style.display='none'; var ac=document.getElementById('annul-confirm'); if(ac) ac.style.display='none'; var dc=document.getElementById('delete-confirm'); if(dc) dc.style.display='none'; } }
 async function claimResult(){
   if(!currentDetailId) return;
@@ -191,15 +207,37 @@ function showToast(msg, isError){
   t.textContent=msg; t.style.background=isError?'var(--red)':'var(--navy)'; t.style.display='block';
   setTimeout(function(){ t.style.display='none'; }, 2000);
 }
+var allUsers=[];var filteredUsers=[];
 async function loadUsers(){
   var el=document.getElementById('users-list');
   try{
     var users=await supabaseGet('users','&order=created_at.desc');
+    allUsers=users||[]; filteredUsers=allUsers; currentUsersPage=1;
     document.getElementById('users-count').textContent = users ? users.length + ' чел.' : '';
-    if(!users||!users.length){el.innerHTML='<div class="admin-empty">Нет участников</div>';return}
-    el.innerHTML=users.map(function(u){ return'<div class="admin-user-card"><div class="admin-user-card__avatar">'+u.name.charAt(0)+'</div><div><b>'+u.name+'</b><p>'+u.login+' · '+u.age+' лет · '+(u.created_at||'—')+'</p></div></div>'; }).join('');
+    renderUsers();
   }catch(e){el.innerHTML='<div class="admin-empty">Ошибка загрузки</div>'}
 }
+function renderUsers(){
+  var el=document.getElementById('users-list');
+  var pagEl=document.getElementById('users-pagination');
+  var list=filteredUsers;
+  if(!list||!list.length){el.innerHTML='<div class="admin-empty">Нет участников</div>'; if(pagEl) pagEl.innerHTML=''; return;}
+  var totalPages=Math.ceil(list.length/USERS_PAGE_SIZE);
+  if(currentUsersPage>totalPages) currentUsersPage=totalPages;
+  var start=(currentUsersPage-1)*USERS_PAGE_SIZE;
+  var page=list.slice(start, start+USERS_PAGE_SIZE);
+  el.innerHTML=page.map(function(u){ return'<div class="admin-user-card"><div class="admin-user-card__avatar">'+u.name.charAt(0)+'</div><div><b>'+u.name+'</b><p>'+u.login+' · '+u.age+' лет · '+(u.created_at||'—')+'</p></div></div>'; }).join('');
+  if(pagEl){
+    var html='';
+    if(totalPages>1){
+      html+='<button class="btn-outline btn-sm" '+(currentUsersPage===1?'disabled':'')+' onclick="goUsersPage('+(currentUsersPage-1)+')">← Назад</button>';
+      html+='<span style="font-size:13px;color:var(--muted)">Стр. '+currentUsersPage+' / '+totalPages+' ('+list.length+')</span>';
+      html+='<button class="btn-outline btn-sm" '+(currentUsersPage===totalPages?'disabled':'')+' onclick="goUsersPage('+(currentUsersPage+1)+')">Вперёд →</button>';
+    } else { html+='<span style="font-size:12px;color:var(--muted)">Всего '+list.length+'</span>'; }
+    pagEl.innerHTML=html;
+  }
+}
+function goUsersPage(p){ currentUsersPage=p; renderUsers(); window.scrollTo(0,0); }
 async function loadAdmins(){
   var el=document.getElementById('admin-list');
   var req=document.getElementById('admin-requests');
