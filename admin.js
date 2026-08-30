@@ -82,7 +82,7 @@ function updateStats(){
 function filterResults(){
   var q=document.getElementById('search-results').value.toLowerCase();
   var sort=document.getElementById('sort-results').value;
-  var f=allResults.filter(function(r){return!q||r.name.toLowerCase().indexOf(q)>=0||r.game_nick.toLowerCase().indexOf(q)>=0});
+  var f=allResults.filter(function(r){return r.status!=='annulled' && r.status!=='retry_pending' && (!q||r.name.toLowerCase().indexOf(q)>=0||r.game_nick.toLowerCase().indexOf(q)>=0)});
   if(sort==='oldest') f.reverse();
   else if(sort==='pending') f=f.sort(function(a,b){ var ap=a.status==='pending'?0:1, bp=b.status==='pending'?0:1; return ap-bp; });
   else if(sort==='score-desc') f.sort(function(a,b){return(b.admin_score||0)-(a.admin_score||0)});
