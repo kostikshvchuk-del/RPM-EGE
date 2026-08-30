@@ -92,7 +92,7 @@ a{color:var(--blue);text-decoration:none}a:hover{text-decoration:underline}
 .header__ministry{font-size:12px;font-weight:800;letter-spacing:.3px;color:var(--navy);text-transform:uppercase;line-height:1.3}
 .header__portal{font-family:'PT Serif',serif;font-size:13px;color:var(--navy);line-height:1.3}
 .header__portal span{color:var(--usared);font-weight:700}
-.header__meta{text-align:right}
+.header__meta{display:flex;flex-direction:column;align-items:flex-end;gap:6px;text-align:right}
 .header__year{font-size:12px;font-weight:800;color:var(--navy)}
 .header__status{font-size:11px;color:var(--muted);display:flex;align-items:center;gap:5px;justify-content:flex-end}
 .dot{width:7px;height:7px;border-radius:50%;background:var(--green);display:inline-block;animation:blink 2s infinite}
@@ -100,9 +100,11 @@ a{color:var(--blue);text-decoration:none}a:hover{text-decoration:underline}
 
 /* NAV */
 .nav{background:var(--navy)}
-.nav__inner{display:flex;gap:0}
+.nav__inner{display:flex;gap:0;align-items:center}
 .nav__link{color:#9fb0d0;padding:10px 16px;font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;border-bottom:2px solid transparent}
 .nav__link:hover,.nav__link.active{color:#fff;border-bottom-color:var(--accent);text-decoration:none}
+.nav__link--accent{margin-left:auto;color:var(--accent) !important;border:1px solid var(--accent) !important;border-radius:6px !important;padding:6px 12px !important;line-height:1}
+.nav__link--accent:hover{background:rgba(255,215,0,.1);border-color:var(--accent) !important}
 
 /* HERO */
 .hero{background:linear-gradient(135deg,#0f1d33 0%,#1a2744 50%,#3C3B6E 100%);color:#fff;padding:50px 0 40px;border-bottom:4px solid var(--usared)}
