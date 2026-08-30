@@ -54,6 +54,7 @@ function showTab(t,el){
   el.classList.add('active');
   if(t==='results') loadResults();
   if(t==='users') loadUsers();
+  if(t==='retries') loadRetries();
   if(t==='admins') loadAdmins();
 }
 var allResults=[];var filteredResults=[];var currentPage=1;var PAGE_SIZE=20;var currentUsersPage=1;var USERS_PAGE_SIZE=20;
@@ -66,6 +67,7 @@ async function loadResults(){
 }
 function updateStats(){
   var total=allResults.length;
+  var retries=allResults.filter(function(r){return r.status==='retry_pending'}).length;
   var claimed=allResults.filter(function(r){return r.status==='claimed'}).length;
   var pending=allResults.filter(function(r){return r.status==='pending'||(!r.status&&r.admin_score==null)}).length;
   var done=allResults.filter(function(r){return r.status==='done'}).length;
@@ -73,6 +75,7 @@ function updateStats(){
   document.getElementById('stat-total').textContent=total;
   document.getElementById('stat-pending').textContent=pending;
   var claimedEl=document.getElementById('stat-claimed'); if(claimedEl) claimedEl.textContent=claimed;
+  var badge=document.getElementById('retries-badge'); if(badge){ badge.textContent=retries; badge.style.display=retries>0?'':'none'; }
   document.getElementById('stat-done').textContent=done;
   document.getElementById('stat-annulled').textContent=annulled;
 }
@@ -238,6 +241,27 @@ function renderUsers(){
   }
 }
 function goUsersPage(p){ currentUsersPage=p; renderUsers(); window.scrollTo(0,0); }
+async function loadRetries(){
+  var el=document.getElementById('retries-list');
+  try{
+    var list=allResults.filter(function(r){return r.status==='retry_pending'});
+    // also fetch fresh in case not in allResults (if status changed after load)
+    if(!list.length){
+      var fresh=await supabaseGet('results','&status=eq.retry_pending&order=timestamp.desc');
+      if(fresh && fresh.length) list=fresh;
+    }
+    if(!list.length){ el.innerHTML='<div class="admin-empty">Нет заявок на повтор</div>'; return; }
+    el.innerHTML=list.map(function(r){
+      return '<div class="admin-request-card" style="background:#fff;border-color:#3C3B6E"><div><b>'+r.name+'</b><p>'+r.game_nick+' · '+r.age+' лет · '+(r.date||'—')+'</p></div><div style="display:flex;gap:6px;flex-shrink:0"><button class="btn-approve" onclick="approveRetry(\''+r.id+'\')">✅ Одобрить (разрешить пересдачу)</button><button class="btn-reject" onclick="rejectRetry(\''+r.id+'\')">❌ Отклонить</button></div></div>';
+    }).join('');
+  }catch(e){ el.innerHTML='<div class="admin-empty">Ошибка</div>'; }
+}
+async function approveRetry(id){
+  try{ await supabaseDelete('results', id); allResults=allResults.filter(function(x){return x.id!=id}); filterResults(); updateStats(); loadRetries(); showToast('Одобрено — участник может пересдать'); }catch(e){ showToast('Ошибка: '+e.message, true); }
+}
+async function rejectRetry(id){
+  try{ await supabasePatch('results', id, {status:'annulled'}); var r=allResults.find(function(x){return x.id==id}); if(r) r.status='annulled'; filterResults(); updateStats(); loadRetries(); showToast('Отклонено — осталось аннулировано'); }catch(e){ showToast('Ошибка: '+e.message, true); }
+}
 async function loadAdmins(){
   var el=document.getElementById('admin-list');
   var req=document.getElementById('admin-requests');

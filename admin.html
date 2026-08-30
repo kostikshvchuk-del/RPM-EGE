@@ -7,7 +7,7 @@
 <link rel="stylesheet" href="style.css">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800&family=PT+Serif:wght@400;700&display=swap" rel="stylesheet">
-<script src="theme.js?v=4"></script>
+<script src="theme.js?v=6"></script>
 </head>
 <body>
 <div class="gov-bar">
@@ -51,6 +51,7 @@
       <nav class="admin-nav">
         <a href="#" class="admin-nav__link active" onclick="showTab('results',this);return false">📋 Результаты</a>
         <a href="#" class="admin-nav__link" onclick="showTab('users',this);return false">👥 Участники</a>
+        <a href="#" class="admin-nav__link" id="nav-retries" onclick="showTab('retries',this);return false">🔄 Повторы <span id="retries-badge" style="display:none;background:var(--usared);color:#fff;font-size:10px;padding:2px 6px;border-radius:999px;margin-left:4px">0</span></a>
         <a href="#" class="admin-nav__link" id="nav-admins" onclick="showTab('admins',this);return false">🛡️ Администраторы</a>
         <div class="admin-nav__hint">Система</div>
         <a href="#" class="admin-nav__link" onclick="adminLogout()">🚪 Выйти</a>
@@ -92,6 +93,12 @@
         <div class="admin-topbar"><h2>Участники</h2><span id="users-count" style="font-size:12px;color:var(--muted)"></span></div>
         <div id="users-list"></div>
         <div id="users-pagination" style="display:flex;gap:8px;justify-content:center;align-items:center;margin-top:16px;flex-wrap:wrap"></div>
+      </div>
+
+      <!-- ПОВТОРЫ -->
+      <div id="tab-retries" class="admin-tab" style="display:none">
+        <div class="admin-topbar"><h2>Заявки на повтор</h2></div>
+        <div id="retries-list"></div>
       </div>
 
       <!-- АДМИНИСТРАТОРЫ -->
@@ -162,6 +169,6 @@
 
 <div id="admin-toast" style="display:none;position:fixed;bottom:20px;right:20px;background:var(--navy);color:#fff;padding:12px 18px;border-radius:8px;font-size:13px;z-index:300;box-shadow:0 4px 12px rgba(0,0,0,.2)"></div>
 <script src="supabase-config.js"></script>
-<script src="admin.js?v=4"></script>
+<script src="admin.js?v=6"></script>
 </body>
 </html>

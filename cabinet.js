@@ -24,13 +24,16 @@ async function loadCabinet(){
   document.getElementById('cabinet-empty').style.display='none';
   document.getElementById('cabinet-pending').style.display='none';
   document.getElementById('cabinet-annulled').style.display='none';
+  document.getElementById('cabinet-retry').style.display='none';
   document.getElementById('cabinet-result').style.display='none';
   document.getElementById('cabinet-history').style.display='none';
   try{
     var r=await supabaseGet('results','&name=eq.'+encodeURIComponent(currentUser.name)+'&order=timestamp.desc');
     if(r&&r.length>0){
       var latest=r[0];
-      if(latest.status==='annulled'){
+      if(latest.status==='retry_pending'){
+        document.getElementById('cabinet-retry').style.display='';
+      } else if(latest.status==='annulled'){
         document.getElementById('cabinet-annulled').style.display='';
       } else {
       var sc=latest.admin_score;
@@ -78,7 +81,9 @@ function startExam(){
   var pending = document.getElementById('cabinet-pending');
   if(pending && pending.style.display !== 'none'){ alert('У вас уже есть работа на проверке. Дождитесь результата.'); return; }
   var annulled = document.getElementById('cabinet-annulled');
-  if(annulled && annulled.style.display !== 'none'){ alert('Ваш тест был аннулирован. Свяжитесь с администрацией.'); return; }
+  if(annulled && annulled.style.display !== 'none'){ alert('Ваш тест был аннулирован. Подайте заявку на повтор.'); return; }
+  var retry = document.getElementById('cabinet-retry');
+  if(retry && retry.style.display !== 'none'){ alert('Ваша заявка на повтор уже подана. Ожидайте.'); return; }
   document.getElementById('rules-overlay').style.display='flex';
   document.getElementById('rules-check').checked=false;
 }
@@ -197,6 +202,7 @@ function annulAndKick(reason){
   var hd=document.querySelector('.header'); if(hd) hd.style.display='';
   document.getElementById('cabinet-empty').style.display='none';
   document.getElementById('cabinet-pending').style.display='none';
+  document.getElementById('cabinet-retry').style.display='none';
   document.getElementById('cabinet-result').style.display='none';
   document.getElementById('cabinet-history').style.display='none';
   var ann=document.getElementById('cabinet-annulled');
@@ -212,6 +218,7 @@ async function requestRetry(){
       for(var i=0;i<r.length;i++) await supabaseDelete('results', r[i].id);
     }
     document.getElementById('cabinet-annulled').style.display='none';
+  document.getElementById('cabinet-retry').style.display='none';
     loadCabinet();
   }catch(e){ alert('Ошибка: '+e.message); }
 }

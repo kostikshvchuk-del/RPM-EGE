@@ -7,7 +7,7 @@
 <link rel="stylesheet" href="style.css">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800&family=PT+Serif:wght@400;700&display=swap" rel="stylesheet">
-<script src="theme.js?v=4"></script>
+<script src="theme.js?v=6"></script>
 </head>
 <body>
 <div class="gov-bar">
@@ -69,6 +69,12 @@
         <h3>Тест аннулирован</h3>
         <p id="cabinet-annulled-text">Ваша работа была аннулирована.<br>Причина: нарушение правил проведения (сворачивание).</p>
         <button class="btn-primary" onclick="requestRetry()" style="margin-top:12px">🔄 Подать на ещё одну попытку</button>
+      </div>
+
+      <div id="cabinet-retry" class="cabinet-empty" style="display:none">
+        <div class="cabinet-empty__icon">⏳</div>
+        <h3>Заявка на повтор подана</h3>
+        <p>Ожидайте — администратор рассмотрит вашу заявку на ещё одну попытку.</p>
       </div>
 
       <div id="cabinet-result" style="display:none">
@@ -180,6 +186,6 @@
 </footer>
 
 <script src="supabase-config.js"></script>
-<script src="cabinet.js?v=5"></script>
+<script src="cabinet.js?v=6"></script>
 </body>
 </html>
