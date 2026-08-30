@@ -69,21 +69,21 @@ document.getElementById('register-form').addEventListener('submit', e=>{
   const pass2 = document.getElementById('reg-pass2').value;
 
   if(!login || !name || !age || !pass){ alert('Заполните все поля'); return; }
+  if(login.length < 3){ alert('Логин минимум 3 символа'); return; }
   if(age < 4){ alert('Минимальный возраст — 4 года'); return; }
   if(pass.length < 4){ alert('Пароль минимум 4 символа'); return; }
   if(pass !== pass2){ alert('Пароли не совпадают'); return; }
 
-  // Сохраняем в localStorage
   const users = JSON.parse(localStorage.getItem('ege_users') || '[]');
   if(users.find(u=>u.login===login)){ alert('Такой логин уже существует'); return; }
 
-  const user = { login, name, age, pass };
+  const user = { login, name, age, pass, created: new Date().toLocaleString('ru-RU') };
   users.push(user);
   localStorage.setItem('ege_users', JSON.stringify(users));
   localStorage.setItem('ege_current', JSON.stringify(user));
 
   currentUser = user;
-  showCabinet();
+  loadCabinet();
   showScreen('screen-cabinet');
 });
 
@@ -99,18 +99,19 @@ document.getElementById('login-form').addEventListener('submit', e=>{
 
   localStorage.setItem('ege_current', JSON.stringify(user));
   currentUser = user;
-  showCabinet();
+  loadCabinet();
   showScreen('screen-cabinet');
 });
 
 // === КАБИНЕТ ===
-async function showCabinet(){
+async function loadCabinet(){
   if(!currentUser) return;
+
   document.getElementById('cab-avatar').textContent = currentUser.name.charAt(0).toUpperCase();
   document.getElementById('cab-name').textContent = currentUser.name;
-  document.getElementById('cab-login').textContent = currentUser.login;
+  document.getElementById('cab-login-display').textContent = currentUser.login;
+  document.getElementById('cab-topbar-info').textContent = 'Аккаунт создан: ' + (currentUser.created || '—');
 
-  // Загружаем результаты из Supabase
   try {
     const results = await supabaseGet('results', `&name=eq.${encodeURIComponent(currentUser.name)}&order=timestamp.desc`);
     if(results && results.length > 0){
@@ -120,25 +121,42 @@ async function showCabinet(){
 
       const score = latest.admin_score;
       if(score !== null && score !== undefined){
-        document.getElementById('cab-score').textContent = score + ' / 35';
+        document.getElementById('cab-score').textContent = score;
         document.getElementById('cab-score').style.color = score >= 14 ? '#0a7a42' : '#c0392b';
         document.getElementById('cab-result-title').textContent = score >= 14 ? '✅ ТЕСТ СДАН' : '❌ НЕ СДАНО';
         document.getElementById('cab-result-icon').textContent = score >= 14 ? '🎓' : '📚';
       } else {
-        document.getElementById('cab-score').textContent = 'На проверке';
+        document.getElementById('cab-score').textContent = '—';
         document.getElementById('cab-score').style.color = '#f59e0b';
         document.getElementById('cab-result-title').textContent = '⏳ Ожидает проверки';
         document.getElementById('cab-result-icon').textContent = '⏳';
       }
-      document.getElementById('cab-date').textContent = latest.date || '';
+      document.getElementById('cab-result-date').textContent = 'Дата сдачи: ' + (latest.date || '—');
+
+      // Детали I части
+      if(latest.answers){
+        try {
+          const ans = JSON.parse(latest.answers);
+          const part1 = ans.slice(0, PART1.length);
+          let correct = 0;
+          let html = '';
+          part1.forEach((a,i)=>{
+            const isCorrect = a === PART1[i].c;
+            if(isCorrect) correct++;
+            html += `<div class="detail-dot ${isCorrect?'correct':'wrong'}" title="В${i+1}: ${isCorrect?'Верно':'Неверно'}">${i+1}</div>`;
+          });
+          document.getElementById('cab-part1-details').style.display = '';
+          document.getElementById('cab-part1-grid').innerHTML = `<span style="font-size:12px;color:var(--muted);margin-bottom:6px;display:block">I Часть: ${correct} из ${PART1.length}</span>` + html;
+        } catch(e){}
+      }
 
       if(results.length > 1){
         document.getElementById('cab-history').style.display = '';
         document.getElementById('cab-history-list').innerHTML = results.map(r=>{
           const sc = r.admin_score;
-          const txt = sc !== null && sc !== undefined ? sc+'/35' : '—';
-          const clr = sc !== null && sc !== undefined ? (sc>=14?'var(--green)':'var(--red)') : 'var(--muted)';
-          return `<div class="cabinet-history-item"><span>${r.date||''}</span><span style="color:${clr};font-weight:800">${txt}</span></div>`;
+          const txt = sc !== null && sc !== undefined ? sc + ' / 35' : 'На проверке';
+          const clr = sc !== null && sc !== undefined ? (sc>=14?'var(--green)':'var(--red)') : '#f59e0b';
+          return `<div style="display:flex;justify-content:space-between;padding:10px 12px;background:#fff;border:1px solid var(--border);border-radius:8px;margin-bottom:6px;font-size:13px"><span style="color:var(--muted)">${r.date||''}</span><span style="color:${clr};font-weight:800">${txt}</span></div>`;
         }).join('');
       }
     } else {
@@ -149,6 +167,7 @@ async function showCabinet(){
   } catch(e){
     console.error(e);
     document.getElementById('cab-empty').style.display = '';
+    document.getElementById('cab-result').style.display = 'none';
   }
 }
 
@@ -196,11 +215,9 @@ function renderQuestion(){
   document.getElementById('q-total').textContent = total;
   document.getElementById('progress').style.width = ((currentQ+1)/total*100)+'%';
 
-  // Показываем нужную часть
   document.getElementById('part1-question').style.display = isChoice ? '' : 'none';
   document.getElementById('part2-question').style.display = isChoice ? 'none' : '';
 
-  // Бейдж части
   const badge = document.getElementById('exam-part-badge');
   badge.textContent = currentQ < PART1.length ? 'I Часть (Выбор)' : 'II Часть (Письменно)';
   badge.className = 'exam-part-badge ' + (currentQ < PART1.length ? 'badge-choice' : 'badge-text');
@@ -274,7 +291,6 @@ function finishExam(){
   disableAntiCheat();
   if(document.fullscreenElement) document.exitFullscreen().catch(()=>{});
 
-  // Подсчёт автоматических баллов (только I часть)
   let autoScore = 0;
   PART1.forEach((q,i)=>{ if(answers[i]===q.c) autoScore++; });
 
@@ -315,6 +331,6 @@ function warn(msg){
 (function(){
   const saved = localStorage.getItem('ege_current');
   if(saved){
-    try{ currentUser = JSON.parse(saved); showCabinet(); showScreen('screen-cabinet'); }catch(e){}
+    try{ currentUser = JSON.parse(saved); loadCabinet(); showScreen('screen-cabinet'); }catch(e){}
   }
 })();

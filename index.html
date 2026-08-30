@@ -3,59 +3,174 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ЕГЭ Штата South</title>
+<title>ЕГЭ Штата South — Официальный портал</title>
 <link rel="stylesheet" href="style.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800&family=PT+Serif:wght@400;700&display=swap" rel="stylesheet">
 </head>
 <body>
 
 <div class="gov-bar">
   <div class="container gov-bar__inner">
-    <span>🇺🇸 ГОСУДАРСТВЕННЫЙ ЭКЗАМЕН — ШТАТ SOUTH</span>
-    <span>Горячая линия: <b>8-800-555-14-63</b></span>
+    <span>🇺🇸 ГОСУДАРСТВЕННЫЙ ПОРТАЛ ШТАТА SOUTH</span>
+    <span>Горячая линия: <b>8-800-555-14-63</b> &nbsp;|&nbsp; support@ege-south.gov</span>
   </div>
 </div>
 
-<!-- ===== ЭКРАН 1: ГЛАВНАЯ ===== -->
-<div id="screen-home" class="screen active">
-  <div class="center-wrap">
-    <div class="home-card">
-      <div class="home-emblem">🏛️</div>
-      <h1>ЕГЭ по РПМ</h1>
-      <p class="home-sub">Штат South — 2026</p>
-
-      <div class="home-info">
-        <div class="home-info__item"><b>25 вопросов</b><span>I часть — тест А Б В Г</span></div>
-        <div class="home-info__item"><b>10 вопросов</b><span>II часть — письменно</span></div>
-        <div class="home-info__item"><b>25 минут</b><span>На весь экзамен</span></div>
+<header class="header">
+  <div class="container header__inner">
+    <div class="header__emblem">
+      <div class="emblem">🏛️</div>
+      <div class="header__titles">
+        <div class="header__ministry">ДЕПАРТАМЕНТ ОБРАЗОВАНИЯ<br>ШТАТА SOUTH — RPM</div>
+        <div class="header__portal">Официальный портал<br><span>ГОСУДАРСТВЕННОГО ЭКЗАМЕНА</span></div>
       </div>
-
-      <div class="home-steps">
-        <h3>Как проходит экзамен:</h3>
-        <ol>
-          <li>Зарегистрируйтесь (логин, имя, возраст, пароль)</li>
-          <li><b>I часть</b> — 25 вопросов, выбираете ответ А, Б, В или Г</li>
-          <li><b>II часть</b> — 10 вопросов, пишете ответ словами</li>
-          <li>Нажмите «Сдать работу» — ответы уходят на проверку</li>
-          <li>Результат появится в личном кабинете</li>
-        </ol>
-      </div>
-
-      <button class="btn-primary" onclick="showScreen('screen-register')">ЗАРЕГИСТРИРОВАТЬСЯ →</button>
-      <p class="home-note">Уже зарегистрированы? <a href="#" onclick="showScreen('screen-login');return false">Войти</a></p>
+    </div>
+    <div class="header__meta">
+      <div class="header__year">ЕГЭ — 2026</div>
+      <div class="header__status"><span class="dot"></span> Идет основной период</div>
     </div>
   </div>
+  <nav class="nav">
+    <div class="container nav__inner">
+      <a href="#about" class="nav__link active">О ЕГЭ</a>
+      <a href="#format" class="nav__link">Формат</a>
+      <a href="#rules" class="nav__link">Правила</a>
+      <a href="#contacts" class="nav__link">Контакты</a>
+    </div>
+  </nav>
+</header>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="container hero__grid">
+    <div class="hero__left">
+      <div class="hero__badge">ПРИКАЗ № 142-П ОТ 15.08.2026 &nbsp;•&nbsp; УТВЕРЖДЕН ГУБЕРНАТОРОМ</div>
+      <h1>Государственный экзамен<br><span>по дисциплине «РПМ»</span></h1>
+      <p class="hero__lead">Обязательная аттестация для граждан, претендующих на государственную службу в штате South. Результаты проверяются вручную администрацией.</p>
+      
+      <div class="hero__stats">
+        <div class="stat"><b>35</b><span>вопросов</span></div>
+        <div class="stat"><b>25</b><span>минут</span></div>
+        <div class="stat"><b>2</b><span>части</span></div>
+        <div class="stat"><b>14</b><span>мин. балл</span></div>
+      </div>
+
+      <button class="btn-primary btn-lg" onclick="showScreen('screen-register')">📝 ЗАРЕГИСТРИРОВАТЬСЯ</button>
+      <p class="hero__note">Уже зарегистрированы? <a href="#" onclick="showScreen('screen-login');return false">Войти в кабинет →</a></p>
+    </div>
+    <div class="hero__right">
+      <div class="doc-card">
+        <div class="doc-card__head">ОФИЦИАЛЬНОЕ ОБЪЯВЛЕНИЕ</div>
+        <div class="doc-card__body">
+          <p class="doc-card__title">Корпус Университета —<br>ППЭ №07</p>
+          <p class="doc-card__text">Экзамен проводится в присутствии преподавателя. Все ответы проверяются <b>вручную</b>. Видеофиксация обязательна.</p>
+          <ul class="doc-list">
+            <li><span class="doc-list__icon">📄</span> Паспорт / ID-карта штата</li>
+            <li><span class="doc-list__icon">🖥️</span> Полноэкранный режим обязателен</li>
+            <li><span class="doc-list__icon">⛔</span> Сворачивание = аннулирование</li>
+          </ul>
+          <div class="doc-card__sign">
+            <div><b>И.о. Директора</b><br><span>В. А. Вернадский</span></div>
+            <div class="stamp">ПЕЧАТЬ<br>ДЕП.ОБР<br>SOUTH</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="alert-bar">
+  <div class="container alert-bar__inner">
+    <span class="alert-tag">ВАЖНО</span>
+    <span>При выходе из полноэкранного режима или сворачивании браузера результат <b>аннулируется</b>. Предупреждений — 2.</span>
+  </div>
 </div>
 
-<!-- ===== ЭКРАН 2: РЕГИСТРАЦИЯ ===== -->
+<main class="container main-grid">
+  <!-- О ФОРМАТЕ -->
+  <section id="about" class="section">
+    <h2 class="section__title"><span>01</span> О экзамене</h2>
+    <div class="cols-2">
+      <div>
+        <p>Государственный экзамен штата South по дисциплине <b>«РПМ — Основы RolePlay»</b> состоит из двух частей:</p>
+        <div class="info-grid">
+          <div class="info-box"><b>I Часть</b><span>25 вопросов, выбор ответа А / Б / В / Г</span></div>
+          <div class="info-box"><b>II Часть</b><span>10 вопросов, письменный ответ словами</span></div>
+          <div class="info-box"><b>Время</b><span>25 минут на весь экзамен</span></div>
+          <div class="info-box"><b>Порог</b><span>14 баллов из 35 — «сдано»</span></div>
+        </div>
+      </div>
+      <div class="side-card">
+        <h3>Порядок прохождения</h3>
+        <ol>
+          <li>Зарегистрируйтесь (логин, имя, возраст, пароль)</li>
+          <li>Войдите в личный кабинет</li>
+          <li>Нажмите «Начать тест»</li>
+          <li>Ответьте на все вопросы</li>
+          <li>Нажмите «Сдать работу»</li>
+          <li>Результат появится в кабинете после проверки</li>
+        </ol>
+      </div>
+    </div>
+  </section>
+
+  <!-- ФОРМАТ -->
+  <section id="format" class="section">
+    <h2 class="section__title"><span>02</span> Формат экзамена</h2>
+    <div class="cards-2">
+      <div class="format-card">
+        <div class="format-card__num">I</div>
+        <h3>Тест (А Б В Г)</h3>
+        <p>25 вопросов с четырьмя вариантами ответа. Выбираете один правильный. Вопросы о фракциях штата, их функциях и полномочиях.</p>
+        <div class="format-card__diff">
+          <span class="diff-easy">Легкие: 1-8</span>
+          <span class="diff-medium">Средние: 9-16</span>
+          <span class="diff-hard">Сложные: 17-25</span>
+        </div>
+      </div>
+      <div class="format-card">
+        <div class="format-card__num">II</div>
+        <h3>Письменно</h3>
+        <p>10 вопросов, требующих развернутого ответа словами. Пишете своими словами, показывая знание правил и структуры штата.</p>
+        <div class="format-card__hint">Ответы проверяются вручную преподавателем</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ПРАВИЛА -->
+  <section id="rules" class="section">
+    <h2 class="section__title"><span>03</span> Правила проведения</h2>
+    <div class="rules-grid">
+      <div class="rule"><div class="rule__num">1</div><div><b>Полноэкранный режим обязателен.</b> Автоматический вход при старте.</div></div>
+      <div class="rule"><div class="rule__num">2</div><div><b>Запрещено</b> сворачивать и переключать вкладки. Нарушение = аннулирование.</div></div>
+      <div class="rule"><div class="rule__num">3</div><div><b>25 минут</b> без перерыва. Таймер в шапке. Автосдача по времени.</div></div>
+      <div class="rule"><div class="rule__num">4</div><div><b>Навигация:</b> можно вернуться к любому вопросу. Неотвеченные = неверные.</div></div>
+    </div>
+  </section>
+
+  <!-- КОНТАКТЫ -->
+  <section id="contacts" class="section">
+    <h2 class="section__title"><span>04</span> Контакты</h2>
+    <div class="doc-links">
+      <div class="doc-link"><span>📞</span><div><b>Горячая линия</b><span>8-800-555-14-63</span></div></div>
+      <div class="doc-link"><span>📧</span><div><b>Почта</b><span>support@ege-south.gov</span></div></div>
+      <div class="doc-link"><span>📍</span><div><b>ППЭ №07</b><span>Los Santos, University Campus</span></div></div>
+    </div>
+  </section>
+</main>
+
+<!-- ===== РЕГИСТРАЦИЯ ===== -->
 <div id="screen-register" class="screen">
   <div class="center-wrap">
     <div class="form-card">
-      <h2>📝 Регистрация</h2>
+      <div class="form-card__emblem">📝</div>
+      <h2>Регистрация</h2>
       <p class="form-sub">Создайте аккаунт для сдачи экзамена</p>
       <form id="register-form" novalidate>
         <label>Логин <span class="req">*</span></label>
         <input type="text" id="reg-login" placeholder="alex_vendetto" required>
-        <span class="hint">Латиница, без пробелов</span>
+        <span class="hint">Латиница, без пробелов, минимум 3 символа</span>
 
         <label>Имя и Фамилия <span class="req">*</span></label>
         <input type="text" id="reg-name" placeholder="Алекс Вендетто" required>
@@ -78,19 +193,18 @@
   </div>
 </div>
 
-<!-- ===== ЭКРАН 3: ВХОД ===== -->
+<!-- ===== ВХОД ===== -->
 <div id="screen-login" class="screen">
   <div class="center-wrap">
     <div class="form-card">
-      <h2>🔐 Вход</h2>
+      <div class="form-card__emblem">🔐</div>
+      <h2>Вход в кабинет</h2>
       <p class="form-sub">Войдите в свой аккаунт</p>
       <form id="login-form" novalidate>
         <label>Логин</label>
         <input type="text" id="log-login" placeholder="alex_vendetto" required>
-
         <label>Пароль</label>
         <input type="password" id="log-pass" placeholder="Ваш пароль" required>
-
         <button type="submit" class="btn-primary full">ВОЙТИ →</button>
         <p class="form-link">Нет аккаунта? <a href="#" onclick="showScreen('screen-register');return false">Зарегистрироваться</a></p>
       </form>
@@ -98,81 +212,99 @@
   </div>
 </div>
 
-<!-- ===== ЭКРАН 4: КАБИНЕТ ===== -->
+<!-- ===== КАБИНЕТ ===== -->
 <div id="screen-cabinet" class="screen">
-  <div class="center-wrap">
-    <div class="cabinet-card">
-      <div class="cabinet-header">
+  <div class="cabinet-wrap">
+    <!-- Сайдбар -->
+    <aside class="cabinet-sidebar">
+      <div class="cabinet-sidebar__user">
         <div class="cabinet-avatar" id="cab-avatar">👤</div>
-        <div>
-          <h2 id="cab-name">Имя</h2>
-          <p id="cab-login" class="cabinet-nick">login</p>
-        </div>
-        <button class="btn-secondary" onclick="cabLogout()" style="margin-left:auto">Выйти</button>
+        <h3 id="cab-name">Имя</h3>
+        <p id="cab-login-display">login</p>
+        <span class="cabinet-role" id="cab-role">Участник</span>
+      </div>
+      <nav class="cabinet-nav">
+        <a href="#" class="cabinet-nav__link active" onclick="return false">📋 Мои результаты</a>
+        <a href="#" class="cabinet-nav__link" onclick="return false">📜 История</a>
+        <a href="#" class="cabinet-nav__link" onclick="cabLogout()">🚪 Выйти</a>
+      </nav>
+    </aside>
+
+    <!-- Основной контент -->
+    <div class="cabinet-main">
+      <div class="cabinet-topbar">
+        <h2>Мои результаты</h2>
+        <span id="cab-topbar-info" class="cabinet-topbar__info"></span>
       </div>
 
-      <!-- Если тест не сдавал -->
-      <div id="cab-empty" class="cabinet-center-box">
-        <div class="cabinet-center-box__icon">📝</div>
+      <!-- Нет результатов -->
+      <div id="cab-empty" class="cabinet-empty">
+        <div class="cabinet-empty__icon">📝</div>
         <h3>Тест ещё не пройден</h3>
         <p>Нажмите кнопку чтобы начать экзамен</p>
-        <button class="btn-primary" onclick="startExam()">НАЧАТЬ ТЕСТ →</button>
+        <button class="btn-primary btn-lg" onclick="startExam()">НАЧАТЬ ТЕСТ →</button>
       </div>
 
-      <!-- Если тест сдал -->
-      <div id="cab-result" class="cabinet-center-box" style="display:none">
-        <div class="cabinet-center-box__icon" id="cab-result-icon">🎓</div>
-        <h3 id="cab-result-title">Результат</h3>
-        <div class="cabinet-score" id="cab-score">—</div>
-        <p id="cab-date" class="cabinet-date"></p>
-        <div class="cabinet-actions">
+      <!-- Есть результат -->
+      <div id="cab-result" style="display:none">
+        <div class="cabinet-result-card">
+          <div class="cabinet-result-card__left">
+            <div class="cabinet-result-card__icon" id="cab-result-icon">🎓</div>
+            <div>
+              <h3 id="cab-result-title">Результат</h3>
+              <p id="cab-result-date" class="cabinet-result-card__date"></p>
+            </div>
+          </div>
+          <div class="cabinet-result-card__right">
+            <div class="cabinet-result-card__score" id="cab-score">—</div>
+            <div class="cabinet-result-card__label">баллов</div>
+          </div>
+        </div>
+
+        <div class="cabinet-result-actions">
           <button class="btn-primary" onclick="startExam()">ПЕРЕСДАТЬ</button>
           <button class="btn-outline" onclick="window.print()">🖨️ Печать</button>
+        </div>
+
+        <!-- Детали I части -->
+        <div id="cab-part1-details" class="cabinet-details" style="display:none">
+          <h4>I Часть — Тест</h4>
+          <div id="cab-part1-grid" class="cabinet-detail-grid"></div>
         </div>
       </div>
 
       <!-- История -->
       <div id="cab-history" style="display:none">
-        <h3 style="font-size:14px;color:var(--navy);margin:16px 0 8px">История попыток</h3>
+        <h3 style="font-size:15px;color:var(--navy);margin-bottom:10px">📜 История попыток</h3>
         <div id="cab-history-list"></div>
       </div>
     </div>
   </div>
 </div>
 
-<!-- ===== ЭКРАН 5: ЭКЗАМЕН ===== -->
+<!-- ===== ЭКЗАМЕН ===== -->
 <div id="screen-exam" class="screen">
   <div class="exam-header">
     <div class="exam-header__left">
       <b id="exam-nick">Участник</b>
-      <span id="exam-part-badge">I Часть</span>
+      <span class="exam-part-badge" id="exam-part-badge">I Часть</span>
     </div>
-    <div class="exam-header__center">
-      Вопрос <span id="q-current">1</span> / <span id="q-total">25</span>
-    </div>
-    <div class="exam-header__right">
-      <span id="timer">25:00</span>
-    </div>
+    <div class="exam-header__center">Вопрос <span id="q-current">1</span> / <span id="q-total">35</span></div>
+    <div class="exam-header__right"><span id="timer">25:00</span></div>
   </div>
   <div class="progress-bar"><div id="progress"></div></div>
-
   <div class="exam-body">
     <div id="exam-warning" class="exam-warning hidden"></div>
-
-    <!-- I ЧАСТЬ: выбор А Б В Г -->
     <div id="part1-question">
       <div class="exam-diff-tag" id="exam-diff"></div>
       <h2 id="question-text">Загрузка...</h2>
       <div id="options" class="options"></div>
     </div>
-
-    <!-- II ЧАСТЬ: текстовый ответ -->
     <div id="part2-question" style="display:none">
       <div class="exam-diff-tag diff-hard">II Часть — Письменно</div>
       <h2 id="question-text-2">Загрузка...</h2>
-      <textarea id="text-answer" placeholder="Напишите ваш ответ словами..." rows="4"></textarea>
+      <textarea id="text-answer" placeholder="Напишите ваш ответ словами..." rows="5"></textarea>
     </div>
-
     <div class="exam-nav">
       <button id="prev-btn" class="btn-secondary" disabled>← Назад</button>
       <div style="display:flex;gap:10px">
@@ -180,26 +312,27 @@
         <button id="finish-btn" class="btn-finish hidden">СДАТЬ РАБОТУ</button>
       </div>
     </div>
-
     <div class="question-grid" id="question-grid"></div>
   </div>
 </div>
 
-<!-- ===== ЭКРАН 6: РЕЗУЛЬТАТ ===== -->
+<!-- ===== РЕЗУЛЬТАТ ===== -->
 <div id="screen-result" class="screen">
   <div class="center-wrap">
-    <div class="result-card">
-      <div class="result-icon">📋</div>
-      <h1>Работа сдана</h1>
-      <p class="result-text">Ваши ответы отправлены на проверку преподавателю.</p>
-      <p class="result-sub">Результат появится в личном кабинете после проверки.</p>
+    <div class="form-card" style="text-align:center">
+      <div style="font-size:52px;margin-bottom:10px">📋</div>
+      <h2>Работа сдана</h2>
+      <p class="form-sub">Ответы отправлены на проверку.<br>Результат появится в личном кабинете.</p>
       <button class="btn-primary" onclick="showScreen('screen-cabinet');loadCabinet()">В КАБИНЕТ →</button>
     </div>
   </div>
 </div>
 
 <footer class="footer">
-  <div class="container">Департамент образования Штата South © 2026 &nbsp;|&nbsp; 8-800-555-14-63</div>
+  <div class="container footer__grid">
+    <div><b>Департамент образования Штата South</b><br>9001, Los Santos, Government Blvd, 1 © 2026</div>
+    <div>support@ege-south.gov &nbsp;|&nbsp; 8-800-555-14-63</div>
+  </div>
 </footer>
 
 <script src="supabase-config.js"></script>
