@@ -223,6 +223,20 @@ function restorePortal(){
 }
 
 document.getElementById('restart-btn').onclick = () => { resultScreen.classList.remove('active'); restorePortal(); document.getElementById('login').scrollIntoView({behavior:'smooth'}); };
+
+// Авто-старт если пришли из кабинета
+(function(){
+  const params = new URLSearchParams(window.location.search);
+  if(params.get('exam') === '1'){
+    const name = localStorage.getItem('ege_nick');
+    const nick = localStorage.getItem('ege_gamenick');
+    if(name && nick){
+      studentInfo = { name, gameNick: nick, age: 18 };
+      document.getElementById('exam-nick').textContent = name + ' (' + nick + ')';
+      setTimeout(startExam, 300);
+    }
+  }
+})();
 document.getElementById('annulled-restart').onclick = () => { annulledScreen.classList.remove('active'); restorePortal(); };
 
 function enableAntiCheat(){ document.addEventListener('visibilitychange', onVisibility); window.addEventListener('blur', onBlur); document.addEventListener('fullscreenchange', onFullscreen); window.addEventListener('beforeunload', onBeforeUnload); }

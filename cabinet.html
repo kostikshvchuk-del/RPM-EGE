@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Личный кабинет — ЕГЭ South</title>
+<link rel="stylesheet" href="style.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800&family=PT+Serif:wght@400;700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+<div class="gov-bar">
+  <div class="container gov-bar__inner">
+    <span>🇺🇸 ЛИЧНЫЙ КАБИНЕТ — ЕГЭ SOUTH</span>
+    <span><a href="index.html" style="color:#fff;text-decoration:none">← На главную</a></span>
+  </div>
+</div>
+
+<!-- ВХОД -->
+<div id="cabinet-login" class="cabinet-center">
+  <div class="cabinet-login-card">
+    <div class="cabinet-icon">🔐</div>
+    <h2>Вход в кабинет</h2>
+    <p>Введите ваши данные для входа</p>
+    <form id="cabinet-login-form" novalidate>
+      <label>Имя и Фамилия</label>
+      <input type="text" id="cab-name" placeholder="Алекс Вендетто" required>
+      <label>Nick в игре</label>
+      <input type="text" id="cab-nick" placeholder="Alex_Vendetto" required>
+      <button type="submit" class="btn-primary full">ВОЙТИ →</button>
+    </form>
+  </div>
+</div>
+
+<!-- КАБИНЕТ -->
+<div id="cabinet-main" class="cabinet-center" style="display:none">
+  <div class="cabinet-card">
+    <div class="cabinet-header">
+      <div class="cabinet-avatar" id="cab-avatar">👤</div>
+      <div>
+        <h2 id="cab-fullname">Имя</h2>
+        <p id="cab-gamenick" class="cabinet-nick">nick</p>
+      </div>
+      <button class="btn-secondary" onclick="cabLogout()" style="margin-left:auto">Выйти</button>
+    </div>
+
+    <!-- Статус -->
+    <div class="cabinet-status" id="cab-status-empty">
+      <div class="cabinet-status__icon">📝</div>
+      <h3>Тест ещё не пройден</h3>
+      <p>Нажмите кнопку ниже чтобы начать экзамен</p>
+      <button class="btn-primary" onclick="goToExam()">ПРОЙТИ ТЕСТ →</button>
+    </div>
+
+    <!-- Результат (скрыт по умолчанию) -->
+    <div class="cabinet-status" id="cab-status-result" style="display:none">
+      <div class="cabinet-status__icon" id="cab-result-icon">🎓</div>
+      <h3 id="cab-result-title">Результат</h3>
+      <div class="cabinet-score" id="cab-score-display">—</div>
+      <p id="cab-result-date" class="cabinet-date"></p>
+      <div class="cabinet-actions">
+        <button class="btn-primary" onclick="goToExam()">ПЕРЕСДАТЬ</button>
+        <button class="btn-outline" onclick="window.print()">🖨️ Печать</button>
+      </div>
+    </div>
+
+    <!-- История -->
+    <div class="cabinet-history" id="cab-history" style="display:none">
+      <h3>История попыток</h3>
+      <div id="cab-history-list"></div>
+    </div>
+  </div>
+</div>
+
+<script src="supabase-config.js"></script>
+<script>
+let cabUser = null;
+
+// Вход
+document.getElementById('cabinet-login-form').addEventListener('submit', e => {
+  e.preventDefault();
+  const name = document.getElementById('cab-name').value.trim();
+  const nick = document.getElementById('cab-nick').value.trim();
+  if(!name || !nick){ alert('Заполните оба поля'); return; }
+  
+  localStorage.setItem('cab_name', name);
+  localStorage.setItem('cab_nick', nick);
+  cabUser = { name, nick };
+  showCabinet();
+});
+
+// Авто-вход если уже заходил
+(function(){
+  const n = localStorage.getItem('cab_name');
+  const nk = localStorage.getItem('cab_nick');
+  if(n && nk){
+    document.getElementById('cab-name').value = n;
+    document.getElementById('cab-nick').value = nk;
+    cabUser = { name: n, nick: nk };
+    showCabinet();
+  }
+})();
+
+function cabLogout(){
+  localStorage.removeItem('cab_name');
+  localStorage.removeItem('cab_nick');
+  document.getElementById('cabinet-login').style.display = '';
+  document.getElementById('cabinet-main').style.display = 'none';
+}
+
+async function showCabinet(){
+  document.getElementById('cabinet-login').style.display = 'none';
+  document.getElementById('cabinet-main').style.display = '';
+  
+  document.getElementById('cab-fullname').textContent = cabUser.name;
+  document.getElementById('cab-gamenick').textContent = cabUser.nick;
+  document.getElementById('cab-avatar').textContent = cabUser.name.charAt(0).toUpperCase();
+
+  // Загружаем результаты из Supabase
+  try {
+    const results = await supabaseGet('results', `&name=eq.${encodeURIComponent(cabUser.name)}&order=timestamp.desc`);
+    
+    if(results && results.length > 0){
+      const latest = results[0];
+      const answers = typeof latest.answers === 'string' ? JSON.parse(latest.answers) : latest.answers;
+      
+      document.getElementById('cab-status-empty').style.display = 'none';
+      document.getElementById('cab-status-result').style.display = '';
+      
+      const score = latest.admin_score;
+      if(score !== null && score !== undefined){
+        document.getElementById('cab-score-display').textContent = score + ' / 25';
+        document.getElementById('cab-score-display').style.color = score >= 12 ? '#0a7a42' : '#c0392b';
+        document.getElementById('cab-result-title').textContent = score >= 12 ? '✅ ТЕСТ СДАН' : '❌ НЕ СДАНО';
+        document.getElementById('cab-result-icon').textContent = score >= 12 ? '🎓' : '📚';
+      } else {
+        document.getElementById('cab-score-display').textContent = 'Ожидает проверки';
+        document.getElementById('cab-score-display').style.color = '#f59e0b';
+        document.getElementById('cab-result-title').textContent = '⏳ На проверке';
+        document.getElementById('cab-result-icon').textContent = '⏳';
+      }
+      
+      document.getElementById('cab-result-date').textContent = 'Дата сдачи: ' + latest.date;
+
+      // История
+      if(results.length > 1){
+        document.getElementById('cab-history').style.display = '';
+        document.getElementById('cab-history-list').innerHTML = results.map(r => {
+          const sc = r.admin_score;
+          const scText = sc !== null && sc !== undefined ? sc + '/25' : '—';
+          const scColor = sc !== null && sc !== undefined ? (sc >= 12 ? 'var(--green)' : 'var(--usared)') : 'var(--muted)';
+          return `<div class="cabinet-history-item">
+            <span>${r.date}</span>
+            <span style="color:${scColor};font-weight:800">${scText}</span>
+          </div>`;
+        }).join('');
+      }
+    }
+  } catch(e){
+    console.error('Ошибка загрузки:', e);
+  }
+}
+
+function goToExam(){
+  // Сохраняем данные и редиректим на экзамен
+  localStorage.setItem('ege_nick', cabUser.name);
+  localStorage.setItem('ege_gamenick', cabUser.nick);
+  window.location.href = 'index.html?exam=1';
+}
+</script>
+
+<style>
+.cabinet-center{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px;background:linear-gradient(135deg,#1a2744 0%,#3C3B6E 100%)}
+.cabinet-login-card,.cabinet-card{background:#fff;border-radius:16px;padding:32px;width:100%;max-width:480px;box-shadow:0 20px 60px rgba(0,0,0,.3)}
+.cabinet-icon{font-size:48px;text-align:center;margin-bottom:10px}
+.cabinet-login-card h2{font-family:'PT Serif',serif;font-size:22px;color:var(--navy);text-align:center;margin-bottom:4px}
+.cabinet-login-card>p{text-align:center;font-size:13px;color:var(--muted);margin-bottom:18px}
+.cabinet-login-card label{font-size:12px;font-weight:700;color:#334155;margin-top:12px;display:block;margin-bottom:6px}
+.cabinet-login-card input{width:100%;background:#f8fafc;border:1px solid var(--border);padding:11px 12px;border-radius:8px;font-size:14px;outline:none}
+.cabinet-login-card input:focus{border-color:var(--blue);box-shadow:0 0 0 3px #dbeafe}
+
+.cabinet-header{display:flex;align-items:center;gap:14px;padding-bottom:16px;border-bottom:1px solid var(--border);margin-bottom:16px}
+.cabinet-avatar{width:56px;height:56px;background:var(--usablue);color:#ffd700;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:24px;font-weight:800;flex-shrink:0}
+.cabinet-header h2{font-size:20px;color:var(--navy);margin:0}
+.cabinet-nick{font-size:13px;color:var(--muted);margin:0}
+
+.cabinet-status{text-align:center;padding:24px 0}
+.cabinet-status__icon{font-size:48px;margin-bottom:10px}
+.cabinet-status h3{font-size:18px;color:var(--navy);margin-bottom:6px}
+.cabinet-status p{font-size:13px;color:var(--muted);margin-bottom:16px}
+
+.cabinet-score{font-size:48px;font-weight:800;margin:10px 0}
+.cabinet-date{font-size:12px;color:var(--muted);margin-bottom:14px}
+.cabinet-actions{display:flex;gap:10px;justify-content:center}
+
+.cabinet-history{margin-top:16px;border-top:1px solid var(--border);padding-top:16px}
+.cabinet-history h3{font-size:14px;color:var(--navy);margin-bottom:10px}
+.cabinet-history-item{display:flex;justify-content:space-between;padding:8px 12px;background:#f8fafc;border-radius:8px;margin-bottom:6px;font-size:13px}
+</style>
+
+</body>
+</html>
