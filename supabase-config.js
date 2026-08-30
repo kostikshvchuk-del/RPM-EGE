@@ -55,3 +55,15 @@ async function supabaseDelete(table, id) {
   });
   return res.json();
 }
+
+// Поиск по полю
+async function supabaseFind(table, field, value) {
+  const url = `${SUPABASE_URL}/rest/v1/${table}?select=*&${field}=eq.${encodeURIComponent(value)}`;
+  const res = await fetch(url, {
+    headers: {
+      'apikey': SUPABASE_KEY,
+      'Authorization': `Bearer ${SUPABASE_KEY}`
+    }
+  });
+  return res.json();
+}

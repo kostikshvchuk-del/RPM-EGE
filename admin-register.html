@@ -9,14 +9,12 @@
 <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800&family=PT+Serif:wght@400;700&display=swap" rel="stylesheet">
 </head>
 <body>
-
 <div class="gov-bar">
   <div class="container gov-bar__inner">
     <span>🇺🇸 РЕГИСТРАЦИЯ АДМИНИСТРАТОРА</span>
     <span>ЕГЭ Штата South — 2026</span>
   </div>
 </div>
-
 <header class="header">
   <div class="container header__inner">
     <div class="header__emblem">
@@ -26,58 +24,42 @@
         <div class="header__portal"><span>Заявка на регистрацию</span></div>
       </div>
     </div>
-    <div class="header__meta">
-      <a href="admin.html" class="btn-outline btn-sm">← Вход</a>
-    </div>
+    <div class="header__meta"><a href="admin.html" class="btn-outline btn-sm">← Вход</a></div>
   </div>
 </header>
 
 <div class="auth-wrap">
-  <div class="auth-tabs">
-    <button class="auth-tab active">📝 Заявка</button>
-  </div>
-
+  <div class="auth-tabs"><button class="auth-tab active">📝 Заявка</button></div>
   <div class="auth-panel active">
     <div class="auth-card">
       <div class="auth-card__emblem">📝</div>
       <h2>Заявка на регистрацию</h2>
-      <p class="auth-sub">После подачи заявки она уходит на одобрение главному администратору. Вы получите доступ после одобрения.</p>
-
+      <p class="auth-sub">После подачи заявки она уходит на одобрение главному администратору</p>
       <form id="admin-reg-form" novalidate>
         <label>Логин <span class="req">*</span></label>
         <input type="text" id="reg-login" placeholder="moderator_01" required>
-        <span class="hint">Латиница, без пробелов, минимум 3 символа</span>
-
+        <span class="hint">Латиница, минимум 3 символа</span>
         <label>Имя и Фамилия <span class="req">*</span></label>
         <input type="text" id="reg-name" placeholder="Иван Иванов" required>
-        <span class="hint">Кириллицей, Имя Фамилия</span>
-
         <label>Роль <span class="req">*</span></label>
         <select id="reg-role" style="width:100%;background:#f8fafc;border:1px solid var(--border);padding:11px 12px;border-radius:8px;font-size:14px;outline:none">
           <option value="admin">Администратор</option>
           <option value="moderator">Модератор</option>
           <option value="teacher">Преподаватель</option>
         </select>
-        <span class="hint">Выберите вашу роль в системе</span>
-
         <label>Пароль <span class="req">*</span></label>
         <input type="password" id="reg-pass" placeholder="Минимум 4 символа" required>
-
         <label>Повторите пароль <span class="req">*</span></label>
         <input type="password" id="reg-pass2" placeholder="Повторите пароль" required>
-
-        <button type="submit" class="btn-primary full">ПОДАТЬ ЗАЯВКУ →</button>
+        <button type="submit" class="btn-primary full" id="reg-btn">ПОДАТЬ ЗАЯВКУ →</button>
       </form>
-
       <div id="reg-msg" class="auth-msg hidden" style="margin-top:14px"></div>
-
       <div style="margin-top:16px;padding:14px;background:#f8fafc;border:1px solid var(--border);border-radius:10px">
         <h4 style="font-size:13px;color:var(--navy);margin-bottom:6px">ℹ️ Как это работает</h4>
         <ul style="font-size:12px;color:var(--muted);padding-left:16px;display:flex;flex-direction:column;gap:3px">
           <li>Заполните форму и нажмите «Подать заявку»</li>
-          <li>Заявка автоматически отправится главному администратору</li>
+          <li>Заявка отправится главному администратору</li>
           <li>После одобрения вы сможете войти в панель</li>
-          <li>Данные хранятся локально и в Supabase</li>
         </ul>
       </div>
     </div>
@@ -91,42 +73,43 @@
   </div>
 </footer>
 
+<script src="supabase-config.js"></script>
 <script>
-function getPending(){return JSON.parse(localStorage.getItem('ege_admin_pending')||'[]')}
-function savePending(a){localStorage.setItem('ege_admin_pending',JSON.stringify(a))}
-function getAdmins(){return JSON.parse(localStorage.getItem('ege_admins')||'[]')}
-
-document.getElementById('admin-reg-form').addEventListener('submit',function(e){
+document.getElementById('admin-reg-form').addEventListener('submit',async function(e){
   e.preventDefault();
+  var btn=document.getElementById('reg-btn');
+  btn.disabled=true;btn.textContent='Загрузка...';
+
   var l=document.getElementById('reg-login').value.trim();
   var n=document.getElementById('reg-name').value.trim();
   var r=document.getElementById('reg-role').value;
   var p=document.getElementById('reg-pass').value;
   var p2=document.getElementById('reg-pass2').value;
 
-  if(!l||!n||!p){showMsg('Заполните все поля','error');return}
-  if(l.length<3){showMsg('Логин минимум 3 символа','error');return}
-  if(p.length<4){showMsg('Пароль минимум 4 символа','error');return}
-  if(p!==p2){showMsg('Пароли не совпадают','error');return}
+  if(!l||!n||!p){showMsg('Заполните все поля','error');btn.disabled=false;btn.textContent='ПОДАТЬ ЗАЯВКУ →';return}
+  if(l.length<3){showMsg('Логин минимум 3 символа','error');btn.disabled=false;btn.textContent='ПОДАТЬ ЗАЯВКУ →';return}
+  if(p.length<4){showMsg('Пароль минимум 4 символа','error');btn.disabled=false;btn.textContent='ПОДАТЬ ЗАЯВКУ →';return}
+  if(p!==p2){showMsg('Пароли не совпадают','error');btn.disabled=false;btn.textContent='ПОДАТЬ ЗАЯВКУ →';return}
 
-  var admins=getAdmins();
-  if(admins.find(function(x){return x.login===l})){showMsg('Такой логин уже существует','error');return}
+  try{
+    var exists=await supabaseFind('admins','login',l);
+    if(exists&&exists.length>0){showMsg('Такой логин уже существует','error');btn.disabled=false;btn.textContent='ПОДАТЬ ЗАЯВКУ →';return}
 
-  var pending=getPending();
-  if(pending.find(function(x){return x.login===l})){showMsg('Заявка уже подана','error');return}
-
-  pending.push({login:l,name:n,role:r,pass:p,created:new Date().toLocaleString('ru-RU')});
-  savePending(pending);
-
-  showMsg('✅ Заявка подана! Ожидайте одобрения главного администратора.','ok');
-  document.getElementById('admin-reg-form').reset();
+    var now=new Date().toLocaleString('ru-RU');
+    var result=await supabasePost('admins',{login:l,name:n,role:r,pass:p,approved:false,created_at:now});
+    if(result&&result.id){
+      showMsg('✅ Заявка подана! Ожидайте одобрения главного администратора.','ok');
+      document.getElementById('admin-reg-form').reset();
+    }else{
+      showMsg('Ошибка подачи заявки','error');
+    }
+  }catch(e){
+    showMsg('Ошибка: '+e.message,'error');
+  }
+  btn.disabled=false;btn.textContent='ПОДАТЬ ЗАЯВКУ →';
 });
 
-function showMsg(t,c){
-  var e=document.getElementById('reg-msg');
-  e.textContent=t;e.className='auth-msg '+c;
-}
+function showMsg(t,c){var e=document.getElementById('reg-msg');e.textContent=t;e.className='auth-msg '+c}
 </script>
-
 </body>
 </html>
