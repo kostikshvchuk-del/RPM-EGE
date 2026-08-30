@@ -53,7 +53,8 @@ async function supabaseDelete(table, id) {
       'Authorization': `Bearer ${SUPABASE_KEY}`
     }
   });
-  return res.json();
+  const text = await res.text();
+  return text ? JSON.parse(text) : {};
 }
 
 // Поиск по полю
